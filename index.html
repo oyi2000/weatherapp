@@ -216,7 +216,8 @@
             z-index: 2;
             max-width: 1400px;
             margin: 0 auto;
-            padding: calc(24px + env(safe-area-inset-top, 0px)) 24px 60px;
+            /* Extra top padding on mobile to clear Dynamic Island / status bar */
+            padding: calc(max(env(safe-area-inset-top, 0px), 54px) + 16px) 24px 60px;
         }
 
         @media (min-width: 1200px) {
@@ -2750,25 +2751,25 @@
                         Idioma / Language
                     </div>
                     <select class="pill-select" id="langSelect" onchange="changeLang(this.value)">
-                        <option value="es">🇪🇸 Español</option>
-                        <option value="en">🇬🇧 English</option>
-                        <option value="fr">🇫🇷 Français</option>
-                        <option value="de">🇩🇪 Deutsch</option>
-                        <option value="it">🇮🇹 Italiano</option>
+                        <option value="es">Español</option>
+                        <option value="en">English</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="it">Italiano</option>
                         <option value="eu">Euskara</option>
                         <option value="ca">Català</option>
                         <option value="va">Valencià</option>
                         <option value="gl">Galego</option>
-                        <option value="pt">🇵🇹 Português</option>
-                        <option value="pl">🇵🇱 Polski</option>
-                        <option value="ru">🇷🇺 Русский</option>
-                        <option value="zh">🇨🇳 中文</option>
-                        <option value="ja">🇯🇵 日本語</option>
-                        <option value="ko">🇰🇷 한국어</option>
-                        <option value="sv">🇸🇪 Svenska</option>
-                        <option value="ar">🇸🇦 العربية</option>
-                        <option value="nl">🇳🇱 Nederlands</option>
-                        <option value="el">🇬🇷 Ελληνικά</option>
+                        <option value="pt">Português</option>
+                        <option value="pl">Polski</option>
+                        <option value="ru">Русский</option>
+                        <option value="zh">中文</option>
+                        <option value="ja">日本語</option>
+                        <option value="ko">한국어</option>
+                        <option value="sv">Svenska</option>
+                        <option value="ar">العربية</option>
+                        <option value="nl">Nederlands</option>
+                        <option value="el">Ελληνικά</option>
                     </select>
                 </div>
 
@@ -5133,23 +5134,36 @@
             const temp = S.data ? fmtTemp(S.data.current.temperature_2m) : '';
             const iconSvg = wmo ? weatherSVG(wmo.icon, 28) : '';
 
-            // Build custom weather marker HTML
+            // Build custom location pin marker HTML
             const markerHtml = `
                 <div style="
-                    width: 56px; height: 56px;
-                    background: rgba(255,255,255,0.18);
-                    backdrop-filter: blur(16px);
-                    -webkit-backdrop-filter: blur(16px);
-                    border: 2px solid rgba(255,255,255,0.6);
-                    border-radius: 50%;
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-                    display: flex; flex-direction: column;
-                    align-items: center; justify-content: center;
-                    gap: 1px;
-                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 0;
+                    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
                 ">
-                    ${iconSvg}
-                    <div style="font-size:10px;font-weight:700;color:#000;font-family:Google Sans,sans-serif;line-height:1;text-shadow:0 0 4px rgba(255,255,255,0.8);">${temp}${temp ? tempLabel() : ''}</div>
+                    <div style="
+                        width: 48px; height: 48px;
+                        background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+                        border: 3px solid #fff;
+                        border-radius: 50% 50% 50% 0;
+                        transform: rotate(-45deg);
+                        display: flex; align-items: center; justify-content: center;
+                        box-shadow: 0 4px 16px rgba(26,115,232,0.6);
+                    ">
+                        <div style="transform: rotate(45deg); display: flex; flex-direction: column; align-items: center; gap: 1px;">
+                            ${iconSvg}
+                            <div style="font-size:9px;font-weight:700;color:#fff;font-family:Google Sans,sans-serif;line-height:1;">${temp}${temp ? tempLabel() : ''}</div>
+                        </div>
+                    </div>
+                    <div style="
+                        width: 8px; height: 8px;
+                        background: rgba(26,115,232,0.5);
+                        border-radius: 50%;
+                        margin-top: 2px;
+                        filter: blur(2px);
+                    "></div>
                 </div>
             `;
 
