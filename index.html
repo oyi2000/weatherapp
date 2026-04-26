@@ -3064,50 +3064,41 @@
             background: rgba(255, 255, 255, 0.22);
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.35);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.4);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             pointer-events: none;
             z-index: 0;
-            transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+            transition: transform 0.38s cubic-bezier(0.34,1.56,0.64,1), width 0.32s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease;
             will-change: transform, width;
         }
-
         .bottom-nav.dragging .nav-liquid-pill {
             transition: transform 0.08s ease-out, width 0.08s ease-out;
         }
-
         .bottom-nav.dragging {
             transform: translateX(-50%) scale(0.96) !important;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.28) !important;
         }
-
         .bottom-nav {
-            transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            transition: transform 0.42s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
         }
-
         .bottom-nav-btn {
             position: relative;
             z-index: 1;
         }
-
         .bottom-nav-btn.active {
             color: #fff;
         }
-
         .bottom-nav-btn.active svg {
-            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.55));
+            filter: drop-shadow(0 0 6px rgba(255,255,255,0.55));
         }
-
         .bottom-nav-btn.drag-hover svg {
             transform: scale(1.18);
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.7));
         }
-
         .bottom-nav-btn svg {
-            transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.22s ease;
+            transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), filter 0.22s ease;
         }
-
         .bottom-nav-btn::after {
             content: '';
             display: block;
@@ -3119,10 +3110,106 @@
             transition: background 0.3s ease, transform 0.3s ease;
             transform: scale(0);
         }
-
         .bottom-nav-btn.active::after {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255,255,255,0.7);
             transform: scale(1);
+        }
+
+        /* ── MAGNIFIER LENS — iOS 26 loupe ── */
+        #navMagnifier {
+            position: fixed;
+            width: 72px;
+            height: 72px;
+            border-radius: 36px;
+            pointer-events: none;
+            z-index: 9999;
+            backdrop-filter: blur(0px) brightness(1.0);
+            -webkit-backdrop-filter: blur(0px) brightness(1.0);
+            opacity: 0;
+            transform: scale(0.4) translateY(12px);
+            transform-origin: center bottom;
+            background: radial-gradient(
+                ellipse at 38% 28%,
+                rgba(255,255,255,0.38) 0%,
+                rgba(255,255,255,0.14) 45%,
+                rgba(255,255,255,0.06) 100%
+            );
+            border: 0.5px solid rgba(255,255,255,0.55);
+            box-shadow:
+                0 8px 32px rgba(0,0,0,0.32),
+                0 2px 8px rgba(0,0,0,0.18),
+                inset 0 1.5px 4px rgba(255,255,255,0.55),
+                inset 0 -1px 3px rgba(255,255,255,0.12),
+                inset 0 -0.5px 0 rgba(180,220,255,0.3);
+            transition:
+                opacity 0.24s cubic-bezier(0.34,1.56,0.64,1),
+                transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+                backdrop-filter 0.24s ease,
+                -webkit-backdrop-filter 0.24s ease;
+            will-change: transform, opacity, left, top;
+        }
+        #navMagnifier.active {
+            opacity: 1;
+            transform: scale(1) translateY(0px);
+            backdrop-filter: blur(10px) brightness(1.22) saturate(1.4);
+            -webkit-backdrop-filter: blur(10px) brightness(1.22) saturate(1.4);
+        }
+        #navMagnifier .mag-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+        }
+        #navMagnifier .mag-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 0 7px rgba(255,255,255,0.85));
+            transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        #navMagnifier .mag-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+        #navMagnifier .mag-label {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 8px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.95);
+            letter-spacing: 0.02em;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            line-height: 1;
+        }
+        #navMagnifier::before {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: inherit;
+            background: linear-gradient(
+                135deg,
+                rgba(255,255,255,0.22) 0%,
+                transparent 42%,
+                transparent 58%,
+                rgba(180,210,255,0.1) 100%
+            );
+            pointer-events: none;
+        }
+        #gooeyFilterSVG {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        /* Gooey effect on buttons during drag */
+        .bottom-nav.dragging .bottom-nav-btn.drag-hover {
+            filter: url(#gooeyFilter);
         }
     </style>
 </head>
@@ -3137,6 +3224,35 @@
     <div class="stars" id="stars"></div>
     <!-- Weather FX -->
     <div id="weatherFx"></div>
+
+    <!-- SVG Gooey filter for magnifier morphing effect -->
+    <svg id="gooeyFilterSVG" style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
+        <defs>
+            <filter id="gooeyFilter" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">
+                <!-- Blur spreads the shapes so they overlap -->
+                <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
+                <!-- Color matrix thresholds the blur to create a liquid blob edge -->
+                <feColorMatrix
+                    in="blur"
+                    mode="matrix"
+                    values="1 0 0 0 0
+                            0 1 0 0 0
+                            0 0 1 0 0
+                            0 0 0 22 -9"
+                    result="gooey" />
+                <!-- Composite keeps original color on top of the gooey blob -->
+                <feComposite in="SourceGraphic" in2="gooey" operator="atop" />
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Magnifier lens — appears during touchmove drag on nav -->
+    <div id="navMagnifier" aria-hidden="true">
+        <div class="mag-content">
+            <div class="mag-icon" id="magIcon"></div>
+            <div class="mag-label" id="magLabel"></div>
+        </div>
+    </div>
 
     <!-- Bottom Liquid Glass Nav -->
     <div class="bottom-nav" id="bottomNav">
@@ -7811,30 +7927,30 @@
            LIQUID TAB BAR — iOS 26 drag-to-navigate
            ───────────────────────────────────────────────────────────── */
         (function initLiquidTabBar() {
-            const nav = document.getElementById('bottomNav');
-            const pill = document.getElementById('navLiquidPill');
-            const buttons = Array.from(nav.querySelectorAll('.bottom-nav-btn'));
+            const nav      = document.getElementById('bottomNav');
+            const pill     = document.getElementById('navLiquidPill');
+            const buttons  = Array.from(nav.querySelectorAll('.bottom-nav-btn'));
 
             if (!nav || !pill || !buttons.length) return;
 
             /* Map each button to its action so we can fire it on release */
             const btnActions = {
-                'btnNavLoc': () => geolocate(),
-                'btnNavMap': () => openMobileMap(),
-                'btnNavMenu': () => openFavModal(),
+                'btnNavLoc':    () => geolocate(),
+                'btnNavMap':    () => openMobileMap(),
+                'btnNavMenu':   () => openFavModal(),
                 'btnNavSearch': () => toggleMobileSearch(),
             };
             /* Settings button has no id — identify by position (index 3) */
             const settingsIdx = 3;
 
             /* ── State ── */
-            let isDragging = false;
-            let activeIdx = -1;   // currently highlighted tab index
-            let dragHoverIdx = -1;   // tab under finger during drag
+            let isDragging    = false;
+            let activeIdx     = -1;   // currently highlighted tab index
+            let dragHoverIdx  = -1;   // tab under finger during drag
             let longPressTimer = null;
-            let touchStartX = 0;
-            let touchStartY = 0;
-            let didLongPress = false;
+            let touchStartX   = 0;
+            let touchStartY   = 0;
+            let didLongPress  = false;
             const LONG_PRESS_MS = 120; // ms to enter drag mode (responsive but not accidental)
             const DRAG_THRESHOLD_PX = 6; // px finger must move to start switching tabs
 
@@ -7853,14 +7969,14 @@
                 const navR = getNavRect();
                 const btnR = getBtnRect(idx);
                 const offsetX = btnR.left - navR.left;
-                const pillW = btnR.width;
+                const pillW   = btnR.width;
 
                 if (instant) {
                     pill.style.transition = 'none';
                 } else {
                     pill.style.transition = '';
                 }
-                pill.style.width = pillW + 'px';
+                pill.style.width     = pillW + 'px';
                 pill.style.transform = 'translateX(' + offsetX + 'px)';
             }
 
@@ -7877,7 +7993,7 @@
 
             function fireTabAction(idx) {
                 const btn = buttons[idx];
-                const id = btn.id;
+                const id  = btn.id;
                 if (btnActions[id]) {
                     btnActions[id]();
                 } else if (idx === settingsIdx) {
@@ -7901,7 +8017,7 @@
                     const navR = getNavRect();
                     const btnR = getBtnRect(idx);
                     pill.style.transition = 'transform 0.08s ease-out, width 0.08s ease-out';
-                    pill.style.width = btnR.width + 'px';
+                    pill.style.width     = btnR.width + 'px';
                     pill.style.transform = 'translateX(' + (btnR.left - navR.left) + 'px)';
                 }
             }
@@ -7919,10 +8035,10 @@
             }
 
             /* ── Touch handlers ── */
-            nav.addEventListener('touchstart', function (e) {
+            nav.addEventListener('touchstart', function(e) {
                 const touch = e.touches[0];
-                touchStartX = touch.clientX;
-                touchStartY = touch.clientY;
+                touchStartX  = touch.clientX;
+                touchStartY  = touch.clientY;
                 didLongPress = false;
 
                 /* Identify which button was touched */
@@ -7931,7 +8047,7 @@
                 /* Start long-press timer to enter drag mode */
                 longPressTimer = setTimeout(() => {
                     didLongPress = true;
-                    isDragging = true;
+                    isDragging   = true;
                     nav.classList.add('dragging');
                     dragHoverIdx = startIdx;
                     buttons.forEach((btn, i) => btn.classList.toggle('drag-hover', i === startIdx));
@@ -7942,7 +8058,7 @@
                 }, LONG_PRESS_MS);
             }, { passive: true });
 
-            nav.addEventListener('touchmove', function (e) {
+            nav.addEventListener('touchmove', function(e) {
                 const touch = e.touches[0];
                 const dx = Math.abs(touch.clientX - touchStartX);
                 const dy = Math.abs(touch.clientY - touchStartY);
@@ -7964,7 +8080,7 @@
                 setDragHover(idx);
             }, { passive: false });
 
-            nav.addEventListener('touchend', function (e) {
+            nav.addEventListener('touchend', function(e) {
                 clearTimeout(longPressTimer);
 
                 if (isDragging) {
@@ -7987,12 +8103,12 @@
                 } else if (!didLongPress) {
                     /* Regular tap — identify button from changedTouches */
                     const touch = e.changedTouches[0];
-                    const idx = closestBtnTo(touch.clientX);
+                    const idx   = closestBtnTo(touch.clientX);
                     setActive(idx, true);
                 }
             }, { passive: true });
 
-            nav.addEventListener('touchcancel', function () {
+            nav.addEventListener('touchcancel', function() {
                 clearTimeout(longPressTimer);
                 isDragging = false;
                 nav.classList.remove('dragging');
@@ -8012,8 +8128,8 @@
                     return;
                 }
                 /* No tab is "active" on load — hide pill */
-                pill.style.opacity = '0';
-                pill.style.width = getBtnRect(0).width + 'px';
+                pill.style.opacity  = '0';
+                pill.style.width    = getBtnRect(0).width + 'px';
                 pill.style.transform = 'translateX(0px)';
             }
 
@@ -8068,6 +8184,163 @@
             });
 
         })(); /* end initLiquidTabBar */
+
+        /* ─────────────────────────────────────────────────────────────
+           NAV MAGNIFIER — iOS 26 loupe that follows the finger
+           ───────────────────────────────────────────────────────────── */
+        (function initNavMagnifier() {
+            const nav      = document.getElementById('bottomNav');
+            const mag      = document.getElementById('navMagnifier');
+            const magIcon  = document.getElementById('magIcon');
+            const magLabel = document.getElementById('magLabel');
+            const buttons  = Array.from(nav.querySelectorAll('.bottom-nav-btn'));
+
+            if (!nav || !mag) return;
+
+            /* Magnifier dimensions */
+            const MAG_W  = 72;   // px — must match CSS width
+            const MAG_H  = 72;   // px — must match CSS height
+            const MAG_LIFT = 88; // px above the touch point so it's always visible
+
+            /* Track which btn is currently cloned inside the lens */
+            let lastMagIdx = -1;
+            let rafId = null;
+            let targetLeft = 0;
+            let targetTop  = 0;
+            let currentLeft = 0;
+            let currentTop  = 0;
+            let isAnimating = false;
+
+            /* ── Clone the icon + label of a button into the magnifier ── */
+            function updateMagContent(idx) {
+                if (idx === lastMagIdx) return;
+                lastMagIdx = idx;
+                const btn = buttons[idx];
+
+                /* Clone SVG icon */
+                const srcSvg = btn.querySelector('svg');
+                if (srcSvg) {
+                    magIcon.innerHTML = '';
+                    magIcon.appendChild(srcSvg.cloneNode(true));
+                }
+
+                /* Clone label text */
+                const srcSpan = btn.querySelector('span');
+                magLabel.textContent = srcSpan ? srcSpan.textContent : '';
+            }
+
+            /* ── Smooth lerp loop for position (follows finger fluidly) ── */
+            function lerpMag() {
+                const SPEED = 0.32; // 0–1, higher = snappier
+                currentLeft += (targetLeft - currentLeft) * SPEED;
+                currentTop  += (targetTop  - currentTop)  * SPEED;
+
+                mag.style.left = currentLeft + 'px';
+                mag.style.top  = currentTop  + 'px';
+
+                const distX = Math.abs(targetLeft - currentLeft);
+                const distY = Math.abs(targetTop  - currentTop);
+                if (distX > 0.3 || distY > 0.3) {
+                    rafId = requestAnimationFrame(lerpMag);
+                } else {
+                    isAnimating = false;
+                    rafId = null;
+                }
+            }
+
+            /* ── Position magnifier centered above touch clientX ── */
+            function moveMagTo(clientX, clientY) {
+                /* Clamp horizontally so mag never goes off-screen */
+                const half    = MAG_W / 2;
+                const maxLeft = window.innerWidth - MAG_W - 4;
+                const rawLeft = clientX - half;
+                targetLeft = Math.max(4, Math.min(rawLeft, maxLeft));
+
+                /* Position above the finger */
+                targetTop  = clientY - MAG_LIFT - MAG_H / 2;
+
+                /* Initialize position on first show (no lerp lag) */
+                if (!mag.classList.contains('active')) {
+                    currentLeft = targetLeft;
+                    currentTop  = targetTop;
+                    mag.style.left = currentLeft + 'px';
+                    mag.style.top  = currentTop  + 'px';
+                }
+
+                if (!isAnimating) {
+                    isAnimating = true;
+                    rafId = requestAnimationFrame(lerpMag);
+                }
+            }
+
+            /* ── Show magnifier with spring entry ── */
+            function showMag(clientX, clientY, btnIdx) {
+                moveMagTo(clientX, clientY);
+                updateMagContent(btnIdx);
+                /* Force reflow before adding .active so transition fires */
+                mag.getBoundingClientRect();
+                mag.classList.add('active');
+            }
+
+            /* ── Hide magnifier with spring exit ── */
+            function hideMag() {
+                mag.classList.remove('active');
+                lastMagIdx = -1;
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                    isAnimating = false;
+                }
+            }
+
+            /* ── Hook into the nav's existing touch events ── */
+            /* We listen at capture phase so we get events before the
+               initLiquidTabBar handlers, but don't interfere with them */
+
+            nav.addEventListener('touchmove', function(e) {
+                /* Only show magnifier once drag mode is active (nav has .dragging) */
+                if (!nav.classList.contains('dragging')) return;
+                const touch = e.touches[0];
+
+                /* Find closest button index */
+                let bestIdx = 0, bestDist = Infinity;
+                buttons.forEach((btn, i) => {
+                    const r = btn.getBoundingClientRect();
+                    const cx = r.left + r.width / 2;
+                    const dist = Math.abs(touch.clientX - cx);
+                    if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+                });
+
+                if (!mag.classList.contains('active')) {
+                    showMag(touch.clientX, touch.clientY, bestIdx);
+                } else {
+                    moveMagTo(touch.clientX, touch.clientY);
+                    updateMagContent(bestIdx);
+                }
+            }, { passive: true, capture: true });
+
+            nav.addEventListener('touchend', function() {
+                hideMag();
+            }, { passive: true, capture: true });
+
+            nav.addEventListener('touchcancel', function() {
+                hideMag();
+            }, { passive: true, capture: true });
+
+            /* Also hook the longpress moment — show mag when drag mode activates.
+               We detect this by observing the 'dragging' class with MutationObserver */
+            const mo = new MutationObserver((mutations) => {
+                mutations.forEach(m => {
+                    if (m.attributeName === 'class') {
+                        if (!nav.classList.contains('dragging')) {
+                            hideMag();
+                        }
+                    }
+                });
+            });
+            mo.observe(nav, { attributes: true });
+
+        })(); /* end initNavMagnifier */
 
     </script>
 </body>
