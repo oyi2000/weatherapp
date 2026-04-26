@@ -1651,9 +1651,12 @@
             -webkit-backdrop-filter: blur(20px);
             z-index: 200;
             display: none;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            padding: 16px;
+            /* padding seguro para PWA: safe-area + margen visual */
+            padding: calc(env(safe-area-inset-top, 0px) + 24px) 16px calc(env(safe-area-inset-bottom, 0px) + 24px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .modal-overlay.open {
@@ -1745,8 +1748,8 @@
             border-radius: 28px;
             width: 400px;
             max-width: calc(100vw - 32px);
-            max-height: 90vh;
-            max-height: 90dvh;
+            /* En PWA el 100% del overlay ya está limitado, dejamos crecer libre */
+            max-height: none;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -1820,11 +1823,12 @@
 
         .sp-body {
             flex: 1;
+            min-height: 0;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             padding: 6px 0 16px;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-            min-height: 0;
         }
 
         .sp-section {
@@ -1959,8 +1963,7 @@
             border-radius: 28px;
             width: 380px;
             max-width: calc(100vw - 32px);
-            max-height: 85vh;
-            max-height: 85dvh;
+            max-height: none;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -2052,14 +2055,15 @@
         /* ── FAV CARDS — Apple Weather style ── */
         .fp-list-wrap {
             flex: 1;
+            min-height: 0;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             padding: 12px 14px 14px;
             display: flex;
             flex-direction: column;
             gap: 10px;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-            min-height: 0;
         }
 
         .fav-item {
@@ -7009,16 +7013,12 @@
         let _scrollLockY = 0;
         function lockScroll() {
             _scrollLockY = window.scrollY || window.pageYOffset;
-            document.body.style.top = '-' + _scrollLockY + 'px';
-            document.body.style.position = 'fixed';
-            document.body.style.width = '100%';
             document.body.style.overflow = 'hidden';
+            document.body.style.touchAction = 'none';
         }
         function unlockScroll() {
-            document.body.style.position = '';
-            document.body.style.top = '';
-            document.body.style.width = '';
             document.body.style.overflow = '';
+            document.body.style.touchAction = '';
             window.scrollTo(0, _scrollLockY);
         }
 
