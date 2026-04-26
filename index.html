@@ -342,10 +342,10 @@
 
         .ac-pin {
             flex-shrink: 0;
-            width: 32px;
-            height: 32px;
+            width: 38px;
+            height: 38px;
             background: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -380,7 +380,7 @@
         }
 
         body.dark-mode .ac-pin {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.10);
         }
 
         body.dark-mode .ac-code {
@@ -2027,115 +2027,132 @@
             flex-shrink: 0;
         }
 
+        /* ── FAV CARDS — Apple Weather style ── */
         .fp-list-wrap {
             flex: 1;
             overflow-y: auto;
-            padding: 8px 0 8px;
+            padding: 12px 14px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
         }
 
-        /* Fav items - new style */
         .fav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 13px 18px;
-            transition: background 0.15s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            cursor: pointer;
             position: relative;
-        }
-
-        .fav-item:last-child {
-            border-bottom: none;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px 18px 14px;
+            background: rgba(255, 255, 255, 0.13);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(18px) saturate(180%);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            transition: transform 0.18s, background 0.18s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
         }
 
         .fav-item:hover {
-            background: rgba(255, 255, 255, 0.10);
+            background: rgba(255, 255, 255, 0.20);
+            transform: scale(1.01);
         }
 
-        .fav-item-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 12px;
+        .fav-item:active {
+            transform: scale(0.98);
+        }
+
+        /* top row: city name left, temp right */
+        .fav-card-top {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .fav-card-name {
             font-size: 18px;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-        }
-
-        .fav-item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .fav-item-name {
-            font-size: 14px;
-            font-weight: 500;
-            white-space: nowrap;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+            line-height: 1.1;
+            max-width: 65%;
             overflow: hidden;
             text-overflow: ellipsis;
-            color: var(--text-primary);
+            white-space: nowrap;
         }
 
-        .fav-item-sub {
+        .fav-card-sub {
             font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
+            color: rgba(255, 255, 255, 0.70);
+            margin-top: 3px;
         }
 
-        .fav-item-actions {
+        .fav-card-temp {
+            font-size: 42px;
+            font-weight: 300;
+            color: #fff;
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        /* bottom row: condition left, range right */
+        .fav-card-bottom {
             display: flex;
-            gap: 6px;
-            flex-shrink: 0;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-top: 10px;
         }
 
-        .fav-btn-del {
-            width: 32px;
-            height: 32px;
+        .fav-card-condition {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 400;
+        }
+
+        .fav-card-range {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 400;
+            white-space: nowrap;
+        }
+
+        /* delete button — top right corner */
+        .fav-del-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.22);
+            background: rgba(0, 0, 0, 0.25);
+            border: none;
             cursor: pointer;
-            color: rgba(255, 180, 180, 0.9);
-            display: flex;
+            color: rgba(255, 255, 255, 0.6);
+            display: none;
             align-items: center;
             justify-content: center;
             transition: all 0.15s;
-            flex-shrink: 0;
+            z-index: 2;
         }
 
-        .fav-btn-del:hover {
-            background: rgba(244, 67, 54, 0.35);
-            border-color: rgba(244, 67, 54, 0.5);
-            color: #fff;
-        }
-
-        .fav-btn-go {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.28);
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.9);
+        .fav-item:hover .fav-del-btn {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.15s;
-            flex-shrink: 0;
         }
 
-        .fav-btn-go:hover {
-            background: rgba(255, 255, 255, 0.28);
-            border-color: rgba(255, 255, 255, 0.5);
+        .fav-del-btn:hover {
+            background: rgba(220, 50, 50, 0.55);
             color: #fff;
+        }
+
+        /* loading shimmer state */
+        .fav-card-loading .fav-card-temp,
+        .fav-card-loading .fav-card-condition,
+        .fav-card-loading .fav-card-range {
+            opacity: 0.35;
         }
 
         .fav-empty {
@@ -2147,6 +2164,17 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
+        }
+
+        /* legacy hidden */
+        .fav-item-icon,
+        .fav-item-info,
+        .fav-item-name,
+        .fav-item-sub,
+        .fav-item-actions,
+        .fav-btn-del,
+        .fav-btn-go {
+            display: none;
         }
 
         /* Legacy fav styles kept for compat */
@@ -2493,13 +2521,13 @@
             transform: translateX(-50%);
             z-index: 150;
             display: flex;
-            gap: 10px;
+            gap: 4px;
             background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 40px;
-            padding: 8px 10px;
+            padding: 8px 6px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
@@ -2509,18 +2537,19 @@
             align-items: center;
             justify-content: center;
             gap: 4px;
-            padding: 8px 16px;
-            border-radius: 30px;
+            padding: 10px 0 8px;
+            border-radius: 22px;
             border: none;
             cursor: pointer;
             font-family: 'Google Sans', sans-serif;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.75);
             background: transparent;
             transition: all 0.22s;
             white-space: nowrap;
-            min-width: 60px;
+            flex: 1;
+            min-width: 80px;
         }
 
         .bottom-nav-btn:hover,
@@ -2532,6 +2561,117 @@
 
         .bottom-nav-btn svg {
             flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+        }
+
+        /* ── WEATHER ALERT — inline fixed card (encima de próximas 24h) ── */
+        #weatherAlertBanner {
+            display: none;
+            flex-direction: column;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 28px;
+        }
+
+        #weatherAlertBanner.visible {
+            display: flex;
+            animation: alertFadeIn 0.38s ease both;
+        }
+
+        @keyframes alertFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Notification card — identical to daily-list / metric-card containers ── */
+        .alert-notif-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 18px 18px 16px 18px;
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ── Alert triangle icon SVG ── */
+        .alert-triangle-icon {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Header row: icon + title + close */
+        .alert-notif-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .alert-notif-title {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        .alert-close-btn {
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.18);
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.9);
+            transition: background 0.18s;
+        }
+
+        .alert-close-btn:hover {
+            background: rgba(255, 255, 255, 0.32);
+        }
+
+        /* Body text */
+        .alert-notif-body {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.93);
+            line-height: 1.5;
+            margin-bottom: 10px;
+            letter-spacing: -0.005em;
+        }
+
+        /* Source line — clickable link to official source */
+        .alert-notif-source {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.55);
+            letter-spacing: 0.01em;
+        }
+
+        .alert-notif-source a {
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .alert-notif-source a:hover {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: underline;
         }
 
         /* ── RESPONSIVE TWEAKS ── */
@@ -2684,7 +2824,7 @@
             display: none;
             flex-direction: column;
             gap: 4px;
-            min-width: 150px;
+            min-width: 170px;
         }
 
         .mmov-layer-panel.open {
@@ -2694,7 +2834,7 @@
         .mmov-layer-option {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             padding: 9px 12px;
             border-radius: 8px;
             cursor: pointer;
@@ -2924,6 +3064,12 @@
 
     <!-- Bottom Liquid Glass Nav -->
     <div class="bottom-nav" id="bottomNav">
+        <button class="bottom-nav-btn" id="btnNavLoc" onclick="geolocate()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                <path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z" />
+            </svg>
+            <span id="t_mobile_loc">Mi ubicación</span>
+        </button>
         <button class="bottom-nav-btn" id="btnNavMap" onclick="openMobileMap()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <polygon points="3,7 9,4 15,7 21,4 21,17 15,20 9,17 3,20" stroke="white" stroke-width="2"
@@ -2949,7 +3095,7 @@
             </svg>
             <span id="t_mobile_settings">${t('nav_settings')}</span>
         </button>
-        <!-- 4th nav item: search pill -->
+        <!-- search button -->
         <button class="bottom-nav-btn bottom-nav-search" id="btnNavSearch" onclick="toggleMobileSearch()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <circle cx="11" cy="11" r="7" stroke="white" stroke-width="2" />
@@ -3294,6 +3440,35 @@
 
         <!-- SUMMARY PHRASE -->
         <div id="summaryPhrase" class="summary-phrase fade-in"></div>
+
+        <!-- WEATHER ALERT inline — justo encima de próximas 24h -->
+        <div id="weatherAlertBanner" role="alert" aria-live="assertive">
+            <div class="alert-notif-card" id="alertBar">
+                <div class="alert-notif-header">
+                    <div class="alert-triangle-icon">
+                        <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11 1.5L20.5 18H1.5L11 1.5Z" fill="white" fill-opacity="0.95"
+                                stroke="rgba(255,255,255,0.5)" stroke-width="0.5" />
+                            <line x1="11" y1="8" x2="11" y2="13" stroke="rgba(0,0,0,0.55)" stroke-width="2"
+                                stroke-linecap="round" />
+                            <circle cx="11" cy="15.5" r="1" fill="rgba(0,0,0,0.55)" />
+                        </svg>
+                    </div>
+                    <span class="alert-notif-title" id="alertTitle">Clima adverso</span>
+                    <button class="alert-close-btn" onclick="dismissAlert()" title="Cerrar" aria-label="Cerrar alerta">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.8"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="alert-notif-body" id="alertTitle2">Alerta meteorológica activa</div>
+                <div class="alert-notif-source">
+                    <a href="#" id="alertSourceLink" target="_blank" rel="noopener">AEMET. Agencia Estatal de
+                        Meteorología</a>
+                </div>
+            </div>
+        </div>
 
         <!-- HOURLY -->
         <div class="section-label" id="t_next24h">Próximas 24 horas</div>
@@ -4910,21 +5085,24 @@
             try {
                 const daily = S.data.daily;
                 const checkMs = atMs !== undefined ? atMs : Date.now();
-                // Find which day's sunrise/sunset to use based on the timestamp
-                let rise = null, set = null;
-                if (daily && daily.sunrise && daily.sunset) {
-                    for (let i = daily.sunrise.length - 1; i >= 0; i--) {
-                        const r = new Date(daily.sunrise[i]);
-                        if (checkMs >= r.getTime() - 12 * 3600000) { // within same calendar day
-                            rise = r;
-                            set = new Date(daily.sunset[i]);
+
+                if (daily && daily.sunrise && daily.sunset && daily.sunrise.length > 0) {
+                    // Encontrar el día correcto: buscar el índice cuya fecha sea hoy o la más cercana
+                    const checkDate = new Date(checkMs);
+                    let bestIdx = 0;
+                    for (let i = 0; i < daily.sunrise.length; i++) {
+                        const riseDate = new Date(daily.sunrise[i]);
+                        // Usar la fecha de este día si checkMs está en el mismo día natural
+                        if (riseDate.toDateString() === checkDate.toDateString()) {
+                            bestIdx = i;
                             break;
                         }
                     }
-                    if (!rise) { rise = new Date(daily.sunrise[0]); set = new Date(daily.sunset[0]); }
+                    const rise = new Date(daily.sunrise[bestIdx]);
+                    const set = new Date(daily.sunset[bestIdx]);
+                    return checkMs < rise.getTime() || checkMs >= set.getTime();
                 }
-                if (!rise || !set) return false;
-                return checkMs < rise.getTime() || checkMs >= set.getTime();
+                return false;
             } catch (e) { return false; }
         }
 
@@ -5054,7 +5232,7 @@
             try {
                 if (S.source === 'wttr') await fetchWttr();
                 else await fetchOpenMeteo();
-                render(); scheduleRefresh();
+                render(); scheduleRefresh(); checkAndShowAlert(S.data);
             } catch (e) { showError('Error al obtener datos: ' + e.message); }
             finally { showLoading(false); }
         }
@@ -5306,7 +5484,7 @@
                 : `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="opacity:0.75"><circle cx="12" cy="12" r="4" fill="rgba(255,220,80,0.8)" stroke="rgba(255,220,80,0.9)" stroke-width="1.5"/><g stroke="rgba(255,220,80,0.8)" stroke-width="1.5" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="17.66" y2="6.34"/><line x1="6.34" y1="17.66" x2="4.93" y2="19.07"/></g></svg>`;
             document.getElementById('heroTime').innerHTML = `${timeIcon}<span>${timeStr} · ${dateStr}</span>`;
 
-            document.getElementById('heroIcon').innerHTML = weatherSVG(wmo.icon, 110);
+            document.getElementById('heroIcon').innerHTML = weatherSVG(wmo.icon, 110, Date.now());
             renderHourly(hourly, now); renderDaily(daily); renderMetrics(cur, daily);
             renderSunArc(daily.sunrise[0], daily.sunset[0]); renderChart(hourly, now);
             renderMoon(); renderSummaryPhrase(); renderAlerts(); updateMap();
@@ -5367,6 +5545,113 @@
                 div.onclick = () => showAlertDialog(a);
                 container.appendChild(div);
             });
+
+            // Fetch external alerts asynchronously and append if found
+            fetchExternalAlerts().then(externalAlerts => {
+                externalAlerts.forEach(a => {
+                    const div = document.createElement('div'); div.className = `weather-alert alert-${a.type}`;
+                    div.innerHTML = `<div class="alert-icon">${icons[a.type] || icons.orange}</div><div class="alert-content"><strong>${a.title}</strong><br><span style="font-size:12px;opacity:0.9">${a.text}</span></div>`;
+                    div.onclick = () => showAlertDialog(a);
+                    container.appendChild(div);
+                });
+            }).catch(() => { });
+        }
+
+        // ─── EXTERNAL ALERTS (multi-source) ──────────────────────────────────────────
+        // Fetches from multiple free sources: Open-Meteo forecast extremes,
+        // Nominatim country code → regional alert APIs
+        async function fetchExternalAlerts() {
+            const results = [];
+            if (!S.lat) return results;
+
+            // Source 1: Open-Meteo hourly wind gusts (next 24h) — more detailed than current
+            try {
+                const omUrl = `https://api.open-meteo.com/v1/forecast?latitude=${S.lat}&longitude=${S.lon}` +
+                    `&hourly=wind_gusts_10m,precipitation,cape&forecast_days=1&timezone=auto`;
+                const r = await fetch(omUrl);
+                if (r.ok) {
+                    const d = await r.json();
+                    if (d.hourly) {
+                        const maxGust = Math.max(...(d.hourly.wind_gusts_10m || [0]));
+                        const maxPrecip = (d.hourly.precipitation || []).reduce((a, b) => a + b, 0);
+                        const maxCAPE = Math.max(...(d.hourly.cape || [0]));
+                        if (maxGust >= 100) {
+                            results.push({ type: 'red', title: `⚡ ${t('alert_wind_r')} — Open-Meteo`, text: `Ráfagas de hasta ${fmtWind(maxGust)} en las próximas 24h`, detail: t('alert_wind_desc') });
+                        } else if (maxGust >= 75 && maxGust < 100) {
+                            results.push({ type: 'orange', title: `💨 ${t('alert_wind_o')} — Open-Meteo`, text: `Ráfagas de hasta ${fmtWind(maxGust)} previstas`, detail: t('alert_wind_desc') });
+                        }
+                        if (maxPrecip >= 50) {
+                            results.push({ type: 'orange', title: `🌧️ ${t('alert_rain_o')} — Open-Meteo`, text: `Precipitación acumulada prevista: ${fmtPrecip(maxPrecip)}${precipUnitLabel()}`, detail: t('alert_rain_desc') });
+                        }
+                        // High CAPE = convective instability = storm risk
+                        if (maxCAPE >= 2000) {
+                            results.push({ type: 'yellow', title: `⛈️ ${t('alert_storm')} — Open-Meteo`, text: `Inestabilidad convectiva alta (CAPE ${Math.round(maxCAPE)} J/kg)`, detail: t('alert_storm_desc') });
+                        }
+                    }
+                }
+            } catch (e) { /* silently skip */ }
+
+            // Source 2: AEMET avisos (Spain only) via proxy-free public RSS
+            try {
+                const countryCode = await getCountryCode();
+                if (countryCode === 'ES') {
+                    // AEMET no tiene API pública sin key, pero podemos usar el RSS de avisos de Protección Civil
+                    // que es de acceso libre. Usamos el de la red de predicción de AEMET vía WMO CAP
+                    const aemetUrl = `https://opendata.aemet.es/opendata/api/avisos_cap/ultimoelaborado/area/esp`;
+                    // Solo intentamos si tenemos key configurada (sin key usamos alternativa)
+                    // Alternativa gratuita: MeteoAlarm RSS (Europa)
+                    const meteoAlarmUrl = `https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-spain`;
+                    const rssR = await fetch(meteoAlarmUrl, { signal: AbortSignal.timeout(4000) });
+                    if (rssR.ok) {
+                        const rssText = await rssR.text();
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(rssText, 'application/xml');
+                        const entries = xmlDoc.querySelectorAll('entry');
+                        let addedFromMeteoAlarm = 0;
+                        entries.forEach(entry => {
+                            if (addedFromMeteoAlarm >= 2) return; // limit
+                            const title = entry.querySelector('title')?.textContent || '';
+                            const summary = entry.querySelector('summary')?.textContent || '';
+                            // Parse severity from title/content
+                            let alertType = 'yellow';
+                            if (/red|rojo|extreme/i.test(title + summary)) alertType = 'red';
+                            else if (/orange|naranja|high/i.test(title + summary)) alertType = 'orange';
+                            if (title && (title.toLowerCase().includes('spain') || title.toLowerCase().includes('españa') || !title.toLowerCase().includes('no active'))) {
+                                if (!title.toLowerCase().includes('no active') && !title.toLowerCase().includes('no hay avisos')) {
+                                    results.push({ type: alertType, title: `🔴 MeteoAlarm: ${title.substring(0, 60)}`, text: summary.substring(0, 100) || 'Ver detalles en MeteoAlarm', detail: 'Aviso emitido por MeteoAlarm / AEMET. Consulta la fuente oficial para más información.' });
+                                    addedFromMeteoAlarm++;
+                                }
+                            }
+                        });
+                    }
+                }
+            } catch (e) { /* silently skip */ }
+
+            // Source 3: Open-Meteo air quality extreme alerts
+            try {
+                if (S.aqiData && S.aqiData.european_aqi > 80) {
+                    const aqi = Math.round(S.aqiData.european_aqi);
+                    results.push({ type: aqi > 100 ? 'red' : 'orange', title: `😷 ${t('aqi')} — Open-Meteo AQ`, text: `Índice AQI europeo: ${aqi} — ${t(aqi > 100 ? 'aqi_haz' : 'aqi_vbad')}`, detail: 'La calidad del aire es perjudicial. Se recomienda evitar actividades al aire libre prolongadas.' });
+                }
+            } catch (e) { /* silently skip */ }
+
+            return results;
+        }
+
+        // Helper: get ISO country code from coordinates using Nominatim (OpenStreetMap)
+        async function getCountryCode() {
+            if (S._countryCode) return S._countryCode;
+            try {
+                const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${S.lat}&lon=${S.lon}&format=json`, {
+                    headers: { 'Accept-Language': 'en' }, signal: AbortSignal.timeout(3000)
+                });
+                if (r.ok) {
+                    const d = await r.json();
+                    S._countryCode = d.address?.country_code?.toUpperCase() || '';
+                    return S._countryCode;
+                }
+            } catch (e) { }
+            return '';
         }
 
         function showAlertDialog(a) {
@@ -6225,7 +6510,7 @@
             if (!S.lat || !S.cityName) return;
             const favs = loadFavs();
             if (favs.some(f => Math.abs(f.lat - S.lat) < 0.01 && Math.abs(f.lon - S.lon) < 0.01)) return;
-            favs.push({ name: S.cityName, lat: S.lat, lon: S.lon, addedAt: Date.now() });
+            favs.push({ name: S.cityName, lat: S.lat, lon: S.lon, addedAt: Date.now(), fc: S._featureCode || '', fl: S._featureClass || '' });
             saveFavs(favs); renderFavList();
             openFavModal(); // refresh button state
         }
@@ -6235,28 +6520,81 @@
             openFavModal();
         }
 
-        // City emoji based on name heuristics
-        // City icon based on name heuristics
-        function cityEmoji(name) {
-            const n = name.toLowerCase();
-            const svg = (path, color = "white") => `<svg width="22" height="22" viewBox="0 0 24 24"><path d="${path}" fill="${color}"/></svg>`;
+        // City icon based on name heuristics + geocoding feature_code/feature_class
+        function cityEmoji(name, featureCode, featureClass) {
+            const n = (name || '').toLowerCase();
+            const fc = (featureCode || '').toUpperCase();
+            const fl = (featureClass || '').toUpperCase();
 
-            const pin = "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z";
-            const beach = "M12 22a5 5 0 1 1 0-10 5 5 0 0 1 0 10zM12 2v2m0 16v2m8-10h2m-20 0h2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41M17.66 17.66l1.41 1.41M6.34 6.34l1.41-1.41";
-            const mountain = "M14 13l-5-7L3 18h18l-7-5z";
-            const city = "M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z";
+            const svg = (path, color = "white", extra = "") =>
+                `<svg width="22" height="22" viewBox="0 0 24 24" ${extra}><path d="${path}" fill="${color}"/></svg>`;
+            const svgStroke = (path, color = "white") =>
+                `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="${path}" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-            const forest = "M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z";
-            const home = "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z";
-            const landmark = "M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"; // Placeholder for more complex landmark
+            // SVG paths
+            const airportPath = "M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2 1.5 1.5 0 0 0 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z";
+            const cityPath = "M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z";
+            const capitalPath = "M12 3L2 9v1h2v9h4v-5h8v5h4V10h2V9L12 3zm0 2.5l6 3.6V10H6V9.1l6-3.6zM8 13h2v3H8v-3zm6 0h2v3h-2v-3z";
+            const mountainPath = "M14 13l-5-7L3 18h18l-7-5z";
+            const beachPath = "M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7";
+            const forestPath = "M17 12h-2.73l-3-4.5-3 4.5H6l-3 4.5h4v4h10v-4h4zM9 20.5v-4h6v4H9z";
+            const lakePath = "M7 16c.55 1.66 2.08 3 4 3h2c1.92 0 3.45-1.34 4-3 .28-.84.28-1.16 0-2-.55-1.66-2.08-3-4-3h-2c-1.92 0-3.45 1.34-4 3-.28.84-.28 1.16 0 2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z";
+            const homePath = "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z";
+            const villagePath = "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8zM5 9.09V6h-2v1.09L5 9.09z";
+            const islandPath = "M12 22a5 5 0 1 1 0-10 5 5 0 0 1 0 10zM12 2v2m0 16v2m8-10h2m-20 0h2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41M17.66 17.66l1.41 1.41M6.34 6.34l1.41-1.41";
+            const pinPath = "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z";
 
-            if (/beach|playa|costa|mare|sea|isla|island|bahía|bay|shore/.test(n)) return { html: svg(beach, "#FFD700"), bg: "rgba(255, 215, 0, 0.25)" };
-            if (/mountain|mont|berg|alp|sierra|peak|cima|pico|hill|valle|valley/.test(n)) return { html: svg(mountain, "#90caf9"), bg: "rgba(144, 202, 249, 0.25)" };
-            if (/forest|bosque|parque|park|wood|selva|jardín|garden|tree/.test(n)) return { html: svg(forest, "#81c784"), bg: "rgba(129, 199, 132, 0.25)" };
-            if (/home|casa|hogar|mi ubicación|my location/.test(n)) return { html: svg(home, "#ff8a65"), bg: "rgba(255, 138, 101, 0.25)" };
+            // ── By feature_code (most precise) ──
+            // Airports
+            if (/^AIRP|^AIRF|^AIRQ|^AIRG|^AIRS/.test(fc))
+                return { html: svg(airportPath, "#90caf9"), bg: "rgba(144,202,249,0.25)" };
+            // Capitals / admin seats
+            if (/^PPLC|^PPLA$/.test(fc))
+                return { html: svg(capitalPath, "#FFD700"), bg: "rgba(255,215,0,0.22)" };
+            // Lakes / water
+            if (/^LK|^RSV|^STM|^BAY|^GULF|^SEA/.test(fc))
+                return { html: svg(lakePath, "#4fc3f7"), bg: "rgba(79,195,247,0.22)" };
+            // Forests / parks / nature reserves
+            if (/^FRST|^PRK|^RESN|^RESV|^RES|^NTK/.test(fc))
+                return { html: svg(forestPath, "#81c784"), bg: "rgba(129,199,132,0.25)" };
+            // Mountains / peaks / hills
+            if (/^MT|^PK|^HLL|^DPRS|^PLN|^UPLD/.test(fc))
+                return { html: svg(mountainPath, "#90caf9"), bg: "rgba(144,202,249,0.25)" };
+            // Islands / beaches / coasts
+            if (/^ISL|^ISLT|^ISLS|^BCH|^CSTL|^CAPE|^PEN/.test(fc))
+                return { html: svg(islandPath, "#FFD700"), bg: "rgba(255,215,0,0.25)" };
+            // Small villages
+            if (/^PPLX|^PPLL|^PPLF|^PPLQ|^PPLR|^PPLS|^PPLW/.test(fc))
+                return { html: svg(villagePath, "#fff"), bg: "rgba(255,255,255,0.13)" };
 
-            // Default: city building icon
-            return { html: svg(city, "#fff"), bg: "rgba(255, 255, 255, 0.15)" };
+            // ── By feature_class ──
+            if (fl === 'S' && /^AIR/.test(fc))
+                return { html: svg(airportPath, "#90caf9"), bg: "rgba(144,202,249,0.25)" };
+            if (fl === 'H') // Hydrographic
+                return { html: svg(lakePath, "#4fc3f7"), bg: "rgba(79,195,247,0.22)" };
+            if (fl === 'T') // Mountain/terrain
+                return { html: svg(mountainPath, "#90caf9"), bg: "rgba(144,202,249,0.25)" };
+            if (fl === 'V') // Vegetation/forest
+                return { html: svg(forestPath, "#81c784"), bg: "rgba(129,199,132,0.25)" };
+            if (fl === 'L') // Parks/areas
+                return { html: svg(forestPath, "#a5d6a7"), bg: "rgba(165,214,167,0.22)" };
+
+            // ── Name-based fallbacks ──
+            if (/airport|aeropuerto|aéroport|flughafen|aeroporto|luchthaven/.test(n))
+                return { html: svg(airportPath, "#90caf9"), bg: "rgba(144,202,249,0.25)" };
+            if (/beach|playa|costa|sea|isla|island|bahía|bay|shore/.test(n))
+                return { html: svg(islandPath, "#FFD700"), bg: "rgba(255,215,0,0.25)" };
+            if (/mountain|mont|berg|alp|sierra|peak|cima|pico|hill|valle|valley/.test(n))
+                return { html: svg(mountainPath, "#90caf9"), bg: "rgba(144,202,249,0.25)" };
+            if (/forest|bosque|parque|park|wood|selva|jardín|garden|tree/.test(n))
+                return { html: svg(forestPath, "#81c784"), bg: "rgba(129,199,132,0.25)" };
+            if (/home|casa|hogar|mi ubicación|my location/.test(n))
+                return { html: svg(homePath, "#ff8a65"), bg: "rgba(255,138,101,0.25)" };
+            if (/lago|lake|river|río|canal|mar |ocean/.test(n))
+                return { html: svg(lakePath, "#4fc3f7"), bg: "rgba(79,195,247,0.22)" };
+
+            // Default: city building
+            return { html: svg(cityPath, "#fff"), bg: "rgba(255,255,255,0.15)" };
         }
 
         function renderFavList() {
@@ -6272,25 +6610,69 @@
                 </div>`;
                 return;
             }
+
+            // Render skeleton cards first
             container.innerHTML = favs.map((f, i) => {
-                const emoji = cityEmoji(f.name);
-                return `
-    <div class="fav-item" onclick="selectFromFav(${f.lat},${f.lon},'${escQ(f.name)}')">
-      <div class="fav-item-icon" style="background: ${emoji.bg}">${emoji.html}</div>
-      <div class="fav-item-info">
-        <div class="fav-item-name">${f.name}</div>
-        <div class="fav-item-sub">${f.lat.toFixed(2)}°, ${f.lon.toFixed(2)}° · ${new Date(f.addedAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
-      </div>
-      <div class="fav-item-actions">
-        <button class="fav-btn-go" onclick="event.stopPropagation();selectFromFav(${f.lat},${f.lon},'${escQ(f.name)}')" title="Ir">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="fav-btn-del" onclick="event.stopPropagation();deleteFav(${i})" title="Eliminar">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-    </div>`;
+                const shortName = f.name.split(',')[0];
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString(S.lang === 'es' ? 'es-ES' : 'en-GB', { hour: '2-digit', minute: '2-digit' });
+                return `<div class="fav-item fav-card-loading" id="fav-card-${i}" onclick="selectFromFav(${f.lat},${f.lon},'${escQ(f.name)}')">
+  <button class="fav-del-btn" onclick="event.stopPropagation();deleteFav(${i})" title="Eliminar">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>
+  </button>
+  <div class="fav-card-top">
+    <div>
+      <div class="fav-card-name">${shortName}</div>
+      <div class="fav-card-sub">${timeStr}</div>
+    </div>
+    <div class="fav-card-temp" id="fav-temp-${i}">—°</div>
+  </div>
+  <div class="fav-card-bottom">
+    <div class="fav-card-condition" id="fav-cond-${i}">…</div>
+    <div class="fav-card-range" id="fav-range-${i}">—</div>
+  </div>
+</div>`;
             }).join('');
+
+            // Fetch weather for each fav in parallel
+            favs.forEach(async (f, i) => {
+                try {
+                    const unit = S.unit === 'F' ? 'fahrenheit' : 'celsius';
+                    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${f.lat}&longitude=${f.lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=${unit}&timezone=auto&forecast_days=1`);
+                    const d = await r.json();
+                    const card = document.getElementById(`fav-card-${i}`);
+                    if (!card) return;
+                    card.classList.remove('fav-card-loading');
+
+                    const temp = Math.round(d.current?.temperature_2m ?? 0);
+                    const code = d.current?.weather_code ?? 0;
+                    const tmax = Math.round(d.daily?.temperature_2m_max?.[0] ?? temp);
+                    const tmin = Math.round(d.daily?.temperature_2m_min?.[0] ?? temp);
+                    const sym = S.unit === 'F' ? '°F' : '°';
+                    const condLabel = (WMO[code] || {})[S.lang] || (WMO[code] || {}).es || '';
+                    const lang = S.lang || 'es';
+                    const rangeLabel = lang === 'es'
+                        ? `Máx. ${tmax}${sym}  Mín. ${tmin}${sym}`
+                        : `H: ${tmax}${sym}  L: ${tmin}${sym}`;
+
+                    document.getElementById(`fav-temp-${i}`).textContent = temp + sym;
+                    document.getElementById(`fav-cond-${i}`).textContent = condLabel;
+                    document.getElementById(`fav-range-${i}`).textContent = rangeLabel;
+
+                    // Subtle tinted background per weather code
+                    const isRain = [51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code);
+                    const isStorm = [95, 96, 99].includes(code);
+                    const isSnow = [71, 73, 75, 77, 85, 86].includes(code);
+                    const isClear = [0, 1].includes(code);
+                    if (isStorm) card.style.background = 'rgba(80,50,120,0.30)';
+                    else if (isRain) card.style.background = 'rgba(40,80,160,0.28)';
+                    else if (isSnow) card.style.background = 'rgba(180,210,255,0.20)';
+                    else if (isClear) card.style.background = 'rgba(255,255,255,0.16)';
+                } catch (e) {
+                    const card = document.getElementById(`fav-card-${i}`);
+                    if (card) card.classList.remove('fav-card-loading');
+                }
+            });
         }
 
         function selectFromFav(lat, lon, name) {
@@ -6320,8 +6702,9 @@
                 const parts = [r.admin1, r.country].filter(Boolean);
                 const sub = parts.join(', ');
                 const countryCode = r.country_code ? r.country_code.toUpperCase() : '';
-                return `<div class="autocomplete-item" data-idx="${i}" onmousedown="selectCity(${r.latitude},${r.longitude},'${escQ(r.name + ', ' + (r.admin1 || r.country || ''))}')">
-      <div class="ac-pin"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#1a73e8" opacity="0.8"/><circle cx="12" cy="9" r="2.5" fill="#fff"/></svg></div>
+                const icon = cityEmoji(r.name, r.feature_code, r.feature_class);
+                return `<div class="autocomplete-item" data-idx="${i}" onmousedown="S._featureCode='${(r.feature_code || '').replace(/'/g, "\\'")}';S._featureClass='${(r.feature_class || '').replace(/'/g, "\\'")}';selectCity(${r.latitude},${r.longitude},'${escQ(r.name + ', ' + (r.admin1 || r.country || ''))}')">
+      <div class="ac-pin" style="background:${icon.bg}">${icon.html}</div>
       <div style="flex:1;min-width:0"><div class="ai-name">${r.name}</div><div class="ai-sub">${sub}</div></div>
       ${countryCode ? `<div class="ac-code">${countryCode}</div>` : ''}
     </div>`;
@@ -6335,7 +6718,7 @@
             if (e.key === 'Escape') { list.classList.remove('open'); acIndex = -1; if (window.innerWidth <= 600) hideMobileSearch(); return; }
             if (e.key === 'ArrowDown') { e.preventDefault(); acIndex = Math.min(acIndex + 1, items.length - 1); items.forEach((el, i) => el.style.background = i === acIndex ? 'rgba(255,255,255,0.15)' : ''); return; }
             if (e.key === 'ArrowUp') { e.preventDefault(); acIndex = Math.max(acIndex - 1, 0); items.forEach((el, i) => el.style.background = i === acIndex ? 'rgba(255,255,255,0.15)' : ''); return; }
-            if (e.key === 'Enter' && acIndex >= 0 && acResults[acIndex]) { const r = acResults[acIndex]; selectCity(r.latitude, r.longitude, r.name + ', ' + (r.admin1 || r.country || '')); return; }
+            if (e.key === 'Enter' && acIndex >= 0 && acResults[acIndex]) { const r = acResults[acIndex]; S._featureCode = r.feature_code || ''; S._featureClass = r.feature_class || ''; selectCity(r.latitude, r.longitude, r.name + ', ' + (r.admin1 || r.country || '')); return; }
         }
         document.addEventListener('click', e => { if (!e.target.closest('.search-wrap')) document.getElementById('acList').classList.remove('open'); });
 
@@ -6475,15 +6858,21 @@
                 overlay.className = 'mobile-map-overlay';
 
                 // Layer options for the mobile panel
+                const layerIcons = {
+                    temp: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
+                    precip: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="19" x2="8" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="8" y1="13" x2="8" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="19" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="13" x2="16" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+                    wind: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8h13a3 3 0 1 0 0-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 12h16a3 3 0 1 1 0 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="16" x2="12" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+                    aqi: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 13v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 17l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+                };
                 const layerOptions = [
-                    { key: 'temp', label: t('map_temp'), dot: 'background:linear-gradient(135deg,#4af,#f44)' },
-                    { key: 'precip', label: t('map_precip'), dot: 'background:#64b5f6' },
-                    { key: 'wind', label: t('map_wind'), dot: 'background:#b0bec5' },
-                    { key: 'aqi', label: t('map_aqi'), dot: 'background:linear-gradient(135deg,#00e400,#ff0000)' },
+                    { key: 'temp', label: t('map_temp') },
+                    { key: 'precip', label: t('map_precip') },
+                    { key: 'wind', label: t('map_wind') },
+                    { key: 'aqi', label: t('map_aqi') },
                 ];
                 const layerBtns = layerOptions.map(l =>
                     `<button class="mmov-layer-option${l.key === currentLayer ? ' active' : ''}" data-layer="${l.key}" onclick="setMapLayer('${l.key}')">
-                        <span style="width:8px;height:8px;border-radius:50%;flex-shrink:0;${l.dot}"></span>${l.label}
+                        ${layerIcons[l.key]}${l.label}
                     </button>`
                 ).join('');
 
@@ -6731,7 +7120,191 @@
         function showError(msg) { const el = document.getElementById('errorBanner'); el.textContent = msg; el.classList.add('show'); }
         function hideError() { document.getElementById('errorBanner').classList.remove('show'); }
 
-        // ─── INIT ─────────────────────────────────────────────────────────────────────
+        // ─── WEATHER ALERT SYSTEM ─────────────────────────────────────────────────────
+        //
+        // WMO codes clasificados por nivel de peligro:
+        //  EXTREME  → 99 (tormenta severa con granizo), 96 (tormenta + granizo), 95 (tormenta)
+        //  HIGH     → 82 (chubascos violentos), 75 (nieve intensa), 65 (lluvia intensa)
+        //  MODERATE → 73, 71 (nieve), 63, 61 (lluvia), 81, 80 (chubascos), 55 (llovizna densa)
+        //  SNOW     → 77 (granizo/nieve granular)
+
+        const ALERT_LEVELS = {
+            extreme: { codes: [95, 96, 99], level: 'extreme', priority: 4 },
+            high: { codes: [65, 75, 82], level: 'high', priority: 3 },
+            snow: { codes: [71, 73, 77], level: 'snow', priority: 2 },
+            moderate: { codes: [55, 61, 63, 80, 81], level: 'moderate', priority: 1 },
+        };
+
+        const ALERT_META = {
+            // Tormentas
+            95: { emoji: '⛈️', color: '#c62828', bgColor: 'rgba(183,28,28,0.25)', advice: { es: 'Evita espacios abiertos y árboles. Permanece en interior. Peligro de rayos y viento fuerte.', en: 'Stay indoors. Avoid open spaces and trees. Risk of lightning and strong wind.' } },
+            96: { emoji: '⛈️', color: '#c62828', bgColor: 'rgba(183,28,28,0.25)', advice: { es: 'Tormenta con granizo. Protege vehículos y no salgas sin protección. Riesgo de daños graves.', en: 'Hailstorm. Protect vehicles and do not go out without cover. Risk of severe damage.' } },
+            99: { emoji: '🌪️', color: '#7b0000', bgColor: 'rgba(100,0,0,0.3)', advice: { es: 'Tormenta severa con granizo grande. Permanece en refugio seguro. Riesgo vital.', en: 'Severe thunderstorm with large hail. Stay in safe shelter. Life risk.' } },
+            // Lluvias torrenciales
+            65: { emoji: '🌧️', color: '#1565c0', bgColor: 'rgba(21,101,192,0.25)', advice: { es: 'Lluvia intensa. Posibles inundaciones en zonas bajas. Conduce con precaución y evita torrentes.', en: 'Heavy rain. Possible flooding in low areas. Drive carefully and avoid streams.' } },
+            82: { emoji: '🌧️', color: '#e65100', bgColor: 'rgba(230,81,0,0.25)', advice: { es: 'Chubascos muy intensos. Visibilidad reducida. Evita carreteras cortadas y aparcamientos subterráneos.', en: 'Violent rain showers. Reduced visibility. Avoid flooded roads and underground car parks.' } },
+            // Nieve
+            71: { emoji: '🌨️', color: '#283593', bgColor: 'rgba(26,35,126,0.25)', advice: { es: 'Nieve ligera. Precaución al conducir y en accesos a zonas de montaña.', en: 'Light snow. Caution driving and on mountain access roads.' } },
+            73: { emoji: '❄️', color: '#283593', bgColor: 'rgba(26,35,126,0.28)', advice: { es: 'Nevada moderada. Usa cadenas o neumáticos de invierno. Evita salidas innecesarias.', en: 'Moderate snowfall. Use chains or winter tyres. Avoid unnecessary trips.' } },
+            75: { emoji: '❄️', color: '#1a237e', bgColor: 'rgba(26,35,126,0.35)', advice: { es: 'Nevada intensa. Carreteras de montaña cortadas. Permanece en lugar seguro y cálido.', en: 'Heavy snowfall. Mountain roads closed. Stay in a safe, warm place.' } },
+            77: { emoji: '🌨️', color: '#283593', bgColor: 'rgba(40,53,147,0.25)', advice: { es: 'Granizo/nieve granular. Superficies muy resbaladizas. Extrema precaución al caminar y conducir.', en: 'Snow grains. Very slippery surfaces. Extreme caution when walking and driving.' } },
+            // Lluvia moderada / chubascos
+            55: { emoji: '🌧️', color: '#1565c0', bgColor: 'rgba(21,101,192,0.2)', advice: { es: 'Llovizna intensa. Pavimento resbaladizo. Conduce despacio y mantén distancia de seguridad.', en: 'Dense drizzle. Slippery road. Drive slowly and keep a safe distance.' } },
+            61: { emoji: '🌦️', color: '#1565c0', bgColor: 'rgba(21,101,192,0.2)', advice: { es: 'Lluvia ligera. Lleva paraguas y precaución al conducir. Sin mayor riesgo.', en: 'Light rain. Carry an umbrella and drive carefully. No major risk.' } },
+            63: { emoji: '🌧️', color: '#1565c0', bgColor: 'rgba(21,101,192,0.22)', advice: { es: 'Lluvia moderada. Posible acumulación en calzadas. Conduce con precaución.', en: 'Moderate rain. Possible water accumulation on roads. Drive carefully.' } },
+            80: { emoji: '🌦️', color: '#1565c0', bgColor: 'rgba(21,101,192,0.2)', advice: { es: 'Chubascos ligeros intermitentes. Pueden cesar pronto. Lleva ropa de abrigo.', en: 'Light intermittent showers. May stop soon. Wear warm clothing.' } },
+            81: { emoji: '🌧️', color: '#1976d2', bgColor: 'rgba(25,118,210,0.22)', advice: { es: 'Chubascos moderados. Lleva paraguas. Posible lluvia fuerte puntualmente.', en: 'Moderate rain showers. Carry an umbrella. Possible brief heavy rain.' } },
+        };
+
+        // Detecta si hay una alerta activa en los próximos N horas
+        function detectWeatherAlert(data) {
+            if (!data) return null;
+
+            const cur = data.current;
+            const hourly = data.hourly;
+            const daily = data.daily;
+
+            // 1. Comprueba código actual
+            const curCode = cur.weather_code;
+            for (const [, grp] of Object.entries(ALERT_LEVELS)) {
+                if (grp.codes.includes(curCode)) {
+                    return buildAlert(curCode, grp.level, cur, hourly, 'now');
+                }
+            }
+
+            // 2. Comprueba próximas 6 horas en hourly
+            if (hourly && hourly.time) {
+                const now = new Date();
+                const horizon = new Date(now.getTime() + 6 * 3600000);
+                for (let i = 0; i < hourly.time.length; i++) {
+                    const t = new Date(hourly.time[i]);
+                    if (t < now || t > horizon) continue;
+                    const code = hourly.weather_code[i];
+                    for (const [, grp] of Object.entries(ALERT_LEVELS)) {
+                        if (grp.codes.includes(code)) {
+                            return buildAlert(code, grp.level, cur, hourly, t);
+                        }
+                    }
+                }
+            }
+
+            // 3. Comprueba daily máximo del día
+            if (daily && daily.weather_code && daily.weather_code[0]) {
+                const todayCode = daily.weather_code[0];
+                for (const [, grp] of Object.entries(ALERT_LEVELS)) {
+                    if (grp.codes.includes(todayCode) && grp.priority >= 2) {
+                        return buildAlert(todayCode, grp.level, cur, hourly, 'today');
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        function buildAlert(code, level, cur, hourly, when) {
+            const meta = ALERT_META[code] || { emoji: '⚠️', color: '#f57c00', bgColor: 'rgba(245,124,0,0.2)', advice: { es: 'Condiciones meteorológicas adversas.', en: 'Adverse weather conditions.' } };
+            const wmoInfo = WMO[code] || {};
+            const label = wmoInfo[S.lang] || wmoInfo.es || wmoInfo.en || 'Alerta';
+            const city = S.cityName ? S.cityName.split(',')[0] : '';
+
+            let whenLabel = '';
+            if (when === 'now') whenLabel = S.lang === 'es' ? 'Ahora mismo' : 'Right now';
+            else if (when === 'today') whenLabel = S.lang === 'es' ? 'Hoy' : 'Today';
+            else {
+                const h = new Date(when).getHours().toString().padStart(2, '0');
+                whenLabel = (S.lang === 'es' ? 'Previsto a las ' : 'Expected at ') + h + ':00';
+            }
+
+            return { code, level, meta, label, city, whenLabel, cur, hourly };
+        }
+
+        // Renders the alert banner with all detail
+        function renderAlert(alert) {
+            if (!alert) return;
+
+            const { level, meta, label, city, whenLabel, cur, hourly } = alert;
+            const lang = S.lang || 'es';
+
+            const titleEl = document.getElementById('alertTitle');
+            const bodyEl = document.getElementById('alertTitle2');
+            const sourceEl = document.getElementById('alertSourceLink');
+            const banner = document.getElementById('weatherAlertBanner');
+
+            // Title — always same style like screenshot
+            const levelNames = {
+                extreme: { es: 'Aviso rojo', en: 'Red warning' },
+                high: { es: 'Aviso naranja', en: 'Orange warning' },
+                moderate: { es: 'Clima adverso', en: 'Adverse weather' },
+                snow: { es: 'Aviso de nieve', en: 'Snow warning' },
+            };
+            titleEl.textContent = (levelNames[level] || levelNames.moderate)[lang === 'es' ? 'es' : 'en'];
+
+            // Body — descriptive sentence like AEMET notification
+            const cityStr = city ? ` en ${city}` : '';
+            const typeStr = label;
+            let bodyText = '';
+            if (lang === 'es') {
+                bodyText = `Aviso por ${typeStr.toLowerCase()}${cityStr}. ${whenLabel}.`;
+                if (level === 'extreme') bodyText += ' Alerta adicional: fenómeno severo con posible granizo.';
+                if (level === 'snow') bodyText += ' Posibles acumulaciones de nieve en zonas de montaña.';
+            } else {
+                bodyText = `Warning for ${typeStr.toLowerCase()}${cityStr}. ${whenLabel}.`;
+            }
+            bodyEl.textContent = bodyText;
+
+            // Source link — point to AEMET or relevant official source
+            let sourceUrl = `https://www.aemet.es/es/eltiempo/prediccion/avisos`;
+            let sourceLabel = 'AEMET. Agencia Estatal de Meteorología';
+            if (S._countryCode && S._countryCode !== 'ES') {
+                sourceUrl = `https://www.meteoalarm.org/`;
+                sourceLabel = 'MeteoAlarm. European weather warnings';
+            }
+            if (sourceEl) {
+                sourceEl.href = sourceUrl;
+                sourceEl.textContent = sourceLabel;
+            }
+
+            // Show banner (inline, no animation needed beyond CSS)
+            banner.classList.remove('visible');
+            void banner.offsetWidth;
+            banner.classList.add('visible');
+        }
+
+        // Dismiss alert (stores dismissed code + timestamp for 1h)
+        function dismissAlert() {
+            const banner = document.getElementById('weatherAlertBanner');
+            banner.classList.remove('visible');
+            // Remember dismissal
+            if (S._lastAlertCode) {
+                localStorage.setItem('wh_alert_dismissed', JSON.stringify({ code: S._lastAlertCode, at: Date.now() }));
+            }
+        }
+
+        // Check if user has dismissed this alert code recently (< 1 hour)
+        function isAlertDismissed(code) {
+            try {
+                const d = JSON.parse(localStorage.getItem('wh_alert_dismissed') || '{}');
+                return d.code === code && (Date.now() - d.at) < 3600000;
+            } catch { return false; }
+        }
+
+        // Main entry point — called after each fetchWeather()
+        function checkAndShowAlert(data) {
+            const alert = detectWeatherAlert(data);
+            if (!alert) {
+                // Hide banner if weather is now fine
+                const banner = document.getElementById('weatherAlertBanner');
+                if (banner) { banner.classList.remove('visible'); }
+                S._lastAlertCode = null;
+                return;
+            }
+            // Don't re-show a dismissed alert unless the code changed
+            if (isAlertDismissed(alert.code) && alert.code === S._lastAlertCode) return;
+            S._lastAlertCode = alert.code;
+            renderAlert(alert);
+        }
+
+
         initBgCanvas();
         loadPrefs();
         changeLang(S.lang);
