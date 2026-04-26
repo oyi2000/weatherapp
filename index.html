@@ -6915,10 +6915,27 @@
         function loadFavs() { try { return JSON.parse(localStorage.getItem('wh_favs') || '[]'); } catch (e) { return []; } }
         function saveFavs(favs) { localStorage.setItem('wh_favs', JSON.stringify(favs)); }
 
+        // ── SCROLL LOCK (works on iOS Safari too) ──
+        let _scrollLockY = 0;
+        function lockScroll() {
+            _scrollLockY = window.scrollY || window.pageYOffset;
+            document.body.style.top = '-' + _scrollLockY + 'px';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            document.body.style.overflow = 'hidden';
+        }
+        function unlockScroll() {
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            document.body.style.overflow = '';
+            window.scrollTo(0, _scrollLockY);
+        }
+
         function openFavModal() {
             renderFavList();
             document.getElementById('favModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
+            lockScroll();
             // Update add button state
             const btn = document.getElementById('favAddBtn');
             const textSpan = btn ? btn.querySelector('span') : null;
@@ -6928,7 +6945,7 @@
             if (btn) btn.disabled = alreadySaved;
             if (textSpan) textSpan.textContent = alreadySaved ? t('fav_saved') : t('fav_add_cur');
         }
-        function closeFavModal() { document.getElementById('favModal').classList.remove('open'); document.body.style.overflow = ''; }
+        function closeFavModal() { document.getElementById('favModal').classList.remove('open'); unlockScroll(); }
         document.getElementById('favModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeFavModal(); });
 
         function addCurrentToFav() {
@@ -7482,8 +7499,8 @@
                 }
             }
         }
-        function openSettings() { document.getElementById('settingsModal').classList.add('open'); document.body.style.overflow = 'hidden'; }
-        function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); document.body.style.overflow = ''; }
+        function openSettings() { document.getElementById('settingsModal').classList.add('open'); lockScroll(); }
+        function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); unlockScroll(); }
         document.getElementById('settingsModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeSettings(); });
         function setUnit(u) {
             S.unit = u;
