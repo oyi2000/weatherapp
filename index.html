@@ -862,21 +862,11 @@
             }
         }
 
-        .alert-yellow {
-            background: rgba(255, 193, 7, 0.35);
-            border-color: rgba(255, 193, 7, 0.45);
-            color: #fff;
-        }
-
-        .alert-orange {
-            background: rgba(255, 152, 0, 0.45);
-            border-color: rgba(255, 152, 0, 0.55);
-            color: #fff;
-        }
-
+        .alert-yellow,
+        .alert-orange,
         .alert-red {
-            background: rgba(244, 67, 54, 0.45);
-            border-color: rgba(244, 67, 54, 0.55);
+            background: rgba(255, 255, 255, 0.13);
+            border-color: rgba(255, 255, 255, 0.22);
             color: #fff;
         }
 
@@ -887,19 +877,7 @@
 
         .weather-alert:hover {
             transform: scale(1.01);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .alert-yellow:hover {
-            background: rgba(255, 193, 7, 0.45);
-        }
-
-        .alert-orange:hover {
-            background: rgba(255, 152, 0, 0.55);
-        }
-
-        .alert-red:hover {
-            background: rgba(244, 67, 54, 0.55);
+            background: rgba(255, 255, 255, 0.20);
         }
 
         /* ── ALERT MODAL OVERLAY ── */
@@ -1651,12 +1629,9 @@
             -webkit-backdrop-filter: blur(20px);
             z-index: 200;
             display: none;
-            align-items: flex-start;
+            align-items: center;
             justify-content: center;
-            /* padding seguro para PWA: safe-area + margen visual */
-            padding: calc(env(safe-area-inset-top, 0px) + 24px) 16px calc(env(safe-area-inset-bottom, 0px) + 24px);
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            padding: 16px;
         }
 
         .modal-overlay.open {
@@ -1748,8 +1723,7 @@
             border-radius: 28px;
             width: 400px;
             max-width: calc(100vw - 32px);
-            /* En PWA el 100% del overlay ya está limitado, dejamos crecer libre */
-            max-height: none;
+            max-height: 90vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -1822,10 +1796,7 @@
         }
 
         .sp-body {
-            flex: 1;
-            min-height: 0;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
             padding: 6px 0 16px;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
@@ -1963,7 +1934,7 @@
             border-radius: 28px;
             width: 380px;
             max-width: calc(100vw - 32px);
-            max-height: none;
+            max-height: 85vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -2055,9 +2026,7 @@
         /* ── FAV CARDS — Apple Weather style ── */
         .fp-list-wrap {
             flex: 1;
-            min-height: 0;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
             padding: 12px 14px 14px;
             display: flex;
             flex-direction: column;
@@ -2258,6 +2227,115 @@
             background: #1e3a5f;
             color: #fff;
             font-weight: 400;
+        }
+
+        /* ── SOURCE CARDS ── */
+        .src-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-bottom: 10px;
+        }
+
+        .src-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 11px 14px;
+            border-radius: 16px;
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .src-card:active {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .src-card.active {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.13);
+        }
+
+        .src-radio {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            flex-shrink: 0;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.15s;
+        }
+
+        .src-card.active .src-radio {
+            border-color: #fff;
+        }
+
+        .src-radio-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .src-card.active .src-radio-dot {
+            opacity: 1;
+        }
+
+        .src-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .src-name {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 2px;
+            flex-wrap: wrap;
+        }
+
+        .src-desc {
+            font-size: 11.5px;
+            color: rgba(255, 255, 255, 0.52);
+            line-height: 1.4;
+        }
+
+        .src-badge {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 2px 7px;
+            border-radius: 20px;
+        }
+
+        .src-badge--green {
+            background: rgba(46, 200, 120, 0.2);
+            color: #4ce89a;
+            border: 1px solid rgba(46, 200, 120, 0.28);
+        }
+
+        .src-badge--blue {
+            background: rgba(60, 150, 255, 0.18);
+            color: #7ec8ff;
+            border: 1px solid rgba(60, 150, 255, 0.28);
+        }
+
+        .src-badge--gray {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         /* Unit selects: all the same fixed width */
@@ -2603,43 +2681,36 @@
             height: 24px;
         }
 
-        /* ── WEATHER ALERT — inline fixed card (encima de próximas 24h) ── */
+        /* ── WEATHER ALERT — inline card (encima de próximas 24h) ── */
         #weatherAlertBanner {
-            display: none;
-            flex-direction: column;
-            border-radius: var(--radius);
-            overflow: hidden;
-            margin-bottom: 28px;
+            display: none !important;
         }
 
-        #weatherAlertBanner.visible {
-            display: flex;
-            animation: alertFadeIn 0.38s ease both;
-        }
-
-        @keyframes alertFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ── Notification card — identical to daily-list / metric-card containers ── */
+        /* ── Notification card — estilo AEMET: fondo blanco/cristal neutro, sin colores ── */
         .alert-notif-card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.13);
+            border: 1px solid rgba(255, 255, 255, 0.28);
             border-radius: var(--radius);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 18px 18px 16px 18px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            padding: 16px 18px 14px 18px;
             cursor: default;
             position: relative;
             overflow: hidden;
+        }
+
+        /* ── Unified alert card — mismo estilo blanco para alertsContainer ── */
+        .alert-card-unified {
+            background: rgba(255, 255, 255, 0.13) !important;
+            border: 1px solid rgba(255, 255, 255, 0.28) !important;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: filter 0.18s, transform 0.18s;
+        }
+
+        .alert-card-unified:hover {
+            background: rgba(255, 255, 255, 0.19) !important;
+            transform: translateY(-1px);
         }
 
         /* ── Alert triangle icon SVG ── */
@@ -3222,7 +3293,7 @@
                 </div>
 
                 <!-- Data Source -->
-                <div class="sp-section">
+                <div class="sp-section sp-section--source">
                     <div class="sp-section-label">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="opacity:.7">
                             <path
@@ -3231,13 +3302,94 @@
                         </svg>
                         <span id="t_source">Fuente de datos</span>
                     </div>
-                    <select class="pill-select" id="sourceSelect" onchange="changeSource(this.value)">
-                        <option value="open-meteo" id="t_src_open_meteo">Open-Meteo (automático)</option>
-                        <option value="gfs" id="t_src_gfs">GFS — modelo americano</option>
-                        <option value="ecmwf" id="t_src_ecmwf">ECMWF — modelo europeo</option>
-                        <option value="icon" id="t_src_icon">ICON — modelo alemán</option>
-                        <option value="wttr" id="t_src_wttr">wttr.in — datos globales</option>
-                    </select>
+                    <div class="src-cards" id="srcCards">
+                        <div class="src-card active" data-src="open-meteo" onclick="selectSourceCard('open-meteo')">
+                            <div class="src-radio">
+                                <div class="src-radio-dot"></div>
+                            </div>
+                            <div class="src-info">
+                                <div class="src-name">Open-Meteo <span
+                                        class="src-badge src-badge--green">Recomendado</span></div>
+                                <div class="src-desc">Modelo automático según tu ubicación. Máxima precisión global.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="src-card" data-src="ecmwf" onclick="selectSourceCard('ecmwf')">
+                            <div class="src-radio">
+                                <div class="src-radio-dot"></div>
+                            </div>
+                            <div class="src-info">
+                                <div class="src-name">ECMWF IFS <span class="src-badge src-badge--blue">Europa</span>
+                                </div>
+                                <div class="src-desc">Modelo europeo. Referencia mundial para predicciones a medio
+                                    plazo.</div>
+                            </div>
+                        </div>
+                        <div class="src-card" data-src="icon" onclick="selectSourceCard('icon')">
+                            <div class="src-radio">
+                                <div class="src-radio-dot"></div>
+                            </div>
+                            <div class="src-info">
+                                <div class="src-name">ICON (DWD) <span class="src-badge src-badge--blue">Europa</span>
+                                </div>
+                                <div class="src-desc">Modelo alemán. Alta precisión en Europa y zonas de montaña.</div>
+                            </div>
+                        </div>
+                        <div class="src-card" data-src="meteofrance" onclick="selectSourceCard('meteofrance')">
+                            <div class="src-radio">
+                                <div class="src-radio-dot"></div>
+                            </div>
+                            <div class="src-info">
+                                <div class="src-name">Météo-France <span class="src-badge src-badge--blue">Europa</span>
+                                </div>
+                                <div class="src-desc">Modelo oficial francés. Excelente para España y Mediterráneo.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="src-card" data-src="gfs" onclick="selectSourceCard('gfs')">
+                            <div class="src-radio">
+                                <div class="src-radio-dot"></div>
+                            </div>
+                            <div class="src-info">
+                                <div class="src-name">GFS (NOAA) <span class="src-badge src-badge--blue">Global</span>
+                                </div>
+                                <div class="src-desc">Modelo americano. Muy bueno para América y zonas oceánicas.</div>
+                            </div>
+                        </div>
+                        <div class="src-card" data-src="gem" onclick="selectSourceCard('gem')">
+                            <div class="src-radio">
+                                <div class="src-radio-dot"></div>
+                            </div>
+                            <div class="src-info">
+                                <div class="src-name">GEM (Canadá) <span class="src-badge src-badge--blue">Global</span>
+                                </div>
+                                <div class="src-desc">Modelo canadiense. Buena alternativa para el hemisferio norte.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="src-card" data-src="jma" onclick="selectSourceCard('jma')">
+                            <div class="src-radio">
+                                <div class="src-radio-dot"></div>
+                            </div>
+                            <div class="src-info">
+                                <div class="src-name">JMA (Japón) <span
+                                        class="src-badge src-badge--blue">Asia-Pac.</span></div>
+                                <div class="src-desc">Modelo meteorológico japonés. Preciso en Asia y Pacífico.</div>
+                            </div>
+                        </div>
+                        <div class="src-card" data-src="wttr" onclick="selectSourceCard('wttr')">
+                            <div class="src-radio">
+                                <div class="src-radio-dot"></div>
+                            </div>
+                            <div class="src-info">
+                                <div class="src-name">wttr.in <span class="src-badge src-badge--gray">Básico</span>
+                                </div>
+                                <div class="src-desc">Fuente alternativa ligera. Útil como respaldo si falla lo demás.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="sourceSelect" value="open-meteo">
                 </div>
 
                 <!-- Units -->
@@ -3432,12 +3584,6 @@
                         stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
-            <button class="btn-icon" id="darkModeBtn" onclick="toggleDark()" title="Modo oscuro">
-                <svg id="darkModeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="white" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </button>
             <button class="btn-icon" onclick="openSettings()" title="Configuración">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                     <circle cx="12" cy="12" r="3" stroke="white" stroke-width="2" />
@@ -3450,9 +3596,6 @@
 
         <!-- Error -->
         <div class="error-banner" id="errorBanner"></div>
-
-        <!-- Alerts -->
-        <div id="alertsContainer" class="alerts-container fade-in"></div>
 
         <!-- Location & update info -->
         <div class="location-bar">
@@ -3507,26 +3650,20 @@
         <!-- SUMMARY PHRASE -->
         <div id="summaryPhrase" class="summary-phrase fade-in"></div>
 
-        <!-- WEATHER ALERT inline — justo encima de próximas 24h -->
-        <div id="weatherAlertBanner" role="alert" aria-live="assertive">
+        <!-- UNIFIED ALERTS — encima de próximas 24h, estilo AEMET -->
+        <div id="unifiedAlertsBanner" style="display:none;margin-bottom:28px;" role="alert" aria-live="assertive">
             <div class="alert-notif-card" id="alertBar">
                 <div class="alert-notif-header">
                     <div class="alert-triangle-icon">
-                        <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11 1.5L20.5 18H1.5L11 1.5Z" fill="white" fill-opacity="0.95"
-                                stroke="rgba(255,255,255,0.5)" stroke-width="0.5" />
-                            <line x1="11" y1="8" x2="11" y2="13" stroke="rgba(0,0,0,0.55)" stroke-width="2"
-                                stroke-linecap="round" />
-                            <circle cx="11" cy="15.5" r="1" fill="rgba(0,0,0,0.55)" />
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                                stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                fill="rgba(255,255,255,0.1)" />
                         </svg>
                     </div>
-                    <span class="alert-notif-title" id="alertTitle">Clima adverso</span>
-                    <button class="alert-close-btn" onclick="dismissAlert()" title="Cerrar" aria-label="Cerrar alerta">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.8"
-                                stroke-linecap="round" />
-                        </svg>
-                    </button>
+                    <span class="alert-notif-title" id="alertTitle">Avisos activos</span>
+
                 </div>
                 <div class="alert-notif-body" id="alertTitle2">Alerta meteorológica activa</div>
                 <div class="alert-notif-source">
@@ -3535,6 +3672,9 @@
                 </div>
             </div>
         </div>
+        <!-- legacy id kept for JS compatibility -->
+        <div id="weatherAlertBanner" style="display:none!important"></div>
+        <div id="alertsContainer" style="display:none!important"></div>
 
         <!-- HOURLY -->
         <div class="section-label" id="t_next24h">Próximas 24 horas</div>
@@ -3764,9 +3904,9 @@
                         </button>
                         <div class="anim-timeline">
                             <span class="anim-hour-label" id="animHourLabel">Ahora</span>
-                            <input type="range" class="anim-slider" id="animSlider" min="0" max="23" value="0"
+                            <input type="range" class="anim-slider" id="animSlider" min="0" max="12" value="0"
                                 oninput="onAnimSlider(this.value)">
-                            <span class="anim-hour-label" id="animHourEnd">+23h</span>
+                            <span class="anim-hour-label" id="animHourEnd">+12h</span>
                         </div>
                     </div>
                     <!-- Legend -->
@@ -3783,7 +3923,7 @@
     </div><!-- /app -->
 
     <footer class="app-footer">
-        <span>v0.0.1</span>
+        <span>v1.0.0</span>
         <span class="beta-tag">BETA</span>
     </footer>
 
@@ -5376,30 +5516,82 @@
 
         // ─── APPLE-STYLE ANIMATED BACKGROUND ──────────────────────────────────────────
         const BG_THEMES = {
-            dawn: { stops: ['#ff6e3c', '#c84b2f', '#1a2b4c', '#0d1a38'], sun: { x: 0.7, y: 0.15, r: 0.35, col: 'rgba(255,160,60,0.55)' } },
-            morning: { stops: ['#4a90e2', '#5ba3ef', '#90bce9', '#c5daf5'], sun: { x: 0.8, y: 0.1, r: 0.4, col: 'rgba(255,230,120,0.4)' } },
-            day: { stops: ['#1a6fd4', '#2c7fd8', '#5cb3ff', '#87ceeb'], sun: { x: 0.85, y: 0.05, r: 0.45, col: 'rgba(255,240,140,0.3)' } },
-            afternoon: { stops: ['#1565c0', '#185a9d', '#43cea2', '#87d7c0'], sun: { x: 0.65, y: 0.25, r: 0.3, col: 'rgba(255,200,80,0.3)' } },
-            sunset: { stops: ['#2b1d3d', '#7b2f55', '#c86a63', '#e8956d'], sun: { x: 0.3, y: 0.55, r: 0.4, col: 'rgba(255,120,60,0.45)' } },
-            night: { stops: ['#091024', '#0e1c3a', '#1b2a4a', '#0d1f38'], sun: null },
-            midnight: { stops: ['#000005', '#05080f', '#0a1128', '#060c1e'], sun: null },
-            cloudy: { stops: ['#5a6a7a', '#617285', '#8a9ab0', '#9baabf'], sun: null },
-            stormy: { stops: ['#1a202e', '#2c3547', '#3a3f50', '#2e3344'], sun: null },
-            rainy: { stops: ['#283444', '#3a4a5a', '#4a5d6e', '#567082'], sun: null },
-            snowy: { stops: ['#6e8290', '#8195a6', '#a0b5c2', '#b5c6d6'], sun: null },
+            // Madrugada: índigo profundo a negro azulado, luna fría
+            midnight: {
+                stops: ['#020510', '#060d20', '#0b1530', '#08102a'], sun: null,
+                moon: { x: 0.72, y: 0.12, r: 0.18, col: 'rgba(200,220,255,0.22)' }
+            },
+            // Noche: azul marino con toque violeta
+            night: {
+                stops: ['#0a1228', '#111e3d', '#182a4e', '#0f1e3a'], sun: null,
+                moon: { x: 0.78, y: 0.15, r: 0.2, col: 'rgba(190,215,255,0.18)' }
+            },
+            // Alba: naranja cobre + rosa + índigo, sol justo asomando
+            dawn: {
+                stops: ['#1a0e28', '#7a2a1a', '#d4612a', '#f0a458'],
+                sun: { x: 0.62, y: 0.82, r: 0.45, col: 'rgba(255,180,80,0.65)' }
+            },
+            // Mañana: azul cielo vivo con sol alto y blancas luces
+            morning: {
+                stops: ['#1563c8', '#2e82e8', '#60aef5', '#a8d8fa'],
+                sun: { x: 0.78, y: 0.08, r: 0.42, col: 'rgba(255,240,140,0.50)' }
+            },
+            // Mediodía: azul eléctrico profundo, sol cenital potente
+            day: {
+                stops: ['#0d52b8', '#1469d6', '#3892ef', '#72c0f8'],
+                sun: { x: 0.5, y: 0.0, r: 0.5, col: 'rgba(255,248,180,0.40)' }
+            },
+            // Tarde: azul-turquesa dorado, sol ya bajo
+            afternoon: {
+                stops: ['#0e4fa0', '#1464b8', '#2e9fcc', '#5ed0c8'],
+                sun: { x: 0.7, y: 0.3, r: 0.35, col: 'rgba(255,210,100,0.38)' }
+            },
+            // Atardecer: fucsia → cobre → naranja encendido → índigo
+            sunset: {
+                stops: ['#1c0e30', '#8c2255', '#d85a3a', '#f09050'],
+                sun: { x: 0.22, y: 0.65, r: 0.5, col: 'rgba(255,110,40,0.60)' }
+            },
+            // Nublado: grises azulados con textura perlada
+            cloudy: { stops: ['#4a5870', '#5a6a82', '#7a8ea6', '#9aafc2'], sun: null },
+            // Tormenta: casi negro azulado, muy dramático
+            stormy: { stops: ['#0e1218', '#181e28', '#20283a', '#1a2030'], sun: null },
+            // Lluvia: azules pizarra con toque verdoso
+            rainy: { stops: ['#1e2c3c', '#283c50', '#344e62', '#3e5c70'], sun: null },
+            // Nieve: blancos azulados suaves con brillo nacarado
+            snowy: {
+                stops: ['#7a9ab0', '#90b0c8', '#b0ccd8', '#c8dee8'],
+                sun: { x: 0.5, y: 0.08, r: 0.5, col: 'rgba(255,255,255,0.30)' }
+            },
         };
         const BG_DARK_THEMES = {
-            dawn: { stops: ['#4a1a0a', '#1a0d08', '#080f1e', '#050c18'], sun: null },
-            morning: { stops: ['#1a2d45', '#1e3550', '#2d4060', '#3a4e68'], sun: null },
-            day: { stops: ['#0e2244', '#163568', '#1e4880', '#285a94'], sun: null },
-            afternoon: { stops: ['#071830', '#0c2645', '#103355', '#0d2a40'], sun: null },
-            sunset: { stops: ['#120810', '#1e0e1a', '#3a1828', '#250c18'], sun: null },
-            night: { stops: ['#020408', '#050910', '#08101e', '#050c18'], sun: null },
-            midnight: { stops: ['#000002', '#020406', '#03060c', '#010408'], sun: null },
-            cloudy: { stops: ['#252c35', '#303840', '#3d464f', '#3a4450'], sun: null },
-            stormy: { stops: ['#0e1015', '#151a22', '#1a1f2a', '#131820'], sun: null },
-            rainy: { stops: ['#101822', '#18222e', '#1e2c38', '#1a2830'], sun: null },
-            snowy: { stops: ['#2e3a42', '#384450', '#42505a', '#3c4a52'], sun: null },
+            // Madrugada modo oscuro: casi negro total
+            midnight: {
+                stops: ['#010205', '#030710', '#050c18', '#030814'], sun: null,
+                moon: { x: 0.72, y: 0.12, r: 0.18, col: 'rgba(180,200,255,0.12)' }
+            },
+            // Noche modo oscuro
+            night: {
+                stops: ['#04091a', '#080f28', '#0c1632', '#080f28'], sun: null,
+                moon: { x: 0.78, y: 0.15, r: 0.2, col: 'rgba(170,200,255,0.10)' }
+            },
+            // Alba modo oscuro: muy tenue
+            dawn: { stops: ['#1c0808', '#100a18', '#0c1020', '#08101c'], sun: null },
+            // Mañana modo oscuro: azules muy apagados
+            morning: { stops: ['#0c1e38', '#102540', '#182e50', '#1e3858'], sun: null },
+            // Día modo oscuro: azul noche profundo
+            day: { stops: ['#0a1c40', '#0f2555', '#152e68', '#183275'], sun: null },
+            // Tarde modo oscuro
+            afternoon: { stops: ['#071828', '#0b2240', '#0f2a50', '#0b2240'], sun: null },
+            // Atardecer modo oscuro: vino tinto y burdeos
+            sunset: { stops: ['#0e0510', '#1a0c18', '#2e1020', '#1e0a18'], sun: null },
+            // Nublado modo oscuro
+            cloudy: { stops: ['#1a2030', '#222838', '#2c3445', '#283040'], sun: null },
+            // Tormenta modo oscuro: negro azabache
+            stormy: { stops: ['#060810', '#0c1018', '#121820', '#0e1420'], sun: null },
+            // Lluvia modo oscuro
+            rainy: { stops: ['#0c1420', '#10182c', '#141e34', '#121c30'], sun: null },
+            // Nieve modo oscuro: grises fríos
+            snowy: { stops: ['#1c2830', '#22303a', '#2c3c44', '#283840'], sun: null },
         };
 
         let bgCtx, bgW, bgH, bgThemeKey = 'day', bgBlobs = [];
@@ -5488,27 +5680,52 @@
             bgCtx.fillStyle = grad;
             bgCtx.fillRect(0, 0, bgW, bgH);
 
-            // Soft blob overlays
+            // Soft blob overlays — más sutiles en modo oscuro, más luminosos en claro
+            const isNightTheme = bgThemeKey === 'night' || bgThemeKey === 'midnight';
             const blobColors = isDark
-                ? ['rgba(255,255,255,0.015)', 'rgba(255,255,255,0.01)', 'rgba(100,150,255,0.02)']
-                : ['rgba(255,255,255,0.07)', 'rgba(255,255,255,0.04)', 'rgba(200,230,255,0.06)'];
+                ? ['rgba(255,255,255,0.012)', 'rgba(180,200,255,0.015)', 'rgba(100,140,255,0.018)', 'rgba(255,255,255,0.008)', 'rgba(140,180,255,0.012)']
+                : isNightTheme
+                    ? ['rgba(200,220,255,0.04)', 'rgba(255,255,255,0.025)', 'rgba(160,200,255,0.035)']
+                    : ['rgba(255,255,255,0.09)', 'rgba(255,255,255,0.05)', 'rgba(200,230,255,0.07)', 'rgba(255,250,220,0.04)', 'rgba(180,220,255,0.06)'];
 
             bgBlobs.forEach((b, i) => {
                 const rg = bgCtx.createRadialGradient(b.x * bgW, b.y * bgH, 0, b.x * bgW, b.y * bgH, b.r * Math.max(bgW, bgH));
                 rg.addColorStop(0, blobColors[i % blobColors.length]);
+                rg.addColorStop(0.5, blobColors[i % blobColors.length].replace(/[\d.]+\)$/, '0.005)'));
                 rg.addColorStop(1, 'rgba(0,0,0,0)');
                 bgCtx.fillStyle = rg;
                 bgCtx.fillRect(0, 0, bgW, bgH);
             });
 
-            // Sun/glow
+            // Sun glow — núcleo brillante + halo difuso doble capa
             if (theme.sun) {
                 const s = theme.sun;
-                const sg = bgCtx.createRadialGradient(s.x * bgW, s.y * bgH, 0, s.x * bgW, s.y * bgH, s.r * Math.max(bgW, bgH));
+                const maxR = Math.max(bgW, bgH);
+                // Halo exterior suave
+                const halo = bgCtx.createRadialGradient(s.x * bgW, s.y * bgH, 0, s.x * bgW, s.y * bgH, s.r * maxR * 1.6);
+                halo.addColorStop(0, s.col.replace(/[\d.]+\)$/, '0.12)'));
+                halo.addColorStop(1, 'rgba(0,0,0,0)');
+                bgCtx.fillStyle = halo;
+                bgCtx.fillRect(0, 0, bgW, bgH);
+                // Núcleo luminoso
+                const sg = bgCtx.createRadialGradient(s.x * bgW, s.y * bgH, 0, s.x * bgW, s.y * bgH, s.r * maxR);
                 sg.addColorStop(0, s.col);
-                sg.addColorStop(0.5, s.col.replace(/[\d.]+\)$/, '0.15)'));
+                sg.addColorStop(0.3, s.col.replace(/[\d.]+\)$/, '0.25)'));
+                sg.addColorStop(0.7, s.col.replace(/[\d.]+\)$/, '0.08)'));
                 sg.addColorStop(1, 'rgba(0,0,0,0)');
                 bgCtx.fillStyle = sg;
+                bgCtx.fillRect(0, 0, bgW, bgH);
+            }
+
+            // Moon glow — brillo plateado frío para noche/madrugada
+            if (theme.moon) {
+                const m = theme.moon;
+                const maxR = Math.max(bgW, bgH);
+                const mg = bgCtx.createRadialGradient(m.x * bgW, m.y * bgH, 0, m.x * bgW, m.y * bgH, m.r * maxR);
+                mg.addColorStop(0, m.col);
+                mg.addColorStop(0.4, m.col.replace(/[\d.]+\)$/, '0.08)'));
+                mg.addColorStop(1, 'rgba(0,0,0,0)');
+                bgCtx.fillStyle = mg;
                 bgCtx.fillRect(0, 0, bgW, bgH);
             }
 
@@ -5737,9 +5954,17 @@
 
         // ─── API SOURCE ───────────────────────────────────────────────────────────────
         function getModelParam() {
-            const m = { 'gfs': 'gfs_seamless', 'ecmwf': 'ecmwf_ifs025', 'icon': 'icon_seamless' };
+            const m = {
+                'gfs': 'gfs_seamless',
+                'ecmwf': 'ecmwf_ifs025',
+                'icon': 'icon_seamless',
+                'meteofrance': 'meteofrance_seamless',
+                'gem': 'gem_seamless',
+                'jma': 'jma_seamless'
+            };
             return m[S.source] ? `&models=${m[S.source]}` : '';
         }
+
 
         // ─── FETCH WEATHER ─────────────────────────────────────────────────────────────
         async function fetchWeather() {
@@ -6034,46 +6259,126 @@
         })();
 
         function renderAlerts() {
-            const container = document.getElementById('alertsContainer');
-            if (!container || !S.data) return;
-            container.innerHTML = '';
-            const icons = {
-                yellow: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 18c-.77 1.333.192 3 1.732 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-                orange: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 18c-.77 1.333.192 3 1.732 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-                red: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 18c-.77 1.333.192 3 1.732 3z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-                tornado: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 4H3M20 8H6M18 12H9M15 16h-4M12 20h-1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
-                wind: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 8h13a3 3 0 1 0 0-6M3 12h16a3 3 0 1 1 0 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
-                rain: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 16.2A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
-                heat: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v12M12 18v.01M7 7.5a7 7 0 0 1 10 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`
-            };
-            const cur = S.data.current, daily = S.data.daily, alerts = [];
+            if (!S.data) return;
+            const banner = document.getElementById('unifiedAlertsBanner');
+            if (!banner) return;
+
+            const cur = S.data.current, daily = S.data.daily;
+            const alerts = [];
             const gusts = cur.wind_gusts_10m || cur.wind_speed_10m * 1.3;
-            if (gusts >= 90) alerts.push({ type: 'red', icon: icons.red, title: `${t('alert_r')}: ${t('alert_wind_r')}`, text: t('sum_wind').replace('{v}', fmtWind(gusts)), detail: t('alert_wind_desc') });
-            else if (gusts >= 70) alerts.push({ type: 'orange', icon: icons.orange, title: `${t('alert_o')}: ${t('alert_wind_o')}`, text: t('sum_wind').replace('{v}', fmtWind(gusts)), detail: t('alert_wind_desc') });
+            if (gusts >= 90) alerts.push({ type: 'red', title: `${t('alert_r')}: ${t('alert_wind_r')}`, text: t('sum_wind').replace('{v}', fmtWind(gusts)), detail: t('alert_wind_desc') });
+            else if (gusts >= 70) alerts.push({ type: 'orange', title: `${t('alert_o')}: ${t('alert_wind_o')}`, text: t('sum_wind').replace('{v}', fmtWind(gusts)), detail: t('alert_wind_desc') });
             const rainToday = daily.precipitation_sum[0] || 0;
-            if (rainToday >= 40) alerts.push({ type: 'orange', icon: icons.rain, title: `${t('alert_o')}: ${t('alert_rain_o')}`, text: `~ ${fmtPrecip(rainToday)}${precipUnitLabel()}`, detail: t('alert_rain_desc') });
+            if (rainToday >= 40) alerts.push({ type: 'orange', title: `${t('alert_o')}: ${t('alert_rain_o')}`, text: `~ ${fmtPrecip(rainToday)}${precipUnitLabel()}`, detail: t('alert_rain_desc') });
             const maxT = daily.temperature_2m_max[0];
-            if (maxT >= 40) alerts.push({ type: 'red', icon: icons.heat, title: `${t('alert_r')}: ${t('temp')}`, text: `${fmtTemp(maxT)}°`, detail: t('alert_heat_desc') });
+            if (maxT >= 40) alerts.push({ type: 'red', title: `${t('alert_r')}: ${t('temp')}`, text: `${fmtTemp(maxT)}°`, detail: t('alert_heat_desc') });
             const wmo = cur.weather_code;
-            if (wmo === 99) alerts.push({ type: 'tornado', icon: icons.tornado, title: t('alert_t'), text: t('alert_tornado'), detail: t('alert_tornado_desc') });
-            else if (wmo >= 95) alerts.push({ type: 'yellow', icon: icons.yellow, title: t('alert_y'), text: t('alert_storm'), detail: t('alert_storm_desc') });
+            if (wmo === 99) alerts.push({ type: 'tornado', title: t('alert_t'), text: t('alert_tornado'), detail: t('alert_tornado_desc') });
+            else if (wmo >= 95) alerts.push({ type: 'yellow', title: t('alert_y'), text: t('alert_storm'), detail: t('alert_storm_desc') });
 
-            alerts.forEach(a => {
-                const div = document.createElement('div'); div.className = `weather-alert alert-${a.type}`;
-                div.innerHTML = `<div class="alert-icon">${a.icon}</div><div class="alert-content"><strong>${a.title}</strong><br><span style="font-size:12px;opacity:0.9">${a.text}</span></div>`;
-                div.onclick = () => showAlertDialog(a);
-                container.appendChild(div);
+            if (alerts.length === 0) {
+                // Se mostrará o no según checkAndShowAlert — no ocultar si hay alerta WMO activa
+                // Pero si no hay alertas de este bloque, dejamos que checkAndShowAlert controle
+                fetchExternalAlerts().then(ext => {
+                    if (ext.length > 0) showCombinedAlerts(ext);
+                }).catch(() => { });
+                return;
+            }
+
+            // Fetch external alerts and merge all together
+            fetchExternalAlerts().then(ext => {
+                showCombinedAlerts([...alerts, ...ext]);
+            }).catch(() => {
+                showCombinedAlerts(alerts);
             });
+        }
 
-            // Fetch external alerts asynchronously and append if found
-            fetchExternalAlerts().then(externalAlerts => {
-                externalAlerts.forEach(a => {
-                    const div = document.createElement('div'); div.className = `weather-alert alert-${a.type}`;
-                    div.innerHTML = `<div class="alert-icon">${icons[a.type] || icons.orange}</div><div class="alert-content"><strong>${a.title}</strong><br><span style="font-size:12px;opacity:0.9">${a.text}</span></div>`;
-                    div.onclick = () => showAlertDialog(a);
-                    container.appendChild(div);
-                });
-            }).catch(() => { });
+        // Muestra todas las alertas en un único card combinado estilo AEMET
+        function showCombinedAlerts(alerts) {
+            if (!alerts || alerts.length === 0) return;
+            const banner = document.getElementById('unifiedAlertsBanner');
+            if (!banner) return;
+
+            // Prioridad: red > tornado > orange > yellow
+            const priority = { red: 4, tornado: 3, orange: 2, yellow: 1 };
+            const sorted = [...alerts].sort((a, b) => (priority[b.type] || 0) - (priority[a.type] || 0));
+            const topType = sorted[0].type;
+            const accent = 'rgba(255,255,255,0.55)';
+
+            // Titulo combinado: "Avisos por viento fuerte y calidad del aire mala"
+            const cleanTitles = sorted.map(a =>
+                (a.title || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '')
+                    .replace(/^Aviso \w+:\s*/i, '').trim()
+            );
+            const titleEl = document.getElementById('alertTitle');
+            const bodyEl = document.getElementById('alertTitle2');
+            const sourceEl = document.getElementById('alertSourceLink');
+
+            if (cleanTitles.length === 1) {
+                titleEl.textContent = sorted[0].title.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim();
+            } else {
+                const lang = S.lang || 'es';
+                const joinWord = lang === 'es' ? ' y ' : ' and ';
+                const prep = lang === 'es' ? 'Avisos por ' : 'Warnings: ';
+                titleEl.textContent = prep + cleanTitles.slice(0, -1).join(', ') + joinWord + cleanTitles[cleanTitles.length - 1];
+            }
+
+            // Body: primera alerta más detalle
+            const bodyLines = sorted.map(a => (a.text || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim()).filter(Boolean);
+            bodyEl.textContent = bodyLines.join(' — ');
+
+            // Source
+            let sourceUrl = 'https://www.aemet.es/es/eltiempo/prediccion/avisos';
+            let sourceLabel = 'AEMET. Agencia Estatal de Meteorología';
+            if (S._countryCode && S._countryCode !== 'ES') {
+                sourceUrl = 'https://www.meteoalarm.org/';
+                sourceLabel = 'MeteoAlarm. European weather warnings';
+            }
+            if (sourceEl) { sourceEl.href = sourceUrl; sourceEl.textContent = sourceLabel; }
+
+            banner.style.display = '';
+            S._lastAlertCode = sorted[0].type;
+        }
+
+        // Construye una tarjeta de aviso estilo AEMET: fondo cristal neutro, sin emojis
+        function buildAlertCard(a, icons) {
+            const div = document.createElement('div');
+            div.className = 'alert-notif-card alert-card-unified';
+            div.style.cssText = `cursor:pointer;margin-bottom:0`;
+            div.setAttribute('role', 'alert');
+
+            // Strip emojis from title and text
+            const cleanTitle = (a.title || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim();
+            const cleanText = (a.text || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim();
+
+            // Header: icon + title
+            const header = document.createElement('div');
+            header.className = 'alert-notif-header';
+            header.innerHTML = `
+                <div class="alert-triangle-icon" style="color:${accent}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                            stroke="${accent}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            fill="${accent}22"/>
+                    </svg>
+                </div>
+                <span class="alert-notif-title">${cleanTitle}</span>`;
+            div.appendChild(header);
+
+            const body = document.createElement('div');
+            body.className = 'alert-notif-body';
+            body.textContent = cleanText;
+            div.appendChild(body);
+
+            if (a.detail) {
+                const src = document.createElement('div');
+                src.className = 'alert-notif-source';
+                src.textContent = (a.detail || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim();
+                div.appendChild(src);
+            }
+
+            div.onclick = () => showAlertDialog(a);
+            return div;
         }
 
         // ─── EXTERNAL ALERTS (multi-source) ──────────────────────────────────────────
@@ -6095,16 +6400,16 @@
                         const maxPrecip = (d.hourly.precipitation || []).reduce((a, b) => a + b, 0);
                         const maxCAPE = Math.max(...(d.hourly.cape || [0]));
                         if (maxGust >= 100) {
-                            results.push({ type: 'red', title: `⚡ ${t('alert_wind_r')} — Open-Meteo`, text: `Ráfagas de hasta ${fmtWind(maxGust)} en las próximas 24h`, detail: t('alert_wind_desc') });
+                            results.push({ type: 'red', title: `${t('alert_wind_r')} — Open-Meteo`, text: `Ráfagas de hasta ${fmtWind(maxGust)} en las próximas 24h`, detail: t('alert_wind_desc') });
                         } else if (maxGust >= 75 && maxGust < 100) {
-                            results.push({ type: 'orange', title: `💨 ${t('alert_wind_o')} — Open-Meteo`, text: `Ráfagas de hasta ${fmtWind(maxGust)} previstas`, detail: t('alert_wind_desc') });
+                            results.push({ type: 'orange', title: `${t('alert_wind_o')} — Open-Meteo`, text: `Ráfagas de hasta ${fmtWind(maxGust)} previstas`, detail: t('alert_wind_desc') });
                         }
                         if (maxPrecip >= 50) {
-                            results.push({ type: 'orange', title: `🌧️ ${t('alert_rain_o')} — Open-Meteo`, text: `Precipitación acumulada prevista: ${fmtPrecip(maxPrecip)}${precipUnitLabel()}`, detail: t('alert_rain_desc') });
+                            results.push({ type: 'orange', title: `${t('alert_rain_o')} — Open-Meteo`, text: `Precipitación acumulada prevista: ${fmtPrecip(maxPrecip)}${precipUnitLabel()}`, detail: t('alert_rain_desc') });
                         }
                         // High CAPE = convective instability = storm risk
                         if (maxCAPE >= 2000) {
-                            results.push({ type: 'yellow', title: `⛈️ ${t('alert_storm')} — Open-Meteo`, text: `Inestabilidad convectiva alta (CAPE ${Math.round(maxCAPE)} J/kg)`, detail: t('alert_storm_desc') });
+                            results.push({ type: 'yellow', title: `${t('alert_storm')} — Open-Meteo`, text: `Inestabilidad convectiva alta (CAPE ${Math.round(maxCAPE)} J/kg)`, detail: t('alert_storm_desc') });
                         }
                     }
                 }
@@ -6137,7 +6442,7 @@
                             else if (/orange|naranja|high/i.test(title + summary)) alertType = 'orange';
                             if (title && (title.toLowerCase().includes('spain') || title.toLowerCase().includes('españa') || !title.toLowerCase().includes('no active'))) {
                                 if (!title.toLowerCase().includes('no active') && !title.toLowerCase().includes('no hay avisos')) {
-                                    results.push({ type: alertType, title: `🔴 MeteoAlarm: ${title.substring(0, 60)}`, text: summary.substring(0, 100) || 'Ver detalles en MeteoAlarm', detail: 'Aviso emitido por MeteoAlarm / AEMET. Consulta la fuente oficial para más información.' });
+                                    results.push({ type: alertType, title: `MeteoAlarm: ${title.substring(0, 60)}`, text: summary.substring(0, 100) || 'Ver detalles en MeteoAlarm', detail: 'Aviso emitido por MeteoAlarm / AEMET. Consulta la fuente oficial para más información.' });
                                     addedFromMeteoAlarm++;
                                 }
                             }
@@ -6150,7 +6455,7 @@
             try {
                 if (S.aqiData && S.aqiData.european_aqi > 80) {
                     const aqi = Math.round(S.aqiData.european_aqi);
-                    results.push({ type: aqi > 100 ? 'red' : 'orange', title: `😷 ${t('aqi')} — Open-Meteo AQ`, text: `Índice AQI europeo: ${aqi} — ${t(aqi > 100 ? 'aqi_haz' : 'aqi_vbad')}`, detail: 'La calidad del aire es perjudicial. Se recomienda evitar actividades al aire libre prolongadas.' });
+                    results.push({ type: aqi > 100 ? 'red' : 'orange', title: `${t('aqi')}`, text: `AQI: ${aqi} — ${t(aqi > 100 ? 'aqi_haz' : 'aqi_vbad')}`, detail: t('aqi_bad') });
                 }
             } catch (e) { /* silently skip */ }
 
@@ -6773,12 +7078,59 @@
         // ─── MAP LAYERS ───────────────────────────────────────────────────────────────
         const OWM = '9de243494c0b295cca9337e1e96b00e2';
         const MAP_LAYERS = {
-            temp: { url: `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${OWM}`, label: t('map_temp'), gradient: 'linear-gradient(to right,#00008b,#0000ff,#00bfff,#00ff00,#ffff00,#ff8c00,#ff0000,#8b0000)', minLabel: '-40°', maxLabel: '+40°', hasAnim: false },
-            precip: { url: null, /* RainViewer handles it */                                                       label: t('map_precip'), gradient: 'linear-gradient(to right,rgba(0,0,255,0),#00bfff,#00ff00,#ffff00,#ff8c00,#ff0000)', minLabel: '0 mm', maxLabel: '150+ mm', hasAnim: true },
-            wind: { url: `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${OWM}`, label: t('map_wind'), gradient: 'linear-gradient(to right,#e0f7ff,#64b5f6,#1565c0,#0d47a1)', minLabel: '0', maxLabel: '200+ km/h', hasAnim: false },
-            aqi: { url: 'https://tiles.aqicn.org/tiles/usepa-aqi/{z}/{x}/{y}.png?token=demo', label: t('map_aqi'), gradient: 'linear-gradient(to right,#00e400,#92d050,#ffff00,#ff7e00,#ff0000,#8f3f97,#7e0023)', minLabel: t('aqi_good'), maxLabel: t('aqi_haz'), hasAnim: false },
+            temp: { url: `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${OWM}`, label: t('map_temp'), gradient: 'linear-gradient(to right,#00008b,#0000ff,#00bfff,#00ff00,#ffff00,#ff8c00,#ff0000,#8b0000)', minLabel: '-40°', maxLabel: '+40°', mode: 'static' },
+            precip: { url: null, label: t('map_precip'), gradient: 'linear-gradient(to right,rgba(0,180,255,0),#00bfff,#00ff00,#ffff00,#ff8c00,#ff0000)', minLabel: '0 mm', maxLabel: '50+ mm/h', mode: 'rainviewer' },
+            wind: { url: `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${OWM}`, label: t('map_wind'), gradient: 'linear-gradient(to right,#e0f7ff,#64b5f6,#1565c0,#0d47a1)', minLabel: '0', maxLabel: '200+ km/h', mode: 'static' },
+            aqi: { url: 'https://tiles.aqicn.org/tiles/usepa-aqi/{z}/{x}/{y}.png?token=demo', label: t('map_aqi'), gradient: 'linear-gradient(to right,#00e400,#92d050,#ffff00,#ff7e00,#ff0000,#8f3f97,#7e0023)', minLabel: t('aqi_good'), maxLabel: t('aqi_haz'), mode: 'static' },
         };
         let currentLayer = 'temp', weatherTileLayer = null, baseTileLayer = null;
+
+        // ─── RAINVIEWER state ─────────────────────────────────────────────────────────
+        let rvFrames = [];   // { ts, path } sorted asc — past + future (coverage/nowcast)
+        let rvCloudsFrames = [];
+        let rvLoaded = false;
+
+        async function loadRainViewerFrames() {
+            // Allow re-fetch if frames are empty (previous attempt may have silently failed)
+            if (rvLoaded && rvFrames.length > 0) return;
+            try {
+                const r = await fetch('https://api.rainviewer.com/public/weather-maps.json', { signal: AbortSignal.timeout(8000) });
+                if (!r.ok) return;
+                const d = await r.json();
+                // Past radar frames
+                const past = (d.radar?.past || []).map(f => ({ ts: f.time, path: f.path, type: 'radar' }));
+                // Nowcast (short-term forecast)
+                const nowcast = (d.radar?.nowcast || []).map(f => ({ ts: f.time, path: f.path, type: 'nowcast' }));
+                rvFrames = [...past, ...nowcast].sort((a, b) => a.ts - b.ts);
+
+                // Satellite cloud frames
+                const clouds = (d.satellite?.infrared || []).map(f => ({ ts: f.time, path: f.path }));
+                rvCloudsFrames = clouds.sort((a, b) => a.ts - b.ts);
+                if (rvFrames.length > 0) rvLoaded = true;
+            } catch (e) { console.warn('RainViewer fetch failed:', e); }
+        }
+
+        // Build the 12 slider steps for current layer:
+        // For RainViewer: use all available past + nowcast frames (no narrow time filter)
+        // For OWM (temp/wind): slider maps to hourly Open-Meteo data offset
+        let animSteps = [];   // array of { label, ts? } length = slider max+1
+
+        function buildAnimSteps(layerMode) {
+            const nowSec = Date.now() / 1000;
+            animSteps = [];
+            if (layerMode === 'rainviewer') {
+                if (!rvFrames.length) return;
+                const chosen = rvFrames.slice(-16);
+                animSteps = chosen.map(f => {
+                    const d = new Date(f.ts * 1000);
+                    const hh = d.getHours().toString().padStart(2, '0');
+                    const mm = d.getMinutes().toString().padStart(2, '0');
+                    const isFuture = f.ts > nowSec;
+                    return { label: isFuture ? `+${hh}:${mm}` : `${hh}:${mm}`, ts: f.ts, path: f.path };
+                });
+            }
+            // static layers: animSteps stays empty, animBar hidden
+        }
 
         function toggleLayerPanel() {
             const panel = document.getElementById('mapLayerPanel');
@@ -6795,38 +7147,37 @@
             }
         });
 
-        function setMapLayer(name) {
+        async function setMapLayer(name) {
             currentLayer = name;
             document.querySelectorAll('.map-layer-option, .mmov-layer-option').forEach(b => b.classList.remove('active'));
             const btnMap = { temp: 'lyrTemp', precip: 'lyrPrecip', wind: 'lyrWind', aqi: 'lyrAqi' };
             if (btnMap[name]) document.getElementById(btnMap[name])?.classList.add('active');
-            // Mirror active state in mobile layer panel
             document.querySelectorAll('.mmov-layer-option').forEach(b => {
                 if (b.dataset.layer === name) b.classList.add('active');
             });
             document.getElementById('mapLayerPanel').classList.remove('open');
             document.getElementById('mapFabBtn').classList.remove('open');
             document.getElementById('mmovLayerPanel')?.classList.remove('open');
-            // Remove all overlay layers
+
             if (weatherTileLayer) { S.map.removeLayer(weatherTileLayer); weatherTileLayer = null; }
-            if (rainViewerLayer) { S.map.removeLayer(rainViewerLayer); rainViewerLayer = null; }
             stopAnim();
+
             const cfg = MAP_LAYERS[name];
             const legend = document.getElementById('mapLegend');
             const animBar = document.getElementById('mapAnimBar');
-            if (name === 'base' || !cfg.url) {
+
+            if (name === 'base' || !cfg) {
                 legend.style.display = 'none';
                 if (document.getElementById('mmovLegend')) document.getElementById('mmovLegend').style.display = 'none';
                 animBar.classList.remove('visible');
                 return;
             }
-            // Update Desktop Legend
+
+            // Update legends
             document.getElementById('mapLegendTitle').textContent = cfg.label;
             document.getElementById('mapLegendBar').style.background = cfg.gradient;
             document.getElementById('mapLegendLabels').innerHTML = `<span>${cfg.minLabel}</span><span>${cfg.maxLabel}</span>`;
             legend.style.display = 'block';
-
-            // Update Mobile Legend if exists
             const mLegend = document.getElementById('mmovLegend');
             if (mLegend) {
                 document.getElementById('mmovLegendTitle').textContent = cfg.label;
@@ -6834,25 +7185,23 @@
                 document.getElementById('mmovLegendLabels').innerHTML = `<span>${cfg.minLabel}</span><span>${cfg.maxLabel}</span>`;
                 mLegend.style.display = 'block';
             }
-            if (name === 'precip') {
-                // Use RainViewer for real radar animation — reload frames each time
-                rainViewerFrames = []; // force reload to get fresh data
-                loadRainViewerFrames().then(() => {
-                    if (rainViewerFrames.length > 0) {
-                        const slider = document.getElementById('animSlider');
-                        slider.max = rainViewerFrames.length - 1;
-                        slider.value = Math.max(0, rainViewerFrames.length - 3); // start near most recent past
-                        const startIdx = parseInt(slider.value);
-                        applyAnimFrame(startIdx);
-                        updateAnimLabel(0);
-                    }
-                });
+
+            if (cfg.mode === 'rainviewer') {
+                await loadRainViewerFrames();
+                buildAnimSteps('rainviewer');
+                const slider = document.getElementById('animSlider');
+                slider.max = Math.max(0, animSteps.length - 1);
+                slider.value = 0;
+                updateAnimLabel(0);
+                animBar.classList.add('visible');
+                applyAnimFrame(0);
             } else {
-                // OWM static tile — no animation
-                weatherTileLayer = L.tileLayer(cfg.url, { opacity: 0.82, maxZoom: 19, maxNativeZoom: 10 }).addTo(S.map);
+                // Static: just add the tile layer, no animation bar
+                animBar.classList.remove('visible');
+                if (cfg.url) {
+                    weatherTileLayer = L.tileLayer(cfg.url, { opacity: 0.82, maxZoom: 19, maxNativeZoom: 10 }).addTo(S.map);
+                }
             }
-            if (cfg.hasAnim) { animBar.classList.add('visible'); S.animHourOffset = 0; document.getElementById('animSlider').value = 0; updateAnimLabel(0); }
-            else { animBar.classList.remove('visible'); }
         }
 
         // ─── MAP ANIMATION ────────────────────────────────────────────────────────────
@@ -6866,65 +7215,93 @@
             animInterval = setInterval(() => {
                 const slider = document.getElementById('animSlider');
                 let v = parseInt(slider.value) + 1;
-                if (v > 23) { v = 0; }
+                if (v > parseInt(slider.max)) { v = 0; }
                 slider.value = v; onAnimSlider(v);
-            }, 800);
+            }, 700);
         }
         function stopAnim() {
             if (animInterval) { clearInterval(animInterval); animInterval = null; }
             const icon = document.getElementById('animPlayIcon');
-            icon.innerHTML = '<polygon points="5,3 19,12 5,21" fill="currentColor"/>';
+            if (icon) icon.innerHTML = '<polygon points="5,3 19,12 5,21" fill="currentColor"/>';
+        }
+        function updateAnimLabel(v) {
+            const step = animSteps[v];
+            const labelEl = document.getElementById('animHourLabel');
+            const endEl = document.getElementById('animHourEnd');
+            if (!step) return;
+            if (labelEl) labelEl.textContent = step.label;
+            // End label: last step
+            const last = animSteps[animSteps.length - 1];
+            if (endEl && last) endEl.textContent = last.label;
         }
         function onAnimSlider(v) {
             v = parseInt(v);
             S.animHourOffset = v;
+            updateAnimLabel(v);
             applyAnimFrame(v);
         }
 
-        let rainViewerFrames = [], rainViewerLayer = null;
-
-        async function loadRainViewerFrames() {
-            try {
-                const r = await fetch('https://api.rainviewer.com/public/weather-maps.json');
-                const d = await r.json();
-                rainViewerFrames = (d.radar?.past || []).concat(d.radar?.nowcast || []);
-            } catch (e) { console.warn('RainViewer fetch failed', e); rainViewerFrames = []; }
+        function applyAnimFrame(v) {
+            const cfg = MAP_LAYERS[currentLayer];
+            if (!cfg || cfg.mode !== 'rainviewer') return;
+            if (weatherTileLayer) { S.map.removeLayer(weatherTileLayer); weatherTileLayer = null; }
+            const step = animSteps[v];
+            if (!step?.path) return;
+            const rvUrl = `https://tilecache.rainviewer.com${step.path}/256/{z}/{x}/{y}/4/1_1.png`;
+            weatherTileLayer = L.tileLayer(rvUrl, { opacity: 0.75, maxZoom: 19, maxNativeZoom: 12 }).addTo(S.map);
         }
 
-        function applyAnimFrame(frameIdx) {
-            if (!S.map) return;
-            // Only precipitation uses real animated frames (RainViewer)
-            if (currentLayer !== 'precip') return;
+        // Update the map marker pin value for a given hour offset and layer
+        function updateMarkerForHour(hourOffset, layer) {
+            if (!S.mapMarker || !S.data) return;
+            const hourly = S.data.hourly;
+            if (!hourly || !hourly.time) return;
 
-            if (rainViewerFrames.length > 0) {
-                if (rainViewerLayer) { S.map.removeLayer(rainViewerLayer); rainViewerLayer = null; }
-                if (weatherTileLayer) { S.map.removeLayer(weatherTileLayer); weatherTileLayer = null; }
-                const idx = Math.min(frameIdx, rainViewerFrames.length - 1);
-                const frame = rainViewerFrames[idx];
-                rainViewerLayer = L.tileLayer(
-                    `https://tilecache.rainviewer.com${frame.path}/256/{z}/{x}/{y}/2/1_1.png`,
-                    { opacity: 0.8, maxZoom: 19, zIndex: 5, crossOrigin: true }
-                ).addTo(S.map);
-                // Update label with actual frame time
-                const frameDate = new Date(frame.time * 1000);
-                const now = new Date();
-                const diffMin = Math.round((frameDate - now) / 60000);
-                const timeStr = frameDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-                const suffix = diffMin === 0 ? ' (Ahora)' : diffMin > 0 ? ` (+${diffMin}min)` : ` (${diffMin}min)`;
-                document.getElementById('animHourLabel').textContent = timeStr + suffix;
+            const now = new Date();
+            // Find the hourly index closest to now + hourOffset
+            let targetTime = new Date(now.getTime() + hourOffset * 3600000);
+            let closestIdx = 0, minDiff = Infinity;
+            for (let i = 0; i < hourly.time.length; i++) {
+                const diff = Math.abs(new Date(hourly.time[i]) - targetTime);
+                if (diff < minDiff) { minDiff = diff; closestIdx = i; }
             }
+
+            let value = '', unit = '';
+            if (layer === 'temp') {
+                const raw = hourly.temperature_2m?.[closestIdx];
+                if (raw !== undefined) { value = fmtTemp(raw); unit = tempLabel(); }
+            } else if (layer === 'wind') {
+                const raw = hourly.wind_speed_10m?.[closestIdx];
+                if (raw !== undefined) { value = fmtWind(raw); unit = windUnitLabel(); }
+            }
+
+            if (!value) return;
+
+            const wmoCode = hourly.weather_code?.[closestIdx] ?? S.data.current.weather_code;
+            const wmo = getWMO(wmoCode);
+            const iconSvg = wmo ? weatherSVG(wmo.icon, 28) : '';
+
+            const markerHtml = `
+                <div style="display:flex;flex-direction:column;align-items:center;gap:0;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5))">
+                    <div style="width:48px;height:48px;background:linear-gradient(135deg,#1a73e8 0%,#0d47a1 100%);border:3px solid #fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(26,115,232,0.6);">
+                        <div style="transform:rotate(45deg);display:flex;flex-direction:column;align-items:center;gap:1px;">
+                            ${iconSvg}
+                            <div style="font-size:9px;font-weight:700;color:#fff;font-family:Google Sans,sans-serif;line-height:1;">${value}${unit}</div>
+                        </div>
+                    </div>
+                    <div style="width:8px;height:8px;background:rgba(26,115,232,0.5);border-radius:50%;margin-top:2px;filter:blur(2px);"></div>
+                </div>`;
+            const icon = L.divIcon({ html: markerHtml, iconSize: [56, 60], iconAnchor: [28, 52], className: '' });
+            S.mapMarker.setIcon(icon);
         }
-        function updateAnimLabel(v) {
-            // Only used when initializing; real labels come from applyAnimFrame for precip
-            document.getElementById('animHourLabel').textContent = 'Ahora';
-        }
+
 
         // ─── MAP BASE TILES ───────────────────────────────────────────────────────────
         function getBaseTileUrl() {
             const dark = document.body.classList.contains('dark-mode');
             if (dark) return { url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', sub: 'abcd' };
-            // Light mode: CartoDB Positron — black text labels
-            return { url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', sub: 'abcd' };
+            // Light mode: CartoDB Voyager — more colorful and readable than Positron
+            return { url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', sub: 'abcd' };
         }
         function updateMapBaseTile() {
             if (!S.map) return;
@@ -6986,20 +7363,25 @@
             `;
 
             if (!S.map) {
-                S.map = L.map('map', { zoomControl: true, attributionControl: false }).setView([S.lat, S.lon], 5);
-                const t = getBaseTileUrl();
-                baseTileLayer = L.tileLayer(t.url, { maxZoom: 19, subdomains: t.sub }).addTo(S.map);
-
-                const icon = L.divIcon({ html: markerHtml, iconSize: [56, 56], iconAnchor: [28, 28], className: '' });
-                S.mapMarker = L.marker([S.lat, S.lon], { icon }).addTo(S.map);
-
-                S.map.on('click', handleMapClick);
-                setMapLayer(currentLayer);
-                loadRainViewerFrames();
+                // Wait for Leaflet to be available (loaded with defer)
+                const initMap = () => {
+                    S.map = L.map('map', { zoomControl: true, attributionControl: false }).setView([S.lat, S.lon], 5);
+                    const t = getBaseTileUrl();
+                    baseTileLayer = L.tileLayer(t.url, { maxZoom: 19, subdomains: t.sub }).addTo(S.map);
+                    const icon = L.divIcon({ html: markerHtml, iconSize: [56, 60], iconAnchor: [28, 52], className: '' });
+                    S.mapMarker = L.marker([S.lat, S.lon], { icon }).addTo(S.map);
+                    S.map.on('click', handleMapClick);
+                    setMapLayer(currentLayer);
+                };
+                if (typeof L !== 'undefined') {
+                    initMap();
+                } else {
+                    const poll = setInterval(() => { if (typeof L !== 'undefined') { clearInterval(poll); initMap(); } }, 100);
+                }
             } else {
                 S.map.setView([S.lat, S.lon], 5);
                 // Update marker icon with fresh data
-                const icon = L.divIcon({ html: markerHtml, iconSize: [56, 56], iconAnchor: [28, 28], className: '' });
+                const icon = L.divIcon({ html: markerHtml, iconSize: [56, 60], iconAnchor: [28, 52], className: '' });
                 S.mapMarker.setLatLng([S.lat, S.lon]);
                 S.mapMarker.setIcon(icon);
             }
@@ -7013,12 +7395,16 @@
         let _scrollLockY = 0;
         function lockScroll() {
             _scrollLockY = window.scrollY || window.pageYOffset;
+            document.body.style.top = '-' + _scrollLockY + 'px';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
             document.body.style.overflow = 'hidden';
-            document.body.style.touchAction = 'none';
         }
         function unlockScroll() {
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
             document.body.style.overflow = '';
-            document.body.style.touchAction = '';
             window.scrollTo(0, _scrollLockY);
         }
 
@@ -7491,15 +7877,23 @@
             const label = isDark ? t('light') : t('dark');
             document.querySelectorAll('#t_dark').forEach(el => el.textContent = label);
         }
+        // Aplica modo oscuro/claro
+        function applyDark(isDark) {
+            if (isDark) document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
+            updateDarkLabel();
+            if (S.map) { updateMapBaseTile(); setTimeout(() => S.map.invalidateSize(), 200); }
+        }
+        // Modo automático: oscuro de 20:00 a 7:00
+        function applyAutoTheme() {
+            const h = new Date().getHours();
+            applyDark(h >= 20 || h < 7);
+        }
         function toggleDark() {
             const isDark = document.body.classList.toggle('dark-mode');
-            const icon = document.getElementById('darkModeIcon');
-            if (isDark) { icon.innerHTML = '<circle cx="12" cy="12" r="5" stroke="white" stroke-width="2"/><line x1="12" y1="1" x2="12" y2="3" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="white" stroke-width="2" stroke-linecap="round"/>'; }
-            else { icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'; }
             updateDarkLabel();
             localStorage.setItem('wh_dark', isDark ? '1' : '0');
             if (S.map) { updateMapBaseTile(); setTimeout(() => S.map.invalidateSize(), 200); }
-            // Background stays dynamic — no setBgTheme call here
         }
         function changeLang(val) {
             S.lang = val;
@@ -7619,6 +8013,11 @@
             savePrefs(); if (S.data) render();
         }
         function setRefresh(m) { S.refreshMin = m;[5, 10, 30].forEach(x => document.getElementById('btnRef' + x).classList.remove('active')); document.getElementById('btnRef' + m).classList.add('active'); savePrefs(); scheduleRefresh(); }
+        function selectSourceCard(v) {
+            document.querySelectorAll('.src-card').forEach(c => c.classList.toggle('active', c.dataset.src === v));
+            document.getElementById('sourceSelect').value = v;
+            changeSource(v);
+        }
         function changeSource(v) {
             S.source = v;
             const labels = {
@@ -7626,6 +8025,9 @@
                 'gfs': 'GFS',
                 'ecmwf': 'ECMWF',
                 'icon': 'ICON',
+                'meteofrance': 'Météo-France',
+                'gem': 'GEM',
+                'jma': 'JMA',
                 'wttr': 'wttr.in'
             };
             document.querySelectorAll('.source-badge').forEach(el => el.textContent = labels[v] || v);
@@ -7651,9 +8053,13 @@
                 if (p.pressure) setPressure(p.pressure);
                 if (p.distance) setDistance(p.distance);
                 if (p.refreshMin) setRefresh(p.refreshMin);
-                if (p.source) { S.source = p.source; document.getElementById('sourceSelect').value = p.source; changeSource(p.source); }
+                if (p.source) { S.source = p.source; document.getElementById('sourceSelect').value = p.source; selectSourceCard(p.source); }
             } catch (e) { }
-            if (localStorage.getItem('wh_dark') === '1') toggleDark();
+            // Auto dark/light: si no hay preferencia manual, seguir la hora local
+            const manualDark = localStorage.getItem('wh_dark');
+            if (manualDark === '1') { applyDark(true); }
+            else if (manualDark === '0') { applyDark(false); }
+            else { applyAutoTheme(); }
         }
 
         // ─── UI HELPERS ───────────────────────────────────────────────────────────────
@@ -7759,7 +8165,7 @@
             return { code, level, meta, label, city, whenLabel, cur, hourly };
         }
 
-        // Renders the alert banner with all detail
+        // Renders the alert banner with all detail — estilo AEMET, blanco, sin emojis
         function renderAlert(alert) {
             if (!alert) return;
 
@@ -7769,9 +8175,8 @@
             const titleEl = document.getElementById('alertTitle');
             const bodyEl = document.getElementById('alertTitle2');
             const sourceEl = document.getElementById('alertSourceLink');
-            const banner = document.getElementById('weatherAlertBanner');
 
-            // Title — uses i18n keys
+            // Title
             const levelTitleKey = {
                 extreme: 'alert_r',
                 high: 'alert_o',
@@ -7780,7 +8185,7 @@
             };
             titleEl.textContent = t(levelTitleKey[level] || 'alert_moderate');
 
-            // Body — descriptive sentence like AEMET notification
+            // Body
             const cityStr = city ? (lang === 'ar' ? ' في ' + city : lang === 'ja' || lang === 'zh' || lang === 'ko' ? city + 'の' : ' ' + t('alert_in_prep') + ' ' + city) : '';
             const typeStr = label;
             let bodyText = '';
@@ -7789,7 +8194,7 @@
             bodyText = `${warnWord} ${typeStr.toLowerCase()}${cityStr}. ${whenLabel}.${periodExtra}`;
             bodyEl.textContent = bodyText;
 
-            // Source link — point to AEMET or relevant official source
+            // Source link
             let sourceUrl = `https://www.aemet.es/es/eltiempo/prediccion/avisos`;
             let sourceLabel = 'AEMET. Agencia Estatal de Meteorología';
             if (S._countryCode && S._countryCode !== 'ES') {
@@ -7801,17 +8206,21 @@
                 sourceEl.textContent = sourceLabel;
             }
 
-            // Show banner (inline, no animation needed beyond CSS)
-            banner.classList.remove('visible');
-            void banner.offsetWidth;
-            banner.classList.add('visible');
+            // Show unified banner
+            const banner = document.getElementById('unifiedAlertsBanner');
+            if (banner) {
+                banner.style.display = '';
+            }
         }
 
         // Dismiss alert (stores dismissed code + timestamp for 1h)
         function dismissAlert() {
-            const banner = document.getElementById('weatherAlertBanner');
-            banner.classList.remove('visible');
-            // Remember dismissal
+            dismissUnifiedAlert();
+        }
+
+        function dismissUnifiedAlert() {
+            const banner = document.getElementById('unifiedAlertsBanner');
+            if (banner) banner.style.display = 'none';
             if (S._lastAlertCode) {
                 localStorage.setItem('wh_alert_dismissed', JSON.stringify({ code: S._lastAlertCode, at: Date.now() }));
             }
@@ -7829,13 +8238,11 @@
         function checkAndShowAlert(data) {
             const alert = detectWeatherAlert(data);
             if (!alert) {
-                // Hide banner if weather is now fine
-                const banner = document.getElementById('weatherAlertBanner');
-                if (banner) { banner.classList.remove('visible'); }
+                const banner = document.getElementById('unifiedAlertsBanner');
+                if (banner) banner.style.display = 'none';
                 S._lastAlertCode = null;
                 return;
             }
-            // Don't re-show a dismissed alert unless the code changed
             if (isAlertDismissed(alert.code) && alert.code === S._lastAlertCode) return;
             S._lastAlertCode = alert.code;
             renderAlert(alert);
