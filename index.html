@@ -14,11 +14,23 @@
     <link rel="icon" type="image/png" href="weatherlogo.png">
     <link rel="apple-touch-icon" href="weatherlogo.png">
     <meta name="msapplication-TileImage" content="weatherlogo.png">
+    <!-- Preconnect para Google Fonts — reduce latencia de conexión -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Carga no bloqueante: media=print → onload cambia a all -->
     <link
         href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Google+Sans+Display:wght@300;400;500&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Google+Sans+Display:wght@300;400;500&display=swap"
+            rel="stylesheet">
+    </noscript>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
+        /* ── OPTIMIZACIÓN GAMA BAJA — desactiva blur/backdrop en dispositivos lentos ── */
+        /* Se aplica vía JS en initBgCanvas según deviceMemory / saveData */
+
         *,
         *::before,
         *::after {
@@ -626,6 +638,8 @@
             overflow: hidden;
             margin-bottom: 28px;
             backdrop-filter: blur(12px);
+            content-visibility: auto;
+            contain-intrinsic-size: 0 320px;
         }
 
         .daily-row {
@@ -698,6 +712,8 @@
             grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
             gap: 12px;
             margin-bottom: 28px;
+            content-visibility: auto;
+            contain-intrinsic-size: 0 400px;
         }
 
         .metric-card {
@@ -707,6 +723,8 @@
             padding: 18px;
             transition: all 0.2s;
             backdrop-filter: blur(10px);
+            contain: layout style;
+            /* evita repaints en cascada */
         }
 
         /* Medias: ocupa toda la fila para no dejar huecos */
@@ -3032,6 +3050,34 @@
             color: var(--text-muted);
         }
 
+        /* Gama baja: elimina backdrop-filter (muy costoso en GPU) y sombras complejas */
+        body.low-end .search-input,
+        body.low-end .btn-icon,
+        body.low-end .autocomplete-list,
+        body.low-end .hourly-card,
+        body.low-end .daily-list,
+        body.low-end .metric-card,
+        body.low-end .source-badge {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        /* Gama baja: desactiva animaciones de hover que causan repaints */
+        body.low-end .metric-card:hover {
+            transform: none !important;
+        }
+
+        /* Forzar aceleración GPU solo en el canvas, no en todo */
+        #bgCanvas {
+            will-change: auto;
+        }
+
+        /* will-change en partículas activas — se añade/quita por JS */
+        .rain-drop,
+        .snow-flake {
+            will-change: transform;
+        }
+
         .app-footer {
             text-align: center;
             padding: 0 0 40px;
@@ -3732,7 +3778,7 @@
         <span class="beta-tag">BETA</span>
     </footer>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
     <div id="alertModalOverlay" class="alert-modal-overlay" onclick="closeAlertDialog()">
         <div class="alert-panel">
             <div class="ap-header">
@@ -5313,6 +5359,12 @@
             return { label: info[S.lang] || info.en || info.es || '?', icon: info.icon };
         }
 
+        // ─── DETECCIÓN DE CAPACIDAD DEL DISPOSITIVO ───────────────────────────────────
+        // Declarar antes de BG_THEMES para que esté disponible en initBgCanvas y renderWeatherFx
+        const _lowEnd = !!(navigator.deviceMemory && navigator.deviceMemory <= 2)
+            || !!(navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType)));
+        const _isMobile = window.innerWidth <= 768;
+
         // ─── APPLE-STYLE ANIMATED BACKGROUND ──────────────────────────────────────────
         const BG_THEMES = {
             dawn: { stops: ['#ff6e3c', '#c84b2f', '#1a2b4c', '#0d1a38'], sun: { x: 0.7, y: 0.15, r: 0.35, col: 'rgba(255,160,60,0.55)' } },
@@ -5342,19 +5394,30 @@
         };
 
         let bgCtx, bgW, bgH, bgThemeKey = 'day', bgBlobs = [];
+        let _bgPaused = false; // pausa cuando la pestaña está oculta
+        let _bgLastFrame = 0;
+        // Throttle: 30fps en gama alta, 20fps en gama baja/móvil
+        const _bgFpsInterval = _lowEnd ? 50 : (_isMobile ? 40 : 33); // ms entre frames
 
         function initBgCanvas() {
             const canvas = document.getElementById('bgCanvas');
             bgCtx = canvas.getContext('2d');
+            // Marcar dispositivos de gama baja en el body para CSS optimizado
+            if (_lowEnd) document.body.classList.add('low-end');
             resizeBg();
-            window.addEventListener('resize', resizeBg);
-            // Init blobs
-            bgBlobs = Array.from({ length: 5 }, (_, i) => ({
+            // Debounce resize para evitar redraws continuos al girar pantalla
+            let _resizeTimer;
+            window.addEventListener('resize', () => { clearTimeout(_resizeTimer); _resizeTimer = setTimeout(resizeBg, 150); });
+            // Pausar animación cuando la pestaña está en segundo plano
+            document.addEventListener('visibilitychange', () => { _bgPaused = document.hidden; if (!_bgPaused) requestAnimationFrame(animateBg); });
+            // Reducir blobs en gama baja
+            const blobCount = _lowEnd ? 2 : (_isMobile ? 3 : 5);
+            bgBlobs = Array.from({ length: blobCount }, () => ({
                 x: Math.random(), y: Math.random(),
                 vx: (Math.random() - 0.5) * 0.0008, vy: (Math.random() - 0.5) * 0.0008,
                 r: 0.3 + Math.random() * 0.3
             }));
-            animateBg();
+            requestAnimationFrame(animateBg);
         }
 
         function resizeBg() {
@@ -5386,8 +5449,11 @@
             else bgTransT = 0;
         }
 
-        function animateBg() {
-            if (!bgCtx) return;
+        function animateBg(ts) {
+            if (!bgCtx || _bgPaused) return;
+            // Throttle FPS
+            if (ts - _bgLastFrame < _bgFpsInterval) { requestAnimationFrame(animateBg); return; }
+            _bgLastFrame = ts;
             const isDark = document.body.classList.contains('dark-mode');
             const themes = isDark ? BG_DARK_THEMES : BG_THEMES;
             const theme = themes[bgThemeKey] || themes.day;
@@ -5467,36 +5533,53 @@
 
         function renderWeatherFx(wmoCode) {
             const fx = document.getElementById('weatherFx');
-            fx.innerHTML = '';
+            // Reutilizar fragment para evitar reflow por innerHTML
+            while (fx.firstChild) fx.removeChild(fx.firstChild);
             const icon = getWMO(wmoCode).icon;
-            let html = '';
+            const frag = document.createDocumentFragment();
+            // Escalar partículas según capacidad del dispositivo
+            const scale = _lowEnd ? 0.3 : (_isMobile ? 0.55 : 1);
+            const hasParticles = icon === 'rain' || icon === 'rain-heavy' || icon === 'shower' || icon === 'storm' || icon === 'drizzle' || icon === 'snow';
+            // will-change solo cuando hay partículas (evita compositing layer innecesario)
+            fx.style.willChange = hasParticles ? 'transform' : 'auto';
             if (icon === 'rain' || icon === 'rain-heavy' || icon === 'shower' || icon === 'storm' || icon === 'drizzle') {
-                const count = icon === 'rain-heavy' || icon === 'storm' ? 120 : icon === 'drizzle' ? 40 : 80;
+                const base = icon === 'rain-heavy' || icon === 'storm' ? 120 : icon === 'drizzle' ? 40 : 80;
+                const count = Math.max(10, Math.round(base * scale));
                 for (let i = 0; i < count; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'rain-drop';
                     const left = Math.random() * 105, dur = 0.45 + Math.random() * 0.55, delay = Math.random() * 3;
                     const h = icon === 'drizzle' ? 14 : (icon === 'rain-heavy' || icon === 'storm') ? 26 : 20;
                     const op = icon === 'drizzle' ? 0.35 : 0.5;
-                    html += `<div class="rain-drop" style="left:${left}%;height:${h}px;opacity:${op};animation-duration:${dur}s;animation-delay:-${delay}s;"></div>`;
+                    el.style.cssText = `left:${left}%;height:${h}px;opacity:${op};animation-duration:${dur}s;animation-delay:-${delay}s`;
+                    frag.appendChild(el);
                 }
             } else if (icon === 'snow') {
-                for (let i = 0; i < 60; i++) {
+                const count = Math.max(8, Math.round(60 * scale));
+                for (let i = 0; i < count; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'snow-flake';
                     const left = Math.random() * 100, dur = 4 + Math.random() * 6, delay = Math.random() * 8;
                     const size = 2 + Math.random() * 5;
-                    html += `<div class="snow-flake" style="left:${left}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:-${delay}s;"></div>`;
+                    el.style.cssText = `left:${left}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:-${delay}s`;
+                    frag.appendChild(el);
                 }
             }
-            fx.innerHTML = html;
+            fx.appendChild(frag);
         }
 
-        // Stars
+        // Stars — reducir cantidad en dispositivos de gama baja/móvil
         (function createStars() {
             const c = document.getElementById('stars');
-            for (let i = 0; i < 80; i++) {
+            const count = _lowEnd ? 20 : (_isMobile ? 40 : 80);
+            const frag = document.createDocumentFragment();
+            for (let i = 0; i < count; i++) {
                 const s = document.createElement('div'); s.className = 'star';
                 const sz = Math.random() * 2.5 + 0.5;
                 s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random() * 100}%;top:${Math.random() * 100}%;animation-delay:${Math.random() * 4}s;animation-duration:${1.5 + Math.random() * 3}s`;
-                c.appendChild(s);
+                frag.appendChild(s);
             }
+            c.appendChild(frag);
         })();
 
         // ─── SVG ICONS ────────────────────────────────────────────────────────────────
@@ -5874,13 +5957,16 @@
 
         // ─── RENDER ───────────────────────────────────────────────────────────────────
         function render() {
-            if (!S.data) return;
+            if (!S.data || document.hidden) return; // no renderizar si la pestaña está en segundo plano
             const d = S.data, cur = d.current, hourly = d.hourly, daily = d.daily;
             const userNow = new Date(), now = cur.time ? new Date(cur.time) : userNow;
             const hour = now.getHours(), wmo = getWMO(cur.weather_code);
             setTheme(hour, cur.weather_code);
             document.getElementById('cityName').textContent = S.cityName;
-            document.querySelectorAll('.last-update').forEach(el => el.textContent = t('updated') + ': ' + userNow.toLocaleTimeString(S.lang, { hour: '2-digit', minute: '2-digit' }));
+            // Cachear los elementos last-update para evitar querySelectorAll en cada render
+            if (!render._lastUpdateEls) render._lastUpdateEls = document.querySelectorAll('.last-update');
+            const _updateText = t('updated') + ': ' + userNow.toLocaleTimeString(S.lang, { hour: '2-digit', minute: '2-digit' });
+            render._lastUpdateEls.forEach(el => el.textContent = _updateText);
             document.getElementById('heroCondition').textContent = wmo.label;
             document.getElementById('tempVal').textContent = fmtTemp(cur.temperature_2m);
             document.getElementById('tempUnit').textContent = tempLabel();
@@ -6793,7 +6879,6 @@
                 const r = await fetch('https://api.rainviewer.com/public/weather-maps.json');
                 const d = await r.json();
                 rainViewerFrames = (d.radar?.past || []).concat(d.radar?.nowcast || []);
-                console.log(`RainViewer: ${rainViewerFrames.length} frames loaded`);
             } catch (e) { console.warn('RainViewer fetch failed', e); rainViewerFrames = []; }
         }
 
@@ -7127,7 +7212,7 @@
             const q = document.getElementById('searchInput').value.trim();
             clearTimeout(searchTimeout); acIndex = -1;
             if (q.length < 1) { document.getElementById('acList').classList.remove('open'); return; }
-            searchTimeout = setTimeout(() => doSearch(q), 180);
+            searchTimeout = setTimeout(() => doSearch(q), 280); // 280ms debounce — reduce peticiones API
         }
         async function doSearch(q) {
             try {
@@ -7414,6 +7499,7 @@
         function changeLang(val) {
             S.lang = val;
             localStorage.setItem('wh_lang', val);
+            if (render._lastUpdateEls) render._lastUpdateEls = null; // invalidar caché DOM
             const labels = [
                 'settings', 'next24h', 'next7d', 'sun', 'details', 'aqi', 'map',
                 'my_loc', 'source', 'units', 'favs', 'sunrise_lbl', 'sunset_lbl',
