@@ -2079,7 +2079,7 @@
             color: #fff;
             letter-spacing: -0.3px;
             line-height: 1.1;
-            max-width: 65%;
+            max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -2516,19 +2516,21 @@
         /* ── LIQUID GLASS BOTTOM NAV ── */
         .bottom-nav {
             position: fixed;
-            bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+            bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
             left: 50%;
             transform: translateX(-50%);
             z-index: 150;
             display: flex;
             gap: 4px;
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.28);
             border-radius: 40px;
-            padding: 8px 6px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            padding: 8px 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            width: calc(100% - 48px);
+            max-width: 420px;
         }
 
         .bottom-nav-btn {
@@ -2537,7 +2539,7 @@
             align-items: center;
             justify-content: center;
             gap: 4px;
-            padding: 10px 0 8px;
+            padding: 10px 4px 8px;
             border-radius: 22px;
             border: none;
             cursor: pointer;
@@ -2549,7 +2551,7 @@
             transition: all 0.22s;
             white-space: nowrap;
             flex: 1;
-            min-width: 80px;
+            min-width: 0;
         }
 
         .bottom-nav-btn:hover,
@@ -3830,7 +3832,7 @@
                 alert_storm_desc: "Riesgo de aparato eléctrico y granizo. Busque refugio en interiores si la tormenta se intensifica.",
                 alert_tornado_desc: "Peligro extremo. Siga las instrucciones de las autoridades locales y busque refugio seguro inmediatamente.",
                 close: "Cerrar",
-                nav_map: "Mapa", nav_favs: "Guardados", nav_settings: "Ajustes",
+                nav_map: "Mapa", nav_favs: "Favoritos", nav_settings: "Ajustes",
                 moon_arc_lbl: "Luna", moonrise_lbl: "Salida de luna", moonset_lbl: "Puesta de luna",
                 next_sunrise: "Próximo amanecer"
             },
@@ -3970,7 +3972,17 @@
                 src_de: "ICON — modèle allemand",
                 src_global: "wttr.in — données globales",
                 fetching_data: "Obtention des données météorologiques…",
-                nav_map: "Carte", nav_favs: "Favoris", nav_settings: "Réglages"
+                alert_details: "Plus de détails",
+                alert_source: "Voir la source officielle",
+                alert_wind_desc: "Précautions recommandées en raison de rafales de vent fortes. Évitez les objets pouvant tomber et soyez vigilant au volant.",
+                alert_rain_desc: "Possibilité d'accumulation d'eau dans les zones basses. Restez informé de l'évolution météorologique.",
+                alert_heat_desc: "Hydratez-vous et évitez l'exposition directe au soleil aux heures les plus chaudes.",
+                alert_storm_desc: "Risque d'éclairs et de grêle. Cherchez un abri à l'intérieur si l'orage s'intensifie.",
+                alert_tornado_desc: "Danger extrême. Suivez les instructions des autorités locales et cherchez immédiatement un abri sûr.",
+                close: "Fermer",
+                nav_map: "Carte", nav_favs: "Favoris", nav_settings: "Réglages",
+                moon_arc_lbl: "Lune", moonrise_lbl: "Lever de lune", moonset_lbl: "Coucher de lune",
+                next_sunrise: "Prochain lever de soleil"
             },
             de: {
                 settings: "Einstellungen", my_loc: "Mein Standort", dark: "Dunkelmodus", light: "Hellmodus", source: "Datenquelle", units: "Einheiten",
@@ -4034,7 +4046,17 @@
                 src_de: "ICON — deutsches Modell",
                 src_global: "wttr.in — globale Daten",
                 fetching_data: "Wetterdaten werden abgerufen…",
-                nav_map: "Karte", nav_favs: "Gespeichert", nav_settings: "Optionen"
+                alert_details: "Mehr Details",
+                alert_source: "Offizielle Quelle ansehen",
+                alert_wind_desc: "Vorsicht wegen starker Windböen. Vermeiden Sie herabfallende Gegenstände und fahren Sie besonders vorsichtig.",
+                alert_rain_desc: "Mögliche Wasseransammlungen in Niederungen. Bleiben Sie über die Wetterentwicklung informiert.",
+                alert_heat_desc: "Ausreichend trinken und direkte Sonneneinstrahlung in den heißen Mittagsstunden vermeiden.",
+                alert_storm_desc: "Blitzschlag- und Hagelgefahr. Bei Intensivierung des Gewitters Schutz im Inneren suchen.",
+                alert_tornado_desc: "Extreme Gefahr. Befolgen Sie die Anweisungen der lokalen Behörden und suchen Sie sofort sicheren Schutz.",
+                close: "Schließen",
+                nav_map: "Karte", nav_favs: "Favoriten", nav_settings: "Optionen",
+                moon_arc_lbl: "Mond", moonrise_lbl: "Mondaufgang", moonset_lbl: "Monduntergang",
+                next_sunrise: "Nächster Sonnenaufgang"
             },
             it: {
                 settings: "Impostazioni", my_loc: "La mia posizione", dark: "Modo scuro", light: "Modo chiaro", source: "Fonte dati", units: "Unità",
@@ -4098,7 +4120,17 @@
                 src_de: "ICON — modello tedesco",
                 src_global: "wttr.in — dati globali",
                 fetching_data: "Recupero dei dati meteorologici…",
-                nav_map: "Mappa", nav_favs: "Salvati", nav_settings: "Opzioni"
+                alert_details: "Più dettagli",
+                alert_source: "Vedi fonte ufficiale",
+                alert_wind_desc: "Si consiglia cautela per raffiche di vento forti. Evitare oggetti che possono cadere e prestare attenzione alla guida.",
+                alert_rain_desc: "Possibile accumulo d'acqua nelle zone basse. Tenersi aggiornati sull'evoluzione meteorologica.",
+                alert_heat_desc: "Mantenersi idratati ed evitare l'esposizione diretta al sole nelle ore centrali della giornata.",
+                alert_storm_desc: "Rischio di fulmini e grandine. Cercare riparo al chiuso se il temporale si intensifica.",
+                alert_tornado_desc: "Pericolo estremo. Seguire le istruzioni delle autorità locali e cercare immediatamente riparo sicuro.",
+                close: "Chiudi",
+                nav_map: "Mappa", nav_favs: "Preferiti", nav_settings: "Opzioni",
+                moon_arc_lbl: "Luna", moonrise_lbl: "Sorgere della luna", moonset_lbl: "Tramonto della luna",
+                next_sunrise: "Prossimo alba"
             },
             eu: {
                 settings: "Ezarpenak", my_loc: "Nire kokapena", dark: "Modu iluna", light: "Modu argia", source: "Datu iturria", units: "Unitateak",
@@ -4157,7 +4189,17 @@
                 src_de: "ICON — modelo alemaniarra",
                 src_global: "wttr.in — datu globalak",
                 fetching_data: "Eguraldi datuak lortzen...",
-                nav_map: "Mapa", nav_favs: "Gordetakoak", nav_settings: "Ezarpenak"
+                alert_details: "Xehetasun gehiago",
+                alert_source: "Iturri ofiziala ikusi",
+                alert_wind_desc: "Kontu handiz ibili haize-bolada indartsuengatik. Eror daitezkeen objektuak saihestu eta gidatzerakoan arreta berezia jarri.",
+                alert_rain_desc: "Euri-urak pilatu daitezke eremu baxuetan. Eguraldi-eboluzioari buruzko informazioa jarraitu.",
+                alert_heat_desc: "Hidratatu eta saihestu eguzkipean egotea eguneko ordu beroenetan.",
+                alert_storm_desc: "Tximista eta txingorra aurkitu daitezke. Babesa bilatu barruan ekaitza hazi ezkero.",
+                alert_tornado_desc: "Arrisku muturreko egoera. Bertako agintarien argibideak jarraitu eta babesgune segurua bilatu.",
+                close: "Itxi",
+                nav_map: "Mapa", nav_favs: "Gogokoak", nav_settings: "Ezarpenak",
+                moon_arc_lbl: "Ilargia", moonrise_lbl: "Ilargi-irteera", moonset_lbl: "Ilargi-sarrera",
+                next_sunrise: "Hurrengo egunsentia"
             },
             ca: {
                 settings: "Configuració", my_loc: "La meva ubicació", dark: "Mode fosc", light: "Mode clar", source: "Font de dades", units: "Unitats",
@@ -4216,7 +4258,17 @@
                 src_de: "ICON — model alemany",
                 src_global: "wttr.in — dades globals",
                 fetching_data: "Obtenint dades meteorològiques…",
-                nav_map: "Mapa", nav_favs: "Guardats", nav_settings: "Ajustos"
+                alert_details: "Més detalls",
+                alert_source: "Veure font oficial",
+                alert_wind_desc: "Es recomana precaució per ratxes de vent fortes. Evita objectes que puguin caure i extrema les precaucions al volant.",
+                alert_rain_desc: "Possibilitat d'acumulació d'aigua a zones baixes. Mantén-te informat de l'evolució meteorològica.",
+                alert_heat_desc: "Mantén-te hidratat i evita l'exposició directa al sol a les hores centrals del dia.",
+                alert_storm_desc: "Risc de llamps i calamarsa. Busca refugi a l'interior si la tempesta s'intensifica.",
+                alert_tornado_desc: "Perill extrem. Segueix les instruccions de les autoritats locals i busca refugi segur immediatament.",
+                close: "Tancar",
+                nav_map: "Mapa", nav_favs: "Preferits", nav_settings: "Ajustos",
+                moon_arc_lbl: "Lluna", moonrise_lbl: "Sortida de lluna", moonset_lbl: "Posta de lluna",
+                next_sunrise: "Proper alba"
             },
             va: {
                 settings: "Configuració", my_loc: "La meua ubicació", dark: "Mode fosc", light: "Mode clar", source: "Font de dades", units: "Unitats",
@@ -4280,7 +4332,17 @@
                 src_de: "ICON — model alemany",
                 src_global: "wttr.in — dades globals",
                 fetching_data: "Obtenint dades meteorològiques…",
-                nav_map: "Mapa", nav_favs: "Guardats", nav_settings: "Ajustos"
+                alert_details: "Més detalls",
+                alert_source: "Veure font oficial",
+                alert_wind_desc: "Es recomana precaució per ratxes de vent fortes. Evita objectes que puguen caure i extrema les precaucions al volant.",
+                alert_rain_desc: "Possibilitat d'acumulació d'aigua a zones baixes. Mantén-te informat de l'evolució meteorològica.",
+                alert_heat_desc: "Mantén-te hidratat i evita l'exposició directa al sol a les hores centrals del dia.",
+                alert_storm_desc: "Risc de llamps i calamarsa. Busca refugi a l'interior si la tempesta s'intensifica.",
+                alert_tornado_desc: "Perill extrem. Segueix les instruccions de les autoritats locals i busca refugi segur immediatament.",
+                close: "Tancar",
+                nav_map: "Mapa", nav_favs: "Preferits", nav_settings: "Ajustos",
+                moon_arc_lbl: "Lluna", moonrise_lbl: "Eixida de lluna", moonset_lbl: "Posta de lluna",
+                next_sunrise: "Pròxim alba"
             },
             gl: {
                 settings: "Configuración", my_loc: "A miña ubicación", dark: "Modo escuro", light: "Modo claro", source: "Fonte de datos", units: "Unidades",
@@ -4339,7 +4401,17 @@
                 src_de: "ICON — modelo alemán",
                 src_global: "wttr.in — datos globais",
                 fetching_data: "Obtendo datos meteorolóxicos...",
-                nav_map: "Mapa", nav_favs: "Gardados", nav_settings: "Axustes"
+                alert_details: "Máis detalles",
+                alert_source: "Ver fonte oficial",
+                alert_wind_desc: "Recoméndase precaución por rafaladas de vento fortes. Evita obxectos que poidan caer e extrema as precaucións ao volante.",
+                alert_rain_desc: "Posibilidade de acumulación de auga en zonas baixas. Mantente informado da evolución meteorolóxica.",
+                alert_heat_desc: "Mantente hidratado e evita a exposición directa ao sol nas horas centrais do día.",
+                alert_storm_desc: "Risco de aparato eléctrico e sarabia. Busca refuxio no interior se a tormenta se intensifica.",
+                alert_tornado_desc: "Perigo extremo. Segue as instrucións das autoridades locais e busca refuxio seguro inmediatamente.",
+                close: "Pechar",
+                nav_map: "Mapa", nav_favs: "Favoritos", nav_settings: "Axustes",
+                moon_arc_lbl: "Lúa", moonrise_lbl: "Saída da lúa", moonset_lbl: "Posta da lúa",
+                next_sunrise: "Próximo amencer"
             },
             pt: {
                 settings: "Configurações", my_loc: "Minha localização", dark: "Modo escuro", light: "Modo claro", source: "Fonte de dados", units: "Unidades",
@@ -4402,7 +4474,17 @@
                 src_de: "ICON — modelo alemão",
                 src_global: "wttr.in — dados globais",
                 fetching_data: "Obtendo dados meteorológicos…",
-                nav_map: "Mapa", nav_favs: "Guardados", nav_settings: "Ajustes"
+                alert_details: "Mais detalhes",
+                alert_source: "Ver fonte oficial",
+                alert_wind_desc: "Recomenda-se cuidado devido a rajadas de vento fortes. Evite objetos que possam cair e tenha precaução ao volante.",
+                alert_rain_desc: "Possibilidade de acumulação de água em áreas baixas. Mantenha-se informado sobre a evolução meteorológica.",
+                alert_heat_desc: "Mantenha-se hidratado e evite exposição direta ao sol nas horas mais quentes do dia.",
+                alert_storm_desc: "Risco de relâmpagos e granizo. Procure abrigo em ambientes fechados se a tempestade se intensificar.",
+                alert_tornado_desc: "Perigo extremo. Siga as instruções das autoridades locais e procure abrigo seguro imediatamente.",
+                close: "Fechar",
+                nav_map: "Mapa", nav_favs: "Favoritos", nav_settings: "Ajustes",
+                moon_arc_lbl: "Lua", moonrise_lbl: "Nascimento da lua", moonset_lbl: "Pôr da lua",
+                next_sunrise: "Próximo nascer do sol"
             },
             pl: {
                 settings: "Ustawienia", my_loc: "Moja lokalizacja", dark: "Tryb ciemny", light: "Tryb jasny", source: "Źródło danych", units: "Jednostki",
@@ -4466,7 +4548,17 @@
                 src_de: "ICON — model niemiecki",
                 src_global: "wttr.in — dane globalne",
                 fetching_data: "Pobieranie danych pogodowych...",
-                nav_map: "Mapa", nav_favs: "Zapisane", nav_settings: "Opcje"
+                alert_details: "Więcej szczegółów",
+                alert_source: "Zobacz oficjalne źródło",
+                alert_wind_desc: "Zaleca się ostrożność z powodu silnych podmuchów wiatru. Unikaj spadających przedmiotów i zachowaj ostrożność za kierownicą.",
+                alert_rain_desc: "Możliwość gromadzenia się wody na niskich terenach. Śledź aktualizacje pogodowe.",
+                alert_heat_desc: "Nawadniaj się i unikaj bezpośredniego nasłonecznienia w najgorętszych godzinach dnia.",
+                alert_storm_desc: "Ryzyko wyładowań elektrycznych i gradu. Schroni się wewnątrz, jeśli burza się nasili.",
+                alert_tornado_desc: "Skrajne niebezpieczeństwo. Stosuj się do poleceń władz lokalnych i natychmiast szukaj bezpiecznego schronienia.",
+                close: "Zamknij",
+                nav_map: "Mapa", nav_favs: "Ulubione", nav_settings: "Opcje",
+                moon_arc_lbl: "Księżyc", moonrise_lbl: "Wschód księżyca", moonset_lbl: "Zachód księżyca",
+                next_sunrise: "Następny wschód słońca"
             },
             ru: {
                 settings: "Настройки", my_loc: "Мое местоположение", dark: "Темная тема", light: "Светлая тема", source: "Источник данных", units: "Единицы",
@@ -4514,7 +4606,33 @@
                 feels_hum: "Из-за влажности ощущается теплее",
                 today: "Сегодня",
                 dir_W: "З",
-                nav_map: "Карта", nav_favs: "Избранное", nav_settings: "Опции"
+                loading: "Загрузка...",
+                loc_denied: "Отказано в доступе к местоположению. Ищите город вручную.",
+                loc_unavailable: "Не удалось получить местоположение. Проверьте соединение.",
+                loc_timeout: "Время ожидания истекло. Повторите попытку.",
+                quick_actions: "БЫСТРЫЕ ДЕЙСТВИЯ",
+                lang_label: "Язык / Language",
+                auto_refresh: "Авто-обновление",
+                min: "мин",
+                no_favs: "Нет сохранённых избранных",
+                search_and_add: "Найдите город и добавьте его кнопкой выше.",
+                src_auto: "Open-Meteo (автоматически)",
+                src_us: "GFS — американская модель",
+                src_eu: "ECMWF — европейская модель",
+                src_de: "ICON — немецкая модель",
+                src_global: "wttr.in — глобальные данные",
+                fetching_data: "Получение данных о погоде…",
+                alert_details: "Подробнее",
+                alert_source: "Смотреть официальный источник",
+                alert_wind_desc: "Рекомендуется осторожность из-за сильных порывов ветра. Избегайте падающих предметов и будьте осторожны за рулём.",
+                alert_rain_desc: "Возможно скопление воды в низинах. Следите за обновлениями прогноза.",
+                alert_heat_desc: "Пейте больше воды и избегайте прямого солнечного воздействия в самые жаркие часы.",
+                alert_storm_desc: "Риск молнии и града. При усилении грозы укройтесь в помещении.",
+                alert_tornado_desc: "Крайняя опасность. Следуйте указаниям местных властей и немедленно ищите безопасное укрытие.",
+                close: "Закрыть",
+                nav_map: "Карта", nav_favs: "Избранное", nav_settings: "Опции",
+                moon_arc_lbl: "Луна", moonrise_lbl: "Восход луны", moonset_lbl: "Заход луны",
+                next_sunrise: "Следующий восход"
             },
             zh: {
                 settings: "设置", my_loc: "我的位置", dark: "深色模式", light: "浅色模式", source: "数据来源", units: "单位",
@@ -4562,7 +4680,33 @@
                 feels_hum: "高湿度使体感更闷热",
                 today: "今天",
                 dir_W: "西",
-                nav_map: "地图", nav_favs: "收藏", nav_settings: "设置"
+                loading: "加载中...",
+                loc_denied: "位置权限被拒绝。请手动搜索城市。",
+                loc_unavailable: "无法获取位置。请检查您的网络连接。",
+                loc_timeout: "请求超时。请重试。",
+                quick_actions: "快捷操作",
+                lang_label: "语言 / Language",
+                auto_refresh: "自动刷新",
+                min: "分钟",
+                no_favs: "暂无收藏",
+                search_and_add: "搜索城市并通过上方按钮添加。",
+                src_auto: "Open-Meteo（自动）",
+                src_us: "GFS — 美国模型",
+                src_eu: "ECMWF — 欧洲模型",
+                src_de: "ICON — 德国模型",
+                src_global: "wttr.in — 全球数据",
+                fetching_data: "正在获取天气数据…",
+                alert_details: "更多详情",
+                alert_source: "查看官方来源",
+                alert_wind_desc: "注意强风阵风，避开可能坠落的物体，驾驶时格外小心。",
+                alert_rain_desc: "低洼地区可能积水，请持续关注天气预报。",
+                alert_heat_desc: "注意补水，避免在一天中最热的时段暴露在阳光下。",
+                alert_storm_desc: "有雷击和冰雹风险，如雷暴加剧请及时寻求室内避难。",
+                alert_tornado_desc: "极端危险。请遵从当地部门指示，立即寻找安全避难所。",
+                close: "关闭",
+                nav_map: "地图", nav_favs: "收藏", nav_settings: "设置",
+                moon_arc_lbl: "月亮", moonrise_lbl: "月出", moonset_lbl: "月落",
+                next_sunrise: "下次日出"
             },
             ja: {
                 settings: "設定", my_loc: "現在地", dark: "ダークモード", light: "ライトモード", source: "データソース", units: "単位",
@@ -4610,7 +4754,33 @@
                 feels_hum: "湿気の影響で蒸し暑く感じます",
                 today: "今日",
                 dir_W: "西",
-                nav_map: "地図", nav_favs: "お気に入り", nav_settings: "設定"
+                loading: "読み込み中...",
+                loc_denied: "位置情報の許可が拒否されました。都市を手動で検索してください。",
+                loc_unavailable: "位置情報を取得できません。接続を確認してください。",
+                loc_timeout: "リクエストがタイムアウトしました。もう一度お試しください。",
+                quick_actions: "クイックアクション",
+                lang_label: "言語 / Language",
+                auto_refresh: "自動更新",
+                min: "分",
+                no_favs: "お気に入りなし",
+                search_and_add: "都市を検索して、上のボタンで追加してください。",
+                src_auto: "Open-Meteo（自動）",
+                src_us: "GFS — アメリカモデル",
+                src_eu: "ECMWF — ヨーロッパモデル",
+                src_de: "ICON — ドイツモデル",
+                src_global: "wttr.in — グローバルデータ",
+                fetching_data: "気象データを取得中…",
+                alert_details: "詳細を見る",
+                alert_source: "公式ソースを見る",
+                alert_wind_desc: "強風に注意してください。飛来物を避け、運転には十分注意してください。",
+                alert_rain_desc: "低地では浸水の可能性があります。気象情報の最新情報にご注意ください。",
+                alert_heat_desc: "水分補給を心がけ、日中の暑い時間帯は日差しを避けてください。",
+                alert_storm_desc: "落雷や雹のリスクがあります。嵐が激化した場合は屋内に避難してください。",
+                alert_tornado_desc: "極めて危険です。地元当局の指示に従い、すぐに安全な避難場所を確保してください。",
+                close: "閉じる",
+                nav_map: "地図", nav_favs: "お気に入り", nav_settings: "設定",
+                moon_arc_lbl: "月", moonrise_lbl: "月の出", moonset_lbl: "月の入り",
+                next_sunrise: "次の日の出"
             },
             ko: {
                 settings: "설정", my_loc: "내 위치", dark: "다크 모드", light: "라이트 모드", source: "데이터 소스", units: "단위",
@@ -4658,7 +4828,33 @@
                 feels_hum: "습도 때문에 더 덥게 느껴집니다",
                 today: "오늘",
                 dir_W: "서",
-                nav_map: "지도", nav_favs: "즐겨찾기", nav_settings: "설정"
+                loading: "로딩 중...",
+                loc_denied: "위치 권한이 거부되었습니다. 도시를 직접 검색하세요.",
+                loc_unavailable: "위치를 가져올 수 없습니다. 연결을 확인하세요.",
+                loc_timeout: "요청 시간이 초과되었습니다. 다시 시도하세요.",
+                quick_actions: "빠른 작업",
+                lang_label: "언어 / Language",
+                auto_refresh: "자동 새로고침",
+                min: "분",
+                no_favs: "저장된 즐겨찾기가 없습니다",
+                search_and_add: "도시를 검색하여 위의 버튼으로 추가하세요.",
+                src_auto: "Open-Meteo (자동)",
+                src_us: "GFS — 미국 모델",
+                src_eu: "ECMWF — 유럽 모델",
+                src_de: "ICON — 독일 모델",
+                src_global: "wttr.in — 글로벌 데이터",
+                fetching_data: "날씨 데이터를 가져오는 중…",
+                alert_details: "자세한 정보",
+                alert_source: "공식 출처 보기",
+                alert_wind_desc: "강한 돌풍으로 인해 주의가 필요합니다. 떨어질 수 있는 물체를 피하고 운전 시 각별히 주의하세요.",
+                alert_rain_desc: "저지대에 물이 고일 가능성이 있습니다. 날씨 변화에 관한 정보를 지속적으로 확인하세요.",
+                alert_heat_desc: "수분을 충분히 섭취하고 하루 중 가장 더운 시간에는 직사광선을 피하세요.",
+                alert_storm_desc: "번개와 우박의 위험이 있습니다. 폭풍이 심해지면 실내로 대피하세요.",
+                alert_tornado_desc: "극도의 위험. 지역 당국의 지시에 따르고 즉시 안전한 대피소를 찾으세요.",
+                close: "닫기",
+                nav_map: "지도", nav_favs: "즐겨찾기", nav_settings: "설정",
+                moon_arc_lbl: "달", moonrise_lbl: "월출", moonset_lbl: "월몰",
+                next_sunrise: "다음 일출"
             },
             sv: {
                 settings: "Inställningar", my_loc: "Min plats", dark: "Mörkt läge", light: "Ljust läge", source: "Datakälla", units: "Enheter",
@@ -4707,7 +4903,31 @@
                 dir_W: "V",
                 loading: "Laddar...",
                 fetching_data: "Hämtar väderdata…",
-                nav_map: "Karta", nav_favs: "Sparade", nav_settings: "Inställningar"
+                alert_details: "Mer detaljer",
+                alert_source: "Se officiell källa",
+                alert_wind_desc: "Försiktighet rekommenderas på grund av starka vindbyar. Undvik föremål som kan blåsa ner och kör försiktigt.",
+                alert_rain_desc: "Risk för vattenansamlingar i låglänta områden. Håll dig uppdaterad om väderutvecklingen.",
+                alert_heat_desc: "Drick tillräckligt med vatten och undvik direkt sol under de varmaste timmarna.",
+                alert_storm_desc: "Risk för blixtar och hagel. Sök skydd inomhus om stormen förvärras.",
+                alert_tornado_desc: "Extremt farligt. Följ lokala myndigheters instruktioner och sök omedelbart ett säkert skyddsrum.",
+                close: "Stäng",
+                loc_denied: "Platstillstånd nekades. Sök efter en stad manuellt.",
+                loc_unavailable: "Det gick inte att hämta platsen. Kontrollera din anslutning.",
+                loc_timeout: "Förfrågan tog för lång tid. Försök igen.",
+                quick_actions: "SNABBÅTGÄRDER",
+                lang_label: "Språk / Language",
+                auto_refresh: "Auto-uppdatering",
+                min: "min",
+                no_favs: "Inga sparade favoriter",
+                search_and_add: "Sök en stad och lägg till den med knappen ovan.",
+                src_auto: "Open-Meteo (automatisk)",
+                src_us: "GFS — Amerikansk modell",
+                src_eu: "ECMWF — Europeisk modell",
+                src_de: "ICON — Tysk modell",
+                src_global: "wttr.in — globala data",
+                nav_map: "Karta", nav_favs: "Favoriter", nav_settings: "Inställningar",
+                moon_arc_lbl: "Måne", moonrise_lbl: "Månuppgång", moonset_lbl: "Månedgång",
+                next_sunrise: "Nästa soluppgång"
             },
             ar: {
                 settings: "الإعدادات", my_loc: "موقعي", dark: "الوضع الداكن", light: "الوضع الفاتح", source: "مصدر البيانات", units: "الوحدات",
@@ -4756,6 +4976,32 @@
                 today: "اليوم",
                 dir_W: "غ",
                 fetching_data: "جاري جلب بيانات الطقس…",
+                alert_details: "مزيد من التفاصيل",
+                alert_source: "عرض المصدر الرسمي",
+                alert_wind_desc: "يُنصح بالحذر بسبب هبات رياح قوية. تجنب الأشياء التي قد تسقط وكن يقظاً أثناء القيادة.",
+                alert_rain_desc: "احتمال تجمع المياه في المناطق المنخفضة. ابقَ على اطلاع بالتطورات الجوية.",
+                alert_heat_desc: "احتفظ بترطيب جيد وتجنب التعرض المباشر للشمس في أوقات الذروة.",
+                alert_storm_desc: "خطر البرق والبَرَد. ابحث عن ملجأ في الداخل إذا اشتدت العاصفة.",
+                alert_tornado_desc: "خطر شديد للغاية. اتبع تعليمات السلطات المحلية وابحث فوراً عن ملجأ آمن.",
+                close: "إغلاق",
+                loading: "جارٍ التحميل...",
+                loc_denied: "تم رفض إذن الموقع. ابحث عن مدينة يدوياً.",
+                loc_unavailable: "تعذّر الحصول على الموقع. تحقق من اتصالك.",
+                loc_timeout: "انتهت مهلة الطلب. أعد المحاولة.",
+                quick_actions: "إجراءات سريعة",
+                lang_label: "اللغة / Language",
+                auto_refresh: "التحديث التلقائي",
+                min: "دقيقة",
+                no_favs: "لا توجد مفضلات محفوظة",
+                search_and_add: "ابحث عن مدينة وأضفها بالزر أعلاه.",
+                src_auto: "Open-Meteo (تلقائي)",
+                src_us: "GFS — النموذج الأمريكي",
+                src_eu: "ECMWF — النموذج الأوروبي",
+                src_de: "ICON — النموذج الألماني",
+                src_global: "wttr.in — بيانات عالمية",
+                nav_map: "خريطة", nav_favs: "المفضلة", nav_settings: "إعدادات",
+                moon_arc_lbl: "القمر", moonrise_lbl: "شروق القمر", moonset_lbl: "غروب القمر",
+                next_sunrise: "شروق الشمس القادم",
                 nav_map: "خريطة", nav_favs: "المحفوظة", nav_settings: "إعدادات"
             },
             nl: {
@@ -4804,7 +5050,17 @@
                 today: "Vandaag",
                 dir_W: "W",
                 fetching_data: "Weergegevens ophalen…",
-                nav_map: "Kaart", nav_favs: "Opgeslagen", nav_settings: "Opties"
+                alert_details: "Meer details",
+                alert_source: "Officiële bron bekijken",
+                alert_wind_desc: "Voorzichtigheid geboden vanwege sterke windstoten. Vermijd vallende voorwerpen en rij extra voorzichtig.",
+                alert_rain_desc: "Mogelijke wateraccumulatie in laaggelegene gebieden. Blijf op de hoogte van de weersontwikkelingen.",
+                alert_heat_desc: "Zorg voor voldoende hydratatie en vermijd directe blootstelling aan de zon tijdens de heetste uren.",
+                alert_storm_desc: "Risico op bliksem en hagel. Zoek beschutting binnen als het onweer toeneemt.",
+                alert_tornado_desc: "Extreem gevaar. Volg de aanwijzingen van de lokale autoriteiten en zoek onmiddellijk een veilige schuilplaats.",
+                close: "Sluiten",
+                nav_map: "Kaart", nav_favs: "Favorieten", nav_settings: "Opties",
+                moon_arc_lbl: "Maan", moonrise_lbl: "Maanopgang", moonset_lbl: "Maanondergang",
+                next_sunrise: "Volgende zonsopgang"
             },
             el: {
                 settings: "Ρυθμίσεις", my_loc: "Η τοποθεσία μου", dark: "Σκοτεινή λειτουργία", light: "Φωτεινή λειτουργία", source: "Πηγή δεδομένων", units: "Μονάδες",
@@ -4852,7 +5108,33 @@
                 today: "Σήμερα",
                 dir_W: "Δ",
                 fetching_data: "Λήψη μετεωρολογικών δεδομένων…",
-                nav_map: "Χάρτης", nav_favs: "Αγαπημένα", nav_settings: "Ρυθμίσεις"
+                loading: "Φόρτωση...",
+                loc_denied: "Άρνηση πρόσβασης στη θέση. Αναζητήστε μια πόλη χειροκίνητα.",
+                loc_unavailable: "Αδύνατη η λήψη τοποθεσίας. Ελέγξτε τη σύνδεσή σας.",
+                loc_timeout: "Το αίτημα έληξε. Δοκιμάστε ξανά.",
+                quick_actions: "ΓΡΗΓΟΡΕΣ ΕΝΕΡΓΕΙΕΣ",
+                lang_label: "Γλώσσα / Language",
+                auto_refresh: "Αυτόματη ανανέωση",
+                min: "λεπτ",
+                no_favs: "Δεν υπάρχουν αποθηκευμένα αγαπημένα",
+                search_and_add: "Αναζητήστε μια πόλη και προσθέστε την με το κουμπί παραπάνω.",
+                src_auto: "Open-Meteo (αυτόματο)",
+                src_us: "GFS — Αμερικανικό μοντέλο",
+                src_eu: "ECMWF — Ευρωπαϊκό μοντέλο",
+                src_de: "ICON — Γερμανικό μοντέλο",
+                src_global: "wttr.in — Παγκόσμια δεδομένα",
+                alert_details: "Περισσότερες λεπτομέρειες",
+                alert_source: "Προβολή επίσημης πηγής",
+                alert_wind_desc: "Συνιστάται προσοχή λόγω ισχυρών ριπών ανέμου. Αποφύγετε αντικείμενα που μπορεί να πέσουν και οδηγήστε με προσοχή.",
+                alert_rain_desc: "Πιθανή συγκέντρωση νερού σε χαμηλές περιοχές. Παρακολουθήστε τις μετεωρολογικές εξελίξεις.",
+                alert_heat_desc: "Παραμείνετε ενυδατωμένοι και αποφύγετε την άμεση έκθεση στον ήλιο τις πιο ζεστές ώρες.",
+                alert_storm_desc: "Κίνδυνος κεραυνών και χαλαζιού. Αναζητήστε καταφύγιο σε εσωτερικό χώρο αν η καταιγίδα ενταθεί.",
+                alert_tornado_desc: "Ακραίος κίνδυνος. Ακολουθήστε τις οδηγίες των τοπικών αρχών και αναζητήστε αμέσως ασφαλές καταφύγιο.",
+                close: "Κλείσιμο",
+                fav_saved: "Ήδη αποθηκευμένο", fav_add_cur: "Προσθήκη τρέχουσας τοποθεσίας",
+                nav_map: "Χάρτης", nav_favs: "Αγαπημένα", nav_settings: "Ρυθμίσεις",
+                moon_arc_lbl: "Σελήνη", moonrise_lbl: "Ανατολή σελήνης", moonset_lbl: "Δύση σελήνης",
+                next_sunrise: "Επόμενη ανατολή ηλίου"
             },
 
         };
@@ -6501,7 +6783,7 @@
             const favs = loadFavs();
             const alreadySaved = favs.some(f => Math.abs(f.lat - S.lat) < 0.01 && Math.abs(f.lon - S.lon) < 0.01);
             if (btn) btn.disabled = alreadySaved;
-            if (textSpan) textSpan.textContent = alreadySaved ? 'Ya guardada' : 'Añadir ubicación actual';
+            if (textSpan) textSpan.textContent = alreadySaved ? t('fav_saved') : t('fav_add_cur');
         }
         function closeFavModal() { document.getElementById('favModal').classList.remove('open'); }
         document.getElementById('favModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeFavModal(); });
@@ -6651,9 +6933,9 @@
                     const sym = S.unit === 'F' ? '°F' : '°';
                     const condLabel = (WMO[code] || {})[S.lang] || (WMO[code] || {}).es || '';
                     const lang = S.lang || 'es';
-                    const rangeLabel = lang === 'es'
-                        ? `Máx. ${tmax}${sym}  Mín. ${tmin}${sym}`
-                        : `H: ${tmax}${sym}  L: ${tmin}${sym}`;
+                    const highLbl = t('high') || 'H';
+                    const lowLbl = t('low') || 'L';
+                    const rangeLabel = `${highLbl} ${tmax}${sym}  ${lowLbl} ${tmin}${sym}`;
 
                     document.getElementById(`fav-temp-${i}`).textContent = temp + sym;
                     document.getElementById(`fav-cond-${i}`).textContent = condLabel;
