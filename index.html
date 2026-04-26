@@ -2533,15 +2533,11 @@
             max-width: 420px;
         }
 
-        .bottom-nav {
-            align-items: stretch;
-        }
-
         .bottom-nav-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             gap: 3px;
             padding: 10px 2px 8px;
             border-radius: 22px;
@@ -3059,6 +3055,75 @@
             letter-spacing: 0.5px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* ── LIQUID TAB BAR — iOS 26 style ── */
+        .nav-liquid-pill {
+            position: absolute;
+            top: 6px;
+            height: calc(100% - 12px);
+            background: rgba(255, 255, 255, 0.22);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            pointer-events: none;
+            z-index: 0;
+            transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+            will-change: transform, width;
+        }
+
+        .bottom-nav.dragging .nav-liquid-pill {
+            transition: transform 0.08s ease-out, width 0.08s ease-out;
+        }
+
+        .bottom-nav.dragging {
+            transform: translateX(-50%) scale(0.96) !important;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+        }
+
+        .bottom-nav {
+            transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+
+        .bottom-nav-btn {
+            position: relative;
+            z-index: 1;
+        }
+
+        .bottom-nav-btn.active {
+            color: #fff;
+        }
+
+        .bottom-nav-btn.active svg {
+            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.55));
+        }
+
+        .bottom-nav-btn.drag-hover svg {
+            transform: scale(1.18);
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+        }
+
+        .bottom-nav-btn svg {
+            transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.22s ease;
+        }
+
+        .bottom-nav-btn::after {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: transparent;
+            margin: 1px auto 0;
+            transition: background 0.3s ease, transform 0.3s ease;
+            transform: scale(0);
+        }
+
+        .bottom-nav-btn.active::after {
+            background: rgba(255, 255, 255, 0.7);
+            transform: scale(1);
+        }
     </style>
 </head>
 
@@ -3075,6 +3140,8 @@
 
     <!-- Bottom Liquid Glass Nav -->
     <div class="bottom-nav" id="bottomNav">
+        <!-- Sliding pill indicator -->
+        <div class="nav-liquid-pill" id="navLiquidPill"></div>
         <button class="bottom-nav-btn" id="btnNavLoc" onclick="geolocate()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
                 <path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z" />
@@ -7739,6 +7806,269 @@
         renderHistory();
         if (S.lat) { fetchWeather(); }
         else { showLoading(false); geolocate(); }
+
+        /* ─────────────────────────────────────────────────────────────
+           LIQUID TAB BAR — iOS 26 drag-to-navigate
+           ───────────────────────────────────────────────────────────── */
+        (function initLiquidTabBar() {
+            const nav = document.getElementById('bottomNav');
+            const pill = document.getElementById('navLiquidPill');
+            const buttons = Array.from(nav.querySelectorAll('.bottom-nav-btn'));
+
+            if (!nav || !pill || !buttons.length) return;
+
+            /* Map each button to its action so we can fire it on release */
+            const btnActions = {
+                'btnNavLoc': () => geolocate(),
+                'btnNavMap': () => openMobileMap(),
+                'btnNavMenu': () => openFavModal(),
+                'btnNavSearch': () => toggleMobileSearch(),
+            };
+            /* Settings button has no id — identify by position (index 3) */
+            const settingsIdx = 3;
+
+            /* ── State ── */
+            let isDragging = false;
+            let activeIdx = -1;   // currently highlighted tab index
+            let dragHoverIdx = -1;   // tab under finger during drag
+            let longPressTimer = null;
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let didLongPress = false;
+            const LONG_PRESS_MS = 120; // ms to enter drag mode (responsive but not accidental)
+            const DRAG_THRESHOLD_PX = 6; // px finger must move to start switching tabs
+
+            /* ── Pill geometry helpers ── */
+            function getBtnRect(idx) {
+                return buttons[idx].getBoundingClientRect();
+            }
+
+            function getNavRect() {
+                return nav.getBoundingClientRect();
+            }
+
+            /* Move pill to a given button index */
+            function setPillTo(idx, instant) {
+                if (idx < 0 || idx >= buttons.length) return;
+                const navR = getNavRect();
+                const btnR = getBtnRect(idx);
+                const offsetX = btnR.left - navR.left;
+                const pillW = btnR.width;
+
+                if (instant) {
+                    pill.style.transition = 'none';
+                } else {
+                    pill.style.transition = '';
+                }
+                pill.style.width = pillW + 'px';
+                pill.style.transform = 'translateX(' + offsetX + 'px)';
+            }
+
+            /* ── Active tab management ── */
+            function setActive(idx, fireAction) {
+                if (idx === activeIdx) return;
+                activeIdx = idx;
+                buttons.forEach((btn, i) => {
+                    btn.classList.toggle('active', i === idx);
+                });
+                setPillTo(idx, false);
+                if (fireAction) fireTabAction(idx);
+            }
+
+            function fireTabAction(idx) {
+                const btn = buttons[idx];
+                const id = btn.id;
+                if (btnActions[id]) {
+                    btnActions[id]();
+                } else if (idx === settingsIdx) {
+                    openSettings();
+                }
+            }
+
+            /* ── Drag hover (no action fired yet) ── */
+            function setDragHover(idx) {
+                if (idx === dragHoverIdx) return;
+                /* Haptic feedback on tab change */
+                if (dragHoverIdx !== -1 && window.navigator && navigator.vibrate) {
+                    navigator.vibrate(10);
+                }
+                dragHoverIdx = idx;
+                buttons.forEach((btn, i) => {
+                    btn.classList.toggle('drag-hover', i === idx);
+                });
+                /* Move pill instantly while dragging */
+                if (isDragging) {
+                    const navR = getNavRect();
+                    const btnR = getBtnRect(idx);
+                    pill.style.transition = 'transform 0.08s ease-out, width 0.08s ease-out';
+                    pill.style.width = btnR.width + 'px';
+                    pill.style.transform = 'translateX(' + (btnR.left - navR.left) + 'px)';
+                }
+            }
+
+            /* ── Find closest button to clientX ── */
+            function closestBtnTo(clientX) {
+                let best = 0, bestDist = Infinity;
+                buttons.forEach((btn, i) => {
+                    const r = btn.getBoundingClientRect();
+                    const center = r.left + r.width / 2;
+                    const dist = Math.abs(clientX - center);
+                    if (dist < bestDist) { bestDist = dist; best = i; }
+                });
+                return best;
+            }
+
+            /* ── Touch handlers ── */
+            nav.addEventListener('touchstart', function (e) {
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+                didLongPress = false;
+
+                /* Identify which button was touched */
+                const startIdx = closestBtnTo(touch.clientX);
+
+                /* Start long-press timer to enter drag mode */
+                longPressTimer = setTimeout(() => {
+                    didLongPress = true;
+                    isDragging = true;
+                    nav.classList.add('dragging');
+                    dragHoverIdx = startIdx;
+                    buttons.forEach((btn, i) => btn.classList.toggle('drag-hover', i === startIdx));
+                    /* Haptic: entering drag mode */
+                    if (navigator.vibrate) navigator.vibrate([8, 30, 8]);
+                    /* Grow pill to cover active btn instantly */
+                    setPillTo(startIdx, true);
+                }, LONG_PRESS_MS);
+            }, { passive: true });
+
+            nav.addEventListener('touchmove', function (e) {
+                const touch = e.touches[0];
+                const dx = Math.abs(touch.clientX - touchStartX);
+                const dy = Math.abs(touch.clientY - touchStartY);
+
+                /* If user moves significantly before longpress fires, cancel it */
+                if (!isDragging && (dx > DRAG_THRESHOLD_PX || dy > DRAG_THRESHOLD_PX)) {
+                    if (!didLongPress) {
+                        clearTimeout(longPressTimer);
+                        return;
+                    }
+                }
+
+                if (!isDragging) return;
+
+                /* Prevent page scroll while dragging the nav */
+                e.preventDefault();
+
+                const idx = closestBtnTo(touch.clientX);
+                setDragHover(idx);
+            }, { passive: false });
+
+            nav.addEventListener('touchend', function (e) {
+                clearTimeout(longPressTimer);
+
+                if (isDragging) {
+                    isDragging = false;
+                    nav.classList.remove('dragging');
+
+                    /* Commit: activate the tab the finger is over */
+                    if (dragHoverIdx !== -1) {
+                        const finalIdx = dragHoverIdx;
+                        /* Clear drag-hover state */
+                        buttons.forEach(btn => btn.classList.remove('drag-hover'));
+                        dragHoverIdx = -1;
+                        /* Set active and fire action */
+                        setActive(finalIdx, true);
+                    }
+
+                    /* Haptic: release */
+                    if (navigator.vibrate) navigator.vibrate(6);
+
+                } else if (!didLongPress) {
+                    /* Regular tap — identify button from changedTouches */
+                    const touch = e.changedTouches[0];
+                    const idx = closestBtnTo(touch.clientX);
+                    setActive(idx, true);
+                }
+            }, { passive: true });
+
+            nav.addEventListener('touchcancel', function () {
+                clearTimeout(longPressTimer);
+                isDragging = false;
+                nav.classList.remove('dragging');
+                buttons.forEach(btn => btn.classList.remove('drag-hover'));
+                dragHoverIdx = -1;
+                /* Restore pill to last active */
+                if (activeIdx !== -1) setPillTo(activeIdx, false);
+            }, { passive: true });
+
+            /* ── Initial pill position ── */
+            /* Place pill under first button (Mi ubicación) with no animation */
+            function initPill() {
+                const navR = getNavRect();
+                if (navR.width === 0) {
+                    /* Nav not visible yet (desktop or hidden) — wait */
+                    requestAnimationFrame(initPill);
+                    return;
+                }
+                /* No tab is "active" on load — hide pill */
+                pill.style.opacity = '0';
+                pill.style.width = getBtnRect(0).width + 'px';
+                pill.style.transform = 'translateX(0px)';
+            }
+
+            /* Show pill when a tab becomes active */
+            const _origSetActive = setActive;
+            function setActiveWithPillReveal(idx, fire) {
+                if (activeIdx === -1) {
+                    /* First activation — fade pill in */
+                    pill.style.transition = 'none';
+                    setPillTo(idx, true);
+                    pill.style.opacity = '0';
+                    requestAnimationFrame(() => {
+                        pill.style.transition = 'opacity 0.2s ease, transform 0.38s cubic-bezier(0.34,1.56,0.64,1), width 0.32s cubic-bezier(0.34,1.56,0.64,1)';
+                        pill.style.opacity = '1';
+                    });
+                }
+                _origSetActive(idx, fire);
+            }
+            /* Rebind setActive to the reveal version */
+            /* (inner function redefinition — use a flag instead) */
+            let pillVisible = false;
+            function setActivePublic(idx, fire) {
+                if (!pillVisible) {
+                    pill.style.transition = 'none';
+                    setPillTo(idx, true);
+                    requestAnimationFrame(() => {
+                        pill.style.transition = '';
+                        pill.style.opacity = '1';
+                    });
+                    pillVisible = true;
+                }
+                activeIdx = -1; // force update
+                setActive(idx, fire);
+            }
+
+            /* Override click handlers to go through our system */
+            buttons.forEach((btn, idx) => {
+                /* Remove existing onclick to avoid double-fire on tap */
+                btn.removeAttribute('onclick');
+                btn.addEventListener('click', (e) => {
+                    /* Only fire on real clicks (not synthesized from touch) */
+                    if (e.detail === 0) return; // keyboard / synthetic
+                    setActivePublic(idx, true);
+                });
+            });
+
+            requestAnimationFrame(initPill);
+
+            /* Re-position pill on resize (orientation change) */
+            window.addEventListener('resize', () => {
+                if (activeIdx !== -1) setPillTo(activeIdx, true);
+            });
+
+        })(); /* end initLiquidTabBar */
+
     </script>
 </body>
 
