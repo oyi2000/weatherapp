@@ -2533,25 +2533,34 @@
             max-width: 420px;
         }
 
+        .bottom-nav {
+            align-items: stretch;
+        }
+
         .bottom-nav-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 4px;
-            padding: 10px 4px 8px;
+            justify-content: flex-start;
+            gap: 3px;
+            padding: 10px 2px 8px;
             border-radius: 22px;
             border: none;
             cursor: pointer;
             font-family: 'Google Sans', sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 500;
             color: rgba(255, 255, 255, 0.75);
             background: transparent;
             transition: all 0.22s;
-            white-space: nowrap;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.2;
+            word-break: break-word;
+            overflow: hidden;
             flex: 1;
             min-width: 0;
+            max-width: 20%;
         }
 
         .bottom-nav-btn:hover,
@@ -7464,7 +7473,13 @@
             // Text direction (RTL)
             document.body.dir = (val === 'ar') ? 'rtl' : 'ltr';
 
-            if (S.data) render();
+            if (S.data) {
+                render();
+                // Re-render alert in new language if one was active
+                if (S._lastAlertCode !== null && S._lastAlertCode !== undefined) {
+                    checkAndShowAlert(S.data);
+                }
+            }
         }
         function openSettings() { document.getElementById('settingsModal').classList.add('open'); }
         function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); }
