@@ -2432,15 +2432,24 @@
                 gap: 10px;
             }
 
+            /* Sun card — vertical stack on mobile */
             .sun-arc-row {
-                flex-direction: row;
+                flex-direction: column;
                 align-items: center;
-                gap: 6px;
+                gap: 8px;
             }
 
             .sun-arc-svg {
-                max-width: none;
-                flex: 1;
+                max-width: 100%;
+                width: 100%;
+                flex: none;
+            }
+
+            .sun-times-row {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                padding: 0 4px;
             }
 
             .sun-time {
@@ -2490,25 +2499,28 @@
             -webkit-backdrop-filter: blur(24px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 40px;
-            padding: 6px 8px;
+            padding: 8px 10px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .bottom-nav-btn {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
-            padding: 8px 18px;
+            justify-content: center;
+            gap: 4px;
+            padding: 8px 16px;
             border-radius: 30px;
             border: none;
             cursor: pointer;
             font-family: 'Google Sans', sans-serif;
-            font-size: 13px;
+            font-size: 10px;
             font-weight: 500;
             color: rgba(255, 255, 255, 0.9);
             background: transparent;
             transition: all 0.22s;
             white-space: nowrap;
+            min-width: 60px;
         }
 
         .bottom-nav-btn:hover,
@@ -2532,6 +2544,11 @@
         @media (max-width: 600px) {
             .header .btn-icon {
                 display: none !important;
+            }
+
+            /* Keep geolocation button visible on mobile */
+            .header .btn-icon.btn-geo {
+                display: flex !important;
             }
 
             .update-info.desktop-only {
@@ -2798,7 +2815,46 @@
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
         }
 
-        /* ── TEMP AVG DEVIATION ── */
+        .sun-times-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 4px;
+        }
+
+        /* ── MOBILE SEARCH REVEAL ── */
+        @media (max-width: 600px) {
+
+            /* Header search invisible by default on mobile */
+            .header .search-wrap {
+                display: none;
+                opacity: 0;
+                transform: translateY(-8px);
+                transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+            }
+
+            .header .search-wrap.mobile-visible {
+                display: flex;
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* Hide other header buttons on mobile */
+            .header .btn-icon {
+                display: none !important;
+            }
+
+            /* Search icon within search-wrap stays visible */
+        }
+
+        /* ── SEARCH NAV BTN pill style ── */
+        .bottom-nav-search {
+            /* same as other nav btns, no extra needed */
+        }
+
+        /* Hidden pill fab — kept for potential reuse but hidden */
+
+
         .avg-badge {
             display: inline-flex;
             align-items: center;
@@ -2869,7 +2925,7 @@
     <!-- Bottom Liquid Glass Nav -->
     <div class="bottom-nav" id="bottomNav">
         <button class="bottom-nav-btn" id="btnNavMap" onclick="openMobileMap()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <polygon points="3,7 9,4 15,7 21,4 21,17 15,20 9,17 3,20" stroke="white" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round" />
                 <line x1="9" y1="4" x2="9" y2="17" stroke="white" stroke-width="1.5" opacity="0.6" />
@@ -2878,20 +2934,28 @@
             <span id="t_mobile_map">${t('nav_map')}</span>
         </button>
         <button class="bottom-nav-btn" id="btnNavMenu" onclick="openFavModal()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
                     stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             <span id="t_mobile_favs">${t('nav_favs')}</span>
         </button>
         <button class="bottom-nav-btn" onclick="openSettings()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="12" r="3" stroke="white" stroke-width="2" />
                 <path
                     d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
                     stroke="white" stroke-width="1.5" />
             </svg>
             <span id="t_mobile_settings">${t('nav_settings')}</span>
+        </button>
+        <!-- 4th nav item: search pill -->
+        <button class="bottom-nav-btn bottom-nav-search" id="btnNavSearch" onclick="toggleMobileSearch()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="7" stroke="white" stroke-width="2" />
+                <line x1="16.5" y1="16.5" x2="22" y2="22" stroke="white" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            <span>Buscar</span>
         </button>
     </div>
 
@@ -3252,15 +3316,6 @@
                 <div class="section-label" id="t_sun">Sol</div>
                 <div class="sun-arc-card" id="sunArcCard" style="margin-bottom:0">
                     <div class="sun-arc-row">
-                        <div class="sun-time">
-                            <div class="sun-time-label" id="arcRiseIcon"><svg width="12" height="12" viewBox="0 0 24 24"
-                                    fill="none" style="vertical-align:middle;margin-right:3px">
-                                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"
-                                        stroke="#FFD700" stroke-width="2" stroke-linecap="round" />
-                                    <circle cx="12" cy="12" r="4" fill="#FFD700" />
-                                </svg><span id="t_sunrise_lbl">Amanecer</span></div>
-                            <div class="sun-time-val" id="sunriseVal">—</div>
-                        </div>
                         <svg class="sun-arc-svg" viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <linearGradient id="arcGrad2" x1="0" y1="0" x2="1" y2="0">
@@ -3276,26 +3331,38 @@
                             <circle id="sunDot" cx="20" cy="95" r="9" fill="#FFD700" opacity="0.95" />
                             <line x1="20" y1="95" x2="240" y2="95" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
                         </svg>
-                        <div class="sun-time">
-                            <div class="sun-time-label" id="arcSetIcon"><svg width="12" height="12" viewBox="0 0 24 24"
-                                    fill="none" style="vertical-align:middle;margin-right:3px">
-                                    <path d="M17 18a5 5 0 0 0-10 0" stroke="#ff9800" stroke-width="2" />
-                                    <line x1="12" y1="2" x2="12" y2="9" stroke="#ff9800" stroke-width="2"
-                                        stroke-linecap="round" />
-                                    <line x1="4.22" y1="10.22" x2="5.64" y2="11.64" stroke="#ff9800" stroke-width="2"
-                                        stroke-linecap="round" />
-                                    <line x1="1" y1="18" x2="3" y2="18" stroke="#ff9800" stroke-width="2"
-                                        stroke-linecap="round" />
-                                    <line x1="21" y1="18" x2="23" y2="18" stroke="#ff9800" stroke-width="2"
-                                        stroke-linecap="round" />
-                                    <line x1="18.36" y1="11.64" x2="19.78" y2="10.22" stroke="#ff9800" stroke-width="2"
-                                        stroke-linecap="round" />
-                                    <line x1="23" y1="22" x2="1" y2="22" stroke="#ff9800" stroke-width="2"
-                                        stroke-linecap="round" />
-                                    <polyline points="8,6 12,2 16,6" stroke="#ff9800" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg><span id="t_sunset_lbl">Atardecer</span></div>
-                            <div class="sun-time-val" id="sunsetVal">—</div>
+                        <div class="sun-times-row">
+                            <div class="sun-time">
+                                <div class="sun-time-label" id="arcRiseIcon"><svg width="12" height="12"
+                                        viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px">
+                                        <path
+                                            d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"
+                                            stroke="#FFD700" stroke-width="2" stroke-linecap="round" />
+                                        <circle cx="12" cy="12" r="4" fill="#FFD700" />
+                                    </svg><span id="t_sunrise_lbl">Amanecer</span></div>
+                                <div class="sun-time-val" id="sunriseVal">—</div>
+                            </div>
+                            <div class="sun-time">
+                                <div class="sun-time-label" id="arcSetIcon"><svg width="12" height="12"
+                                        viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px">
+                                        <path d="M17 18a5 5 0 0 0-10 0" stroke="#ff9800" stroke-width="2" />
+                                        <line x1="12" y1="2" x2="12" y2="9" stroke="#ff9800" stroke-width="2"
+                                            stroke-linecap="round" />
+                                        <line x1="4.22" y1="10.22" x2="5.64" y2="11.64" stroke="#ff9800"
+                                            stroke-width="2" stroke-linecap="round" />
+                                        <line x1="1" y1="18" x2="3" y2="18" stroke="#ff9800" stroke-width="2"
+                                            stroke-linecap="round" />
+                                        <line x1="21" y1="18" x2="23" y2="18" stroke="#ff9800" stroke-width="2"
+                                            stroke-linecap="round" />
+                                        <line x1="18.36" y1="11.64" x2="19.78" y2="10.22" stroke="#ff9800"
+                                            stroke-width="2" stroke-linecap="round" />
+                                        <line x1="23" y1="22" x2="1" y2="22" stroke="#ff9800" stroke-width="2"
+                                            stroke-linecap="round" />
+                                        <polyline points="8,6 12,2 16,6" stroke="#ff9800" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg><span id="t_sunset_lbl">Atardecer</span></div>
+                                <div class="sun-time-val" id="sunsetVal">—</div>
+                            </div>
                         </div>
                     </div>
                     <div class="day-length" id="dayLength"></div>
@@ -6265,17 +6332,57 @@
         function onSearchKey(e) {
             const list = document.getElementById('acList');
             const items = list.querySelectorAll('.autocomplete-item');
-            if (e.key === 'Escape') { list.classList.remove('open'); acIndex = -1; return; }
+            if (e.key === 'Escape') { list.classList.remove('open'); acIndex = -1; if (window.innerWidth <= 600) hideMobileSearch(); return; }
             if (e.key === 'ArrowDown') { e.preventDefault(); acIndex = Math.min(acIndex + 1, items.length - 1); items.forEach((el, i) => el.style.background = i === acIndex ? 'rgba(255,255,255,0.15)' : ''); return; }
             if (e.key === 'ArrowUp') { e.preventDefault(); acIndex = Math.max(acIndex - 1, 0); items.forEach((el, i) => el.style.background = i === acIndex ? 'rgba(255,255,255,0.15)' : ''); return; }
             if (e.key === 'Enter' && acIndex >= 0 && acResults[acIndex]) { const r = acResults[acIndex]; selectCity(r.latitude, r.longitude, r.name + ', ' + (r.admin1 || r.country || '')); return; }
         }
         document.addEventListener('click', e => { if (!e.target.closest('.search-wrap')) document.getElementById('acList').classList.remove('open'); });
 
+        // ── MOBILE SEARCH TOGGLE — 4th nav button ────────────────────────────────────
+        let mobileSearchOpen = false;
+        function toggleMobileSearch() {
+            const wrap = document.querySelector('.header .search-wrap');
+            const btn = document.getElementById('btnNavSearch');
+            if (!wrap) return;
+            mobileSearchOpen = !mobileSearchOpen;
+            if (mobileSearchOpen) {
+                wrap.style.display = 'flex';
+                // Force reflow so transition fires
+                wrap.getBoundingClientRect();
+                wrap.classList.add('mobile-visible');
+                btn.classList.add('active');
+                // Scroll to top then focus
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                    document.getElementById('searchInput').focus();
+                }, 320);
+            } else {
+                hideMobileSearch();
+            }
+        }
+        function hideMobileSearch() {
+            const wrap = document.querySelector('.header .search-wrap');
+            const btn = document.getElementById('btnNavSearch');
+            if (!wrap) return;
+            mobileSearchOpen = false;
+            wrap.classList.remove('mobile-visible');
+            btn && btn.classList.remove('active');
+            document.getElementById('acList').classList.remove('open');
+            // Wait for transition then hide
+            setTimeout(() => {
+                if (!mobileSearchOpen) wrap.style.display = 'none';
+            }, 300);
+        }
+
+
+
         function selectCity(lat, lon, name) {
             S.lat = lat; S.lon = lon; S.cityName = name;
             document.getElementById('searchInput').value = '';
             document.getElementById('acList').classList.remove('open');
+            // Hide mobile search bar after selection
+            if (window.innerWidth <= 600) hideMobileSearch();
             saveHistory(name, lat, lon); renderHistory(); savePrefs(); fetchWeather();
         }
 
