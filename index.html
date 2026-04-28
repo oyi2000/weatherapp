@@ -145,6 +145,54 @@
             }
         }
 
+        /* Granizo — gotas pequeñas, ovaladas, translúcidas */
+        .hail-drop {
+            position: absolute;
+            top: -12px;
+            width: 5px;
+            height: 7px;
+            background: radial-gradient(ellipse at 35% 30%, rgba(255, 255, 255, 0.95), rgba(200, 220, 240, 0.7) 60%, rgba(160, 190, 220, 0.4));
+            border-radius: 50% 50% 55% 45%;
+            animation: fall-hail linear infinite;
+            filter: drop-shadow(0 1px 2px rgba(120, 160, 200, 0.4));
+        }
+
+        @keyframes fall-hail {
+            to {
+                transform: translateY(110vh) translateX(-4px);
+            }
+        }
+
+        /* Niebla — bandas horizontales que se deslizan lentamente */
+        .fog-band {
+            position: absolute;
+            left: -10%;
+            width: 120%;
+            border-radius: 50%;
+            animation: drift-fog linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes drift-fog {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(8%);
+            }
+        }
+
+        @keyframes drift-fog-rev {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-8%);
+            }
+        }
+
         /* ── STARS ── */
         .stars {
             position: fixed;
@@ -826,34 +874,34 @@
             color: var(--text-muted);
         }
 
-        /* ── ALERTS & SUMMARY ── */
-        .alerts-container {
-            margin-bottom: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* ── ALERT BANNER (nuevo sistema) ── */
+        #alertBanner {
+            margin-bottom: 24px;
         }
 
-        .weather-alert {
-            padding: 14px 18px;
-            border-radius: 16px;
+        .ab-card {
+            border-radius: var(--radius);
+            padding: 14px 16px;
             display: flex;
-            align-items: center;
-            gap: 14px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #fff;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: slideDown 0.4s ease-out;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            align-items: flex-start;
+            gap: 12px;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            animation: abIn 0.3s cubic-bezier(.22, 1, .36, 1);
+            position: relative;
+            cursor: pointer;
+            transition: filter 0.18s;
         }
 
-        @keyframes slideDown {
+        .ab-card:hover {
+            filter: brightness(1.08);
+        }
+
+        @keyframes abIn {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(-8px);
             }
 
             to {
@@ -862,190 +910,90 @@
             }
         }
 
-        .alert-yellow,
-        .alert-orange,
-        .alert-red {
-            background: rgba(255, 255, 255, 0.13);
-            border-color: rgba(255, 255, 255, 0.22);
-            color: #fff;
+        /* colores por nivel */
+        .ab-info {
+            background: rgba(30, 90, 200, 0.22);
         }
 
-        .weather-alert {
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
+        .ab-moderate {
+            background: rgba(180, 110, 0, 0.28);
         }
 
-        .weather-alert:hover {
-            transform: scale(1.01);
-            background: rgba(255, 255, 255, 0.20);
+        .ab-high {
+            background: rgba(200, 70, 0, 0.32);
         }
 
-        /* ── ALERT MODAL OVERLAY ── */
-        .alert-modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            padding: 20px;
+        .ab-extreme {
+            background: rgba(180, 0, 0, 0.38);
         }
 
-        .alert-modal-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* ── ALERT PANEL (replaces alert-modal-card) ── */
-        .alert-panel {
-            background: rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(20px) saturate(200%);
-            -webkit-backdrop-filter: blur(20px) saturate(200%);
-            border: 1px solid rgba(255, 255, 255, 0.30);
-            border-radius: 28px;
-            width: 400px;
-            max-width: calc(100vw - 32px);
-            max-height: 90vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-            animation: panelSlideUp 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            color: #fff;
-        }
-
-        .alert-modal-overlay.show .alert-panel {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-        }
-
-        /* LIQUID GLASS RED ALERT (applied to alert-panel) */
-        .alert-panel.alert-card-red {
-            background: linear-gradient(160deg, rgba(220, 20, 20, 0.35) 0%, rgba(120, 0, 0, 0.55) 100%) !important;
-            backdrop-filter: blur(40px) saturate(180%) !important;
-            -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
-            border: 1.5px solid rgba(255, 100, 100, 0.45) !important;
-            box-shadow: 0 30px 80px rgba(255, 0, 0, 0.4), inset 0 0 25px rgba(255, 255, 255, 0.1) !important;
-        }
-
-        .ap-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 22px 22px 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+        .ab-icon {
             flex-shrink: 0;
-        }
-
-        .ap-header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .ap-header-icon {
             width: 36px;
             height: 36px;
-            background: rgba(255, 255, 255, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.30);
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .ap-header h2 {
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-            margin: 0;
-        }
-
-        .ap-close {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
             background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.22);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.18s;
-            flex-shrink: 0;
-            color: #fff;
         }
 
-        .ap-close:hover {
-            background: rgba(255, 255, 255, 0.28);
-            transform: scale(1.08);
+        .ab-content {
+            flex: 1;
+            min-width: 0;
         }
 
-        .ap-body {
-            padding: 24px 22px 28px;
-            overflow-y: auto;
-        }
-
-        .ap-desc {
+        .ab-title {
             font-size: 15px;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.95);
-            margin-bottom: 24px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 4px;
         }
 
-        .ap-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 14px;
-            border-radius: 16px;
-            background: #fff;
-            color: #000;
+        .ab-body {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.45;
+        }
+
+        .ab-source {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 6px;
+        }
+
+        .ab-source a {
+            color: rgba(255, 255, 255, 0.55);
             text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: transform 0.2s, background 0.2s;
-            border: none;
-            cursor: pointer;
         }
 
-        .ap-btn:hover {
-            transform: scale(1.02);
-            background: #eee;
-        }
-
-        .ap-btn--secondary {
-            background: rgba(255, 255, 255, 0.1);
+        .ab-source a:hover {
             color: #fff;
-            margin-top: 10px;
+            text-decoration: underline;
         }
 
-        .ap-btn--secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-
-        .alert-tornado {
-            background: rgba(0, 0, 0, 0.5);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: #fff;
-            border: 2px solid #f44336;
-        }
-
-        .alert-icon {
+        .ab-close {
             flex-shrink: 0;
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 50%;
             width: 24px;
             height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            line-height: 1;
+            transition: background 0.15s;
+        }
+
+        .ab-close:hover {
+            background: rgba(255, 255, 255, 0.28);
         }
 
         .summary-phrase {
@@ -1346,6 +1294,18 @@
             font-weight: 500;
         }
 
+        /* Satellite toggle active state for desktop and mobile */
+        #satToggleBtn.active {
+            background: rgba(80, 200, 120, 0.25);
+            color: #7fffb0;
+            font-weight: 600;
+        }
+
+        .mmov-btn.active {
+            background: rgba(80, 200, 120, 0.35) !important;
+            box-shadow: 0 0 0 2px rgba(80, 200, 120, 0.6);
+        }
+
         .map-layer-dot {
             width: 8px;
             height: 8px;
@@ -1624,28 +1584,46 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.28);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             z-index: 200;
             display: none;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            padding: 16px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            /* Dark gray background for settings and favorites */
+            background: #2a2d35;
+        }
+
+        body.dark-mode .modal-overlay {
+            background: #1a1c22;
         }
 
         .modal-overlay.open {
             display: flex;
-            animation: overlayIn 0.2s ease;
+            animation: pageSlideIn 0.30s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
-        @keyframes overlayIn {
+        @keyframes pageSlideIn {
             from {
-                opacity: 0
+                transform: translateX(100%);
+                opacity: 0.6;
             }
 
             to {
-                opacity: 1
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pageSlideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(100%);
+                opacity: 0.6;
             }
         }
 
@@ -1716,19 +1694,21 @@
 
         /* ── NEW SETTINGS PANEL ── */
         .settings-panel {
-            background: rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(40px) saturate(220%);
-            -webkit-backdrop-filter: blur(40px) saturate(220%);
-            border: 1px solid rgba(255, 255, 255, 0.30);
-            border-radius: 28px;
-            width: 400px;
-            max-width: calc(100vw - 32px);
-            max-height: 90vh;
-            overflow: hidden;
+            background: transparent;
+            width: 100%;
+            max-width: 1100px;
+            min-height: 100vh;
+            margin: 0 auto;
+            overflow: visible;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-            animation: panelSlideUp 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: calc(env(safe-area-inset-top, 0px) + 16px) 32px calc(env(safe-area-inset-bottom, 0px) + 40px);
+        }
+
+        @media (max-width: 600px) {
+            .settings-panel {
+                padding: calc(env(safe-area-inset-top, 0px) + 12px) 18px calc(env(safe-area-inset-bottom, 0px) + 24px);
+            }
         }
 
         @keyframes panelSlideUp {
@@ -1747,23 +1727,24 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 22px 22px 18px;
+            padding: 12px 0 22px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.18);
             flex-shrink: 0;
+            margin-bottom: 4px;
         }
 
         .sp-header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .sp-header-icon {
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
             background: rgba(255, 255, 255, 0.18);
             border: 1px solid rgba(255, 255, 255, 0.30);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1771,14 +1752,14 @@
         }
 
         .sp-header h2 {
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: -0.3px;
+            font-size: clamp(20px, 3vw, 28px);
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .sp-close {
-            width: 32px;
-            height: 32px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.25);
@@ -1796,14 +1777,37 @@
         }
 
         .sp-body {
-            overflow-y: auto;
-            padding: 6px 0 16px;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+            overflow-y: visible;
+            padding: 20px 0 16px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        @media (min-width: 768px) {
+            .sp-body {
+                grid-template-columns: 1fr 1fr;
+                gap: 0 40px;
+                align-items: start;
+            }
+
+            /* Source section spans left col fully */
+            .sp-section--source {
+                grid-row: 1 / 99;
+                grid-column: 1;
+                border-right: none;
+                padding-right: 40px;
+                border-bottom: none;
+            }
+
+            /* Right col sections */
+            .sp-section:not(.sp-section--source) {
+                grid-column: 2;
+            }
         }
 
         .sp-section {
-            padding: 14px 22px 6px;
+            padding: 14px 0 6px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.10);
         }
 
@@ -1927,42 +1931,45 @@
 
         /* ── NEW FAVORITES PANEL ── */
         .fav-panel {
-            background: rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(40px) saturate(220%);
-            -webkit-backdrop-filter: blur(40px) saturate(220%);
-            border: 1px solid rgba(255, 255, 255, 0.30);
-            border-radius: 28px;
-            width: 380px;
-            max-width: calc(100vw - 32px);
-            max-height: 85vh;
-            overflow: hidden;
+            background: transparent;
+            width: 100%;
+            max-width: 1100px;
+            min-height: 100vh;
+            margin: 0 auto;
+            overflow: visible;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-            animation: panelSlideUp 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: calc(env(safe-area-inset-top, 0px) + 16px) 32px calc(env(safe-area-inset-bottom, 0px) + 40px);
+        }
+
+        @media (max-width: 600px) {
+            .fav-panel {
+                padding: calc(env(safe-area-inset-top, 0px) + 12px) 18px calc(env(safe-area-inset-bottom, 0px) + 24px);
+            }
         }
 
         .fp-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 22px 22px 18px;
+            padding: 12px 0 22px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.18);
             flex-shrink: 0;
+            margin-bottom: 4px;
         }
 
         .fp-header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .fp-header-icon {
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
             background: rgba(255, 220, 60, 0.22);
             border: 1px solid rgba(255, 220, 60, 0.38);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1970,13 +1977,13 @@
         }
 
         .fp-header h2 {
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: -0.3px;
+            font-size: clamp(20px, 3vw, 28px);
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .fp-add-zone {
-            padding: 14px 16px;
+            padding: 14px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.12);
             flex-shrink: 0;
         }
@@ -2026,65 +2033,154 @@
         /* ── FAV CARDS — Apple Weather style ── */
         .fp-list-wrap {
             flex: 1;
-            overflow-y: auto;
-            padding: 12px 14px 14px;
+            overflow-y: visible;
+            padding: 16px 0 14px;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+            width: 100%;
         }
 
         .fav-item {
             position: relative;
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
-            min-height: 110px;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 16px 18px 14px;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 22px;
+            min-height: 90px;
             background: rgba(255, 255, 255, 0.13);
             border: 1px solid rgba(255, 255, 255, 0.22);
             backdrop-filter: blur(18px) saturate(180%);
             -webkit-backdrop-filter: blur(18px) saturate(180%);
-            transition: transform 0.18s, background 0.18s;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+            transition: transform 0.18s, background 0.18s, box-shadow 0.18s;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            user-select: none;
         }
 
         .fav-item:hover {
             background: rgba(255, 255, 255, 0.20);
-            transform: scale(1.01);
         }
 
         .fav-item:active {
             transform: scale(0.98);
         }
 
-        /* top row: city name left, temp right */
+        .fav-item.dragging {
+            opacity: 0.55;
+            transform: scale(0.97);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+        }
+
+        .fav-item.drag-over {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        /* drag handle */
+        .fav-drag-handle {
+            flex-shrink: 0;
+            cursor: grab;
+            color: rgba(255, 255, 255, 0.35);
+            display: flex;
+            align-items: center;
+            padding: 4px 2px;
+            touch-action: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .fav-drag-handle:active {
+            cursor: grabbing;
+        }
+
+        /* city info — left */
+        .fav-card-info {
+            flex: 1;
+            min-width: 0;
+            position: relative;
+            z-index: 1;
+        }
+
         .fav-card-top {
             display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
         }
 
         .fav-card-name {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
             color: #fff;
-            letter-spacing: -0.3px;
-            line-height: 1.1;
-            max-width: 100%;
+            letter-spacing: -0.2px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .fav-card-sub {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.55);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .fav-card-bottom {
+            margin-top: 2px;
+        }
+
+        .fav-card-condition {
             font-size: 12px;
             color: rgba(255, 255, 255, 0.70);
-            margin-top: 3px;
+            font-weight: 400;
+        }
+
+        .fav-alert-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+            padding: 3px 8px 3px 6px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .fav-alert-badge--extreme {
+            background: rgba(183, 28, 28, 0.55);
+            border: 1px solid rgba(255, 100, 100, 0.45);
+            color: #ffcdd2;
+        }
+
+        .fav-alert-badge--high {
+            background: rgba(230, 81, 0, 0.50);
+            border: 1px solid rgba(255, 160, 80, 0.45);
+            color: #ffe0b2;
+        }
+
+        .fav-alert-badge--snow {
+            background: rgba(26, 35, 126, 0.55);
+            border: 1px solid rgba(150, 180, 255, 0.40);
+            color: #c5cae9;
+        }
+
+        .fav-alert-badge--moderate {
+            background: rgba(21, 101, 192, 0.50);
+            border: 1px solid rgba(100, 180, 255, 0.40);
+            color: #bbdefb;
+        }
+
+        /* temp + range — right side */
+        .fav-card-right {
+            flex-shrink: 0;
+            text-align: right;
+            position: relative;
+            z-index: 1;
         }
 
         .fav-card-temp {
@@ -2095,48 +2191,34 @@
             line-height: 1;
         }
 
-        /* bottom row: condition left, range right */
-        .fav-card-bottom {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        .fav-card-condition {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.85);
-            font-weight: 400;
-        }
-
         .fav-card-range {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.85);
-            font-weight: 400;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.65);
             white-space: nowrap;
+            margin-top: 4px;
         }
 
-        /* delete button — top right corner */
+        /* delete button */
         .fav-del-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 22px;
-            height: 22px;
+            flex-shrink: 0;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.20);
             border: none;
             cursor: pointer;
-            color: rgba(255, 255, 255, 0.6);
-            display: none;
+            color: rgba(255, 255, 255, 0.5);
+            display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.15s;
-            z-index: 2;
+            opacity: 0;
+            position: relative;
+            z-index: 1;
         }
 
         .fav-item:hover .fav-del-btn {
-            display: flex;
+            opacity: 1;
         }
 
         .fav-del-btn:hover {
@@ -2148,18 +2230,22 @@
         .fav-card-loading .fav-card-temp,
         .fav-card-loading .fav-card-condition,
         .fav-card-loading .fav-card-range {
-            opacity: 0.35;
+            opacity: 0.30;
         }
 
         .fav-empty {
             text-align: center;
             color: var(--text-muted);
             font-size: 14px;
-            padding: 48px 20px;
+            padding: 60px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             gap: 10px;
+            /* span full width to center properly */
+            width: 100%;
+            max-width: 100%;
         }
 
         /* legacy hidden */
@@ -2681,107 +2767,7 @@
             height: 24px;
         }
 
-        /* ── WEATHER ALERT — inline card (encima de próximas 24h) ── */
-        #weatherAlertBanner {
-            display: none !important;
-        }
 
-        /* ── Notification card — estilo AEMET: fondo blanco/cristal neutro, sin colores ── */
-        .alert-notif-card {
-            background: rgba(255, 255, 255, 0.13);
-            border: 1px solid rgba(255, 255, 255, 0.28);
-            border-radius: var(--radius);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            padding: 16px 18px 14px 18px;
-            cursor: default;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* ── Unified alert card — mismo estilo blanco para alertsContainer ── */
-        .alert-card-unified {
-            background: rgba(255, 255, 255, 0.13) !important;
-            border: 1px solid rgba(255, 255, 255, 0.28) !important;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            transition: filter 0.18s, transform 0.18s;
-        }
-
-        .alert-card-unified:hover {
-            background: rgba(255, 255, 255, 0.19) !important;
-            transform: translateY(-1px);
-        }
-
-        /* ── Alert triangle icon SVG ── */
-        .alert-triangle-icon {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Header row: icon + title + close */
-        .alert-notif-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .alert-notif-title {
-            flex: 1;
-            font-size: 17px;
-            font-weight: 700;
-            color: #fff;
-            line-height: 1.2;
-            letter-spacing: -0.01em;
-        }
-
-        .alert-close-btn {
-            flex-shrink: 0;
-            background: rgba(255, 255, 255, 0.18);
-            border: none;
-            border-radius: 50%;
-            width: 26px;
-            height: 26px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.9);
-            transition: background 0.18s;
-        }
-
-        .alert-close-btn:hover {
-            background: rgba(255, 255, 255, 0.32);
-        }
-
-        /* Body text */
-        .alert-notif-body {
-            font-size: 15px;
-            color: rgba(255, 255, 255, 0.93);
-            line-height: 1.5;
-            margin-bottom: 10px;
-            letter-spacing: -0.005em;
-        }
-
-        /* Source line — clickable link to official source */
-        .alert-notif-source {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.55);
-            letter-spacing: 0.01em;
-        }
-
-        .alert-notif-source a {
-            color: rgba(255, 255, 255, 0.55);
-            text-decoration: none;
-            transition: color 0.15s;
-        }
-
-        .alert-notif-source a:hover {
-            color: rgba(255, 255, 255, 0.85);
-            text-decoration: underline;
-        }
 
         /* ── RESPONSIVE TWEAKS ── */
         @media (min-width: 601px) {
@@ -3265,8 +3251,9 @@
                     <h2 id="t_settings">Configuración</h2>
                 </div>
                 <button class="sp-close" onclick="closeSettings()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M18 6 6 18M6 6l12 12" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M19 12H5M12 5l-7 7 7 7" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </button>
             </div>
@@ -3523,8 +3510,9 @@
                     <h2><span id="t_favs">Favoritos</span></h2>
                 </div>
                 <button class="sp-close" onclick="closeFavModal()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M18 6 6 18M6 6l12 12" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M19 12H5M12 5l-7 7 7 7" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </button>
             </div>
@@ -3650,31 +3638,8 @@
         <!-- SUMMARY PHRASE -->
         <div id="summaryPhrase" class="summary-phrase fade-in"></div>
 
-        <!-- UNIFIED ALERTS — encima de próximas 24h, estilo AEMET -->
-        <div id="unifiedAlertsBanner" style="display:none;margin-bottom:28px;" role="alert" aria-live="assertive">
-            <div class="alert-notif-card" id="alertBar">
-                <div class="alert-notif-header">
-                    <div class="alert-triangle-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path
-                                d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
-                                stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                fill="rgba(255,255,255,0.1)" />
-                        </svg>
-                    </div>
-                    <span class="alert-notif-title" id="alertTitle">Avisos activos</span>
-
-                </div>
-                <div class="alert-notif-body" id="alertTitle2">Alerta meteorológica activa</div>
-                <div class="alert-notif-source">
-                    <a href="#" id="alertSourceLink" target="_blank" rel="noopener">AEMET. Agencia Estatal de
-                        Meteorología</a>
-                </div>
-            </div>
-        </div>
-        <!-- legacy id kept for JS compatibility -->
-        <div id="weatherAlertBanner" style="display:none!important"></div>
-        <div id="alertsContainer" style="display:none!important"></div>
+        <!-- ALERT BANNER -->
+        <div id="alertBanner"></div>
 
         <!-- HOURLY -->
         <div class="section-label" id="t_next24h">Próximas 24 horas</div>
@@ -3845,6 +3810,16 @@
                             </svg>
                         </button>
                         <div class="map-layer-panel" id="mapLayerPanel">
+                            <button class="map-layer-option" id="satToggleBtn" onclick="toggleSatellite()"
+                                style="border-bottom:1px solid rgba(255,255,255,0.15);padding-bottom:6px;margin-bottom:2px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0">
+                                    <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" />
+                                    <path
+                                        d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                </svg>
+                                <span>Satélite</span>
+                            </button>
                             <button class="map-layer-option active" id="lyrTemp" onclick="setMapLayer('temp')">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0">
                                     <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"
@@ -3893,6 +3868,19 @@
                                 </svg>
                                 <span id="t_map_aqi_lbl">Calidad del aire</span>
                             </button>
+                            <button class="map-layer-option" id="lyrAlerts" onclick="setMapLayer('alerts')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0">
+                                    <path
+                                        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" />
+                                    <line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" />
+                                </svg>
+                                <span id="t_map_alerts_lbl">Avisos activos</span>
+                            </button>
                         </div>
                     </div>
                     <!-- Animation bar (inside map-wrap) -->
@@ -3923,28 +3911,11 @@
     </div><!-- /app -->
 
     <footer class="app-footer">
-        <span>v1.0.0</span>
+        <span>v0.0.2</span>
         <span class="beta-tag">BETA</span>
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-    <div id="alertModalOverlay" class="alert-modal-overlay" onclick="closeAlertDialog()">
-        <div class="alert-panel">
-            <div class="ap-header">
-                <div class="ap-header-left">
-                    <div id="modalAlertIcon" class="ap-header-icon"></div>
-                    <h2 id="modalAlertTitle"></h2>
-                </div>
-                <button class="ap-close" onclick="closeAlertDialog()">✕</button>
-            </div>
-            <div class="ap-body">
-                <div id="modalAlertDesc" class="ap-desc"></div>
-                <a id="modalAlertBtn" href="#" target="_blank" class="ap-btn"></a>
-                <button id="modalCloseBtn" class="ap-btn ap-btn--secondary" onclick="closeAlertDialog()"></button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ─── STATE ────────────────────────────────────────────────────────────────────
         const S = {
@@ -5551,16 +5522,33 @@
                 stops: ['#1c0e30', '#8c2255', '#d85a3a', '#f09050'],
                 sun: { x: 0.22, y: 0.65, r: 0.5, col: 'rgba(255,110,40,0.60)' }
             },
-            // Nublado: grises azulados con textura perlada
-            cloudy: { stops: ['#4a5870', '#5a6a82', '#7a8ea6', '#9aafc2'], sun: null },
-            // Tormenta: casi negro azulado, muy dramático
-            stormy: { stops: ['#0e1218', '#181e28', '#20283a', '#1a2030'], sun: null },
-            // Lluvia: azules pizarra con toque verdoso
+            // Nublado: grises perla suaves, estilo Apple iOS Weather
+            cloudy: {
+                stops: ['#6b7d95', '#7d90a8', '#98afc4', '#b2c8d8'],
+                sun: null
+            },
+            // Tormenta: gris plomo oscuro, verde apagado dramático
+            stormy: {
+                stops: ['#1a1e24', '#22282e', '#2c3038', '#252b32'],
+                sun: null,
+                lightning: true   // flag para efecto relámpago
+            },
+            // Lluvia: azul pizarra profundo
             rainy: { stops: ['#1e2c3c', '#283c50', '#344e62', '#3e5c70'], sun: null },
-            // Nieve: blancos azulados suaves con brillo nacarado
+            // Nieve: blanco azulado luminoso, nacarado — Apple usa casi blanco puro
             snowy: {
-                stops: ['#7a9ab0', '#90b0c8', '#b0ccd8', '#c8dee8'],
-                sun: { x: 0.5, y: 0.08, r: 0.5, col: 'rgba(255,255,255,0.30)' }
+                stops: ['#c8d8e8', '#d8e4f0', '#e4eef6', '#eef4fa'],
+                sun: { x: 0.5, y: 0.05, r: 0.55, col: 'rgba(255,255,255,0.55)' }
+            },
+            // Granizo: gris verdoso oscuro tenso
+            hail: {
+                stops: ['#2a3020', '#343828', '#404430', '#383e2c'],
+                sun: null
+            },
+            // Niebla: blanco sucio apagado, casi sin contraste — como leche
+            fog: {
+                stops: ['#b8bec8', '#c4cad4', '#d0d6e0', '#d8dde6'],
+                sun: { x: 0.5, y: 0.3, r: 0.6, col: 'rgba(255,255,240,0.28)' }
             },
         };
         const BG_DARK_THEMES = {
@@ -5587,14 +5575,24 @@
             // Nublado modo oscuro
             cloudy: { stops: ['#1a2030', '#222838', '#2c3445', '#283040'], sun: null },
             // Tormenta modo oscuro: negro azabache
-            stormy: { stops: ['#060810', '#0c1018', '#121820', '#0e1420'], sun: null },
+            stormy: { stops: ['#060810', '#0c1018', '#121820', '#0e1420'], sun: null, lightning: true },
             // Lluvia modo oscuro
             rainy: { stops: ['#0c1420', '#10182c', '#141e34', '#121c30'], sun: null },
             // Nieve modo oscuro: grises fríos
             snowy: { stops: ['#1c2830', '#22303a', '#2c3c44', '#283840'], sun: null },
+            // Granizo modo oscuro
+            hail: { stops: ['#141810', '#1c2018', '#222618', '#1e2414'], sun: null },
+            // Niebla modo oscuro
+            fog: { stops: ['#282c30', '#303438', '#383c42', '#303438'], sun: null },
         };
 
-        let bgCtx, bgW, bgH, bgThemeKey = 'day', bgBlobs = [];
+        let bgCtx, bgW, bgH, bgThemeKey = 'day', bgBlobs = [], bgClouds = [];
+        // Temas que muestran nubes/niebla en el fondo dinámico general
+        const BG_CLOUD_THEMES = new Set(['cloudy', 'rainy', 'stormy', 'snowy', 'hail', 'fog']);
+        // Estado para efecto relámpago
+        let _lightning = { active: false, alpha: 0, nextAt: 0 };
+        // Estado para efecto de niebla (partículas de polvo/vapor)
+        let _fogParticles = [];
         let _bgPaused = false; // pausa cuando la pestaña está oculta
         let _bgLastFrame = 0;
         // Throttle: 30fps en gama alta, 20fps en gama baja/móvil
@@ -5617,6 +5615,19 @@
                 x: Math.random(), y: Math.random(),
                 vx: (Math.random() - 0.5) * 0.0008, vy: (Math.random() - 0.5) * 0.0008,
                 r: 0.3 + Math.random() * 0.3
+            }));
+            // Nubes estilo Apple Weather para temas nublados/lluvia/tormenta/nieve
+            const cloudCount = _lowEnd ? 3 : (_isMobile ? 4 : 6);
+            // rw/rh: radio como fracción de bgW/bgH — nubes enormes y difusas
+            // speed: fracción de bgW por frame (~0.00003 = ~0.03px/frame a 1200px → ~1px/s a 30fps)
+            bgClouds = Array.from({ length: cloudCount }, (_, i) => ({
+                x: [0.05, 0.40, 0.72, -0.15, 0.58, 0.22][i] ?? Math.random(),
+                y: [0.18, 0.08, 0.28, 0.42, 0.55, 0.35][i] ?? 0.1 + Math.random() * 0.5,
+                rw: 0.55 + Math.random() * 0.35,   // radio horizontal: 55–90% de bgW
+                rh: 0.28 + Math.random() * 0.18,   // radio vertical: 28–46% de bgH
+                speed: 0.000025 + Math.random() * 0.000020, // extremadamente lento
+                opacity: 0.30 + Math.random() * 0.28,
+                phase: Math.random() * Math.PI * 2
             }));
             requestAnimationFrame(animateBg);
         }
@@ -5648,6 +5659,19 @@
             bgTarget = themes[key] || themes.day;
             if (!bgCurrent) { bgCurrent = bgTarget; bgTransT = 1; }
             else bgTransT = 0;
+            // Regenerar nubes al cambiar de tema
+            if (BG_CLOUD_THEMES.has(key) && bgClouds.length === 0) {
+                const cloudCount = _lowEnd ? 3 : (_isMobile ? 4 : 6);
+                bgClouds = Array.from({ length: cloudCount }, () => ({
+                    x: Math.random(),
+                    y: 0.08 + Math.random() * 0.50,
+                    rw: 0.55 + Math.random() * 0.35,
+                    rh: 0.28 + Math.random() * 0.18,
+                    speed: 0.000025 + Math.random() * 0.000020,
+                    opacity: 0.30 + Math.random() * 0.28,
+                    phase: Math.random() * Math.PI * 2
+                }));
+            }
         }
 
         function animateBg(ts) {
@@ -5670,6 +5694,25 @@
 
             bgCtx.clearRect(0, 0, bgW, bgH);
 
+            // ── RELÁMPAGO: flash blanco antes del fondo para que ilumine ──
+            if ((bgThemeKey === 'stormy' || bgThemeKey === 'hail') && !isDark) {
+                if (ts > _lightning.nextAt && !_lightning.active) {
+                    _lightning.active = true;
+                    _lightning.alpha = 0.55 + Math.random() * 0.3;
+                    // doble flash: programar apagado y siguiente relámpago
+                    setTimeout(() => {
+                        _lightning.alpha *= 0.3; // segundo flash más suave
+                        setTimeout(() => { _lightning.active = false; }, 80 + Math.random() * 60);
+                    }, 60 + Math.random() * 40);
+                    _lightning.nextAt = ts + 4000 + Math.random() * 14000;
+                }
+                if (_lightning.active && _lightning.alpha > 0.01) {
+                    bgCtx.fillStyle = `rgba(220,230,255,${_lightning.alpha})`;
+                    bgCtx.fillRect(0, 0, bgW, bgH);
+                    _lightning.alpha *= 0.82; // fade rápido
+                }
+            }
+
             // Base gradient (4 diagonal stops)
             const stops = theme.stops;
             const grad = bgCtx.createLinearGradient(0, 0, bgW * 0.6, bgH);
@@ -5680,13 +5723,22 @@
             bgCtx.fillStyle = grad;
             bgCtx.fillRect(0, 0, bgW, bgH);
 
-            // Soft blob overlays — más sutiles en modo oscuro, más luminosos en claro
+            // Soft blob overlays — color según tema
             const isNightTheme = bgThemeKey === 'night' || bgThemeKey === 'midnight';
-            const blobColors = isDark
-                ? ['rgba(255,255,255,0.012)', 'rgba(180,200,255,0.015)', 'rgba(100,140,255,0.018)', 'rgba(255,255,255,0.008)', 'rgba(140,180,255,0.012)']
-                : isNightTheme
-                    ? ['rgba(200,220,255,0.04)', 'rgba(255,255,255,0.025)', 'rgba(160,200,255,0.035)']
-                    : ['rgba(255,255,255,0.09)', 'rgba(255,255,255,0.05)', 'rgba(200,230,255,0.07)', 'rgba(255,250,220,0.04)', 'rgba(180,220,255,0.06)'];
+            let blobColors;
+            if (isDark) {
+                blobColors = ['rgba(255,255,255,0.012)', 'rgba(180,200,255,0.015)', 'rgba(100,140,255,0.018)', 'rgba(255,255,255,0.008)', 'rgba(140,180,255,0.012)'];
+            } else if (isNightTheme) {
+                blobColors = ['rgba(200,220,255,0.04)', 'rgba(255,255,255,0.025)', 'rgba(160,200,255,0.035)'];
+            } else if (bgThemeKey === 'snowy') {
+                blobColors = ['rgba(255,255,255,0.18)', 'rgba(220,235,255,0.12)', 'rgba(200,220,250,0.10)', 'rgba(255,255,255,0.14)', 'rgba(210,228,255,0.09)'];
+            } else if (bgThemeKey === 'fog') {
+                blobColors = ['rgba(255,255,245,0.20)', 'rgba(240,242,248,0.16)', 'rgba(255,255,255,0.22)', 'rgba(228,232,240,0.14)', 'rgba(255,255,250,0.18)'];
+            } else if (bgThemeKey === 'stormy' || bgThemeKey === 'hail') {
+                blobColors = ['rgba(80,100,120,0.06)', 'rgba(60,80,100,0.04)', 'rgba(100,120,140,0.05)', 'rgba(70,90,110,0.03)', 'rgba(90,110,130,0.04)'];
+            } else {
+                blobColors = ['rgba(255,255,255,0.09)', 'rgba(255,255,255,0.05)', 'rgba(200,230,255,0.07)', 'rgba(255,250,220,0.04)', 'rgba(180,220,255,0.06)'];
+            }
 
             bgBlobs.forEach((b, i) => {
                 const rg = bgCtx.createRadialGradient(b.x * bgW, b.y * bgH, 0, b.x * bgW, b.y * bgH, b.r * Math.max(bgW, bgH));
@@ -5729,6 +5781,117 @@
                 bgCtx.fillRect(0, 0, bgW, bgH);
             }
 
+            // ── NUBES / NIEBLA ESTILO APPLE WEATHER ──
+            if (BG_CLOUD_THEMES.has(bgThemeKey) && bgClouds.length) {
+                const isStormy = bgThemeKey === 'stormy';
+                const isRainy = bgThemeKey === 'rainy';
+                const isFog = bgThemeKey === 'fog';
+                const isHail = bgThemeKey === 'hail';
+                const isSnowy = bgThemeKey === 'snowy';
+
+                bgClouds.forEach(c => {
+                    c.x += c.speed;
+                    if (c.x > 1.35) c.x = -0.45;
+                    c.phase += 0.002;
+                    const cx = c.x * bgW;
+                    const cy = (c.y + Math.sin(c.phase) * 0.008) * bgH;
+                    const rw = c.rw * bgW;
+                    const rh = c.rh * bgH;
+                    const op = c.opacity;
+
+                    // Colores por tema
+                    let col0, col1;
+                    if (isFog) {
+                        col0 = `rgba(240,242,248,${op * 1.1})`; col1 = `rgba(220,225,235,${op * 0.5})`;
+                    } else if (isStormy) {
+                        col0 = `rgba(75,82,95,${op})`; col1 = `rgba(55,62,75,${op * 0.5})`;
+                    } else if (isHail) {
+                        col0 = `rgba(88,100,80,${op})`; col1 = `rgba(65,78,60,${op * 0.5})`;
+                    } else if (isSnowy) {
+                        col0 = `rgba(255,255,255,${op * 1.1})`; col1 = `rgba(235,242,255,${op * 0.5})`;
+                    } else if (isRainy) {
+                        col0 = `rgba(200,215,235,${op})`; col1 = `rgba(170,190,215,${op * 0.5})`;
+                    } else {
+                        col0 = `rgba(255,255,255,${op})`; col1 = `rgba(225,235,252,${op * 0.5})`;
+                    }
+
+                    // Capa 1 — masa exterior elíptica muy difusa
+                    bgCtx.save();
+                    const scaleY1 = rh / rw;
+                    bgCtx.transform(1, 0, 0, scaleY1, 0, cy - cy * scaleY1);
+                    const g1 = bgCtx.createRadialGradient(cx, cy / scaleY1, 0, cx, cy / scaleY1, rw);
+                    g1.addColorStop(0, col0);
+                    g1.addColorStop(0.40, col1);
+                    g1.addColorStop(0.72, `rgba(180,200,230,${op * 0.10})`);
+                    g1.addColorStop(1, 'rgba(180,200,230,0)');
+                    bgCtx.fillStyle = g1;
+                    bgCtx.beginPath();
+                    bgCtx.arc(cx, cy / scaleY1, rw, 0, Math.PI * 2);
+                    bgCtx.fill();
+                    bgCtx.restore();
+
+                    // Capa 2 — núcleo más brillante y compacto
+                    bgCtx.save();
+                    const scaleY2 = (rh * 0.58) / (rw * 0.52);
+                    bgCtx.transform(1, 0, 0, scaleY2, 0, cy - cy * scaleY2);
+                    const g2 = bgCtx.createRadialGradient(cx, cy / scaleY2, 0, cx, cy / scaleY2, rw * 0.52);
+                    g2.addColorStop(0, isFog || isSnowy ? `rgba(255,255,255,${op * 0.8})` : isStormy ? `rgba(100,110,128,${op * 0.65})` : `rgba(255,255,255,${op * 0.7})`);
+                    g2.addColorStop(0.5, isFog ? `rgba(240,242,248,${op * 0.3})` : `rgba(220,232,255,${op * 0.28})`);
+                    g2.addColorStop(1, 'rgba(200,220,248,0)');
+                    bgCtx.fillStyle = g2;
+                    bgCtx.beginPath();
+                    bgCtx.arc(cx, cy / scaleY2, rw * 0.52, 0, Math.PI * 2);
+                    bgCtx.fill();
+                    bgCtx.restore();
+
+                    // Capa 3 — para niebla: velo adicional horizontal que cubre toda la pantalla
+                    if (isFog) {
+                        const gy = cy / bgH;
+                        const veil = bgCtx.createLinearGradient(0, cy - rh, 0, cy + rh * 1.5);
+                        veil.addColorStop(0, 'rgba(235,238,245,0)');
+                        veil.addColorStop(0.3, `rgba(235,238,245,${op * 0.35})`);
+                        veil.addColorStop(0.6, `rgba(220,224,232,${op * 0.22})`);
+                        veil.addColorStop(1, 'rgba(220,224,232,0)');
+                        bgCtx.fillStyle = veil;
+                        bgCtx.fillRect(0, cy - rh, bgW, rh * 2.5);
+                    }
+                });
+
+                // Velo de niebla global para tema fog — capa semitransparente sobre todo el fondo
+                if (isFog) {
+                    const fogVeil = bgCtx.createLinearGradient(0, 0, 0, bgH);
+                    fogVeil.addColorStop(0, 'rgba(210,215,225,0.28)');
+                    fogVeil.addColorStop(0.4, 'rgba(220,225,235,0.18)');
+                    fogVeil.addColorStop(1, 'rgba(200,208,220,0.32)');
+                    bgCtx.fillStyle = fogVeil;
+                    bgCtx.fillRect(0, 0, bgW, bgH);
+                }
+            }
+
+            // ── DESTELLO RELÁMPAGO — segunda capa post-nubes para efecto de iluminación ──
+            if (_lightning.active && _lightning.alpha > 0.005 && (bgThemeKey === 'stormy' || bgThemeKey === 'hail')) {
+                // Línea de relámpago vertical
+                if (_lightning.alpha > 0.15) {
+                    const lx = 0.2 + Math.random() * 0.6;
+                    bgCtx.save();
+                    bgCtx.globalAlpha = _lightning.alpha * 0.7;
+                    bgCtx.strokeStyle = 'rgba(220,235,255,0.9)';
+                    bgCtx.lineWidth = 1.5 + Math.random() * 1.5;
+                    bgCtx.shadowColor = 'rgba(180,210,255,0.8)';
+                    bgCtx.shadowBlur = 18;
+                    bgCtx.beginPath();
+                    let ly = 0, lxc = lx * bgW;
+                    bgCtx.moveTo(lxc, ly);
+                    while (ly < bgH * 0.75) {
+                        ly += 18 + Math.random() * 30;
+                        lxc += (Math.random() - 0.5) * 28;
+                        bgCtx.lineTo(lxc, ly);
+                    }
+                    bgCtx.stroke();
+                    bgCtx.restore();
+                }
+            }
+
             requestAnimationFrame(animateBg);
         }
 
@@ -5739,8 +5902,11 @@
             let key;
             if (icon === 'storm') { key = 'stormy'; }
             else if (icon === 'snow') { key = 'snowy'; }
+            // Granizo (códigos 96, 99) → tema hail
+            else if ([96, 99].includes(wmoCode)) { key = 'hail'; }
             else if (icon === 'rain' || icon === 'rain-heavy' || icon === 'shower' || icon === 'drizzle') { key = 'rainy'; }
-            else if (icon === 'fog' || icon === 'cloud') { key = 'cloudy'; }
+            else if (icon === 'fog') { key = 'fog'; }
+            else if (icon === 'cloud') { key = 'cloudy'; }
             else if (hour >= 5 && hour < 7) { key = 'dawn'; }
             else if (hour >= 7 && hour < 11) { key = 'morning'; }
             else if (hour >= 11 && hour < 16) { key = 'day'; }
@@ -5759,16 +5925,35 @@
 
         function renderWeatherFx(wmoCode) {
             const fx = document.getElementById('weatherFx');
-            // Reutilizar fragment para evitar reflow por innerHTML
             while (fx.firstChild) fx.removeChild(fx.firstChild);
             const icon = getWMO(wmoCode).icon;
             const frag = document.createDocumentFragment();
-            // Escalar partículas según capacidad del dispositivo
             const scale = _lowEnd ? 0.3 : (_isMobile ? 0.55 : 1);
-            const hasParticles = icon === 'rain' || icon === 'rain-heavy' || icon === 'shower' || icon === 'storm' || icon === 'drizzle' || icon === 'snow';
-            // will-change solo cuando hay partículas (evita compositing layer innecesario)
+            // Granizo también tiene partículas
+            const isHailCode = [96, 99].includes(wmoCode);
+            const hasParticles = icon === 'rain' || icon === 'rain-heavy' || icon === 'shower' || icon === 'storm' || icon === 'drizzle' || icon === 'snow' || isHailCode;
             fx.style.willChange = hasParticles ? 'transform' : 'auto';
-            if (icon === 'rain' || icon === 'rain-heavy' || icon === 'shower' || icon === 'storm' || icon === 'drizzle') {
+
+            if (isHailCode) {
+                // Granizo: gotas compactas + lluvia de fondo
+                const rainCount = Math.max(8, Math.round(60 * scale));
+                for (let i = 0; i < rainCount; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'rain-drop';
+                    const left = Math.random() * 105, dur = 0.38 + Math.random() * 0.35, delay = Math.random() * 2.5;
+                    el.style.cssText = `left:${left}%;height:22px;opacity:0.4;animation-duration:${dur}s;animation-delay:-${delay}s`;
+                    frag.appendChild(el);
+                }
+                const hailCount = Math.max(6, Math.round(40 * scale));
+                for (let i = 0; i < hailCount; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'hail-drop';
+                    const left = Math.random() * 102, dur = 0.32 + Math.random() * 0.28, delay = Math.random() * 2;
+                    const size = 4 + Math.random() * 4;
+                    el.style.cssText = `left:${left}%;width:${size}px;height:${size * 1.3}px;animation-duration:${dur}s;animation-delay:-${delay}s`;
+                    frag.appendChild(el);
+                }
+            } else if (icon === 'rain' || icon === 'rain-heavy' || icon === 'shower' || icon === 'storm' || icon === 'drizzle') {
                 const base = icon === 'rain-heavy' || icon === 'storm' ? 120 : icon === 'drizzle' ? 40 : 80;
                 const count = Math.max(10, Math.round(base * scale));
                 for (let i = 0; i < count; i++) {
@@ -5788,6 +5973,23 @@
                     const left = Math.random() * 100, dur = 4 + Math.random() * 6, delay = Math.random() * 8;
                     const size = 2 + Math.random() * 5;
                     el.style.cssText = `left:${left}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:-${delay}s`;
+                    frag.appendChild(el);
+                }
+            } else if (icon === 'fog') {
+                // Niebla: bandas horizontales semitransparentes que se deslizan muy despacio
+                const bandCount = _lowEnd ? 3 : (_isMobile ? 4 : 6);
+                const positions = [8, 22, 38, 54, 68, 82];
+                for (let i = 0; i < bandCount; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'fog-band';
+                    const top = positions[i] + (Math.random() - 0.5) * 6;
+                    const h = 80 + Math.random() * 120;
+                    const op = 0.10 + Math.random() * 0.12;
+                    const dur = 18 + Math.random() * 22;
+                    const delay = Math.random() * -20;
+                    // Alternar dirección para efecto más natural
+                    const dir = i % 2 === 0 ? 'drift-fog' : 'drift-fog-rev';
+                    el.style.cssText = `top:${top}%;height:${h}px;opacity:${op};background:linear-gradient(to bottom,rgba(220,225,235,0),rgba(230,234,242,1) 40%,rgba(230,234,242,1) 60%,rgba(220,225,235,0));animation-name:${dir};animation-duration:${dur}s;animation-delay:${delay}s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;animation-direction:alternate;`;
                     frag.appendChild(el);
                 }
             }
@@ -6258,255 +6460,186 @@
             setInterval(tickClock, 60000);
         })();
 
-        function renderAlerts() {
-            if (!S.data) return;
-            const banner = document.getElementById('unifiedAlertsBanner');
-            if (!banner) return;
+        // ── NUEVO SISTEMA DE ALERTAS ────────────────────────────────────────────────
 
-            const cur = S.data.current, daily = S.data.daily;
+        // Iconos SVG por tipo de fenómeno
+        const AB_ICONS = {
+            storm: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 16.9A5 5 0 0016 7h-1.26A8 8 0 102 15.8M13 11l-4 6h6l-4 6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            rain: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 17.58A5 5 0 0016 8h-1.26A8 8 0 102 15.8M8 16l-1 4M12 16l-1 4M16 16l-1 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            snow: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+            wind: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9.59 4.59A2 2 0 1112 8H2M12.59 19.41A2 2 0 1015 16H2M17.73 7.73A2.5 2.5 0 1119.5 12H2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            heat: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="white" stroke-width="1.8"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+            warn: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        };
+
+        // Detecta alertas activas y devuelve array ordenado por prioridad
+        function detectAlerts(data) {
+            if (!data) return [];
+            const cur = data.current, daily = data.daily, hourly = data.hourly;
             const alerts = [];
-            const gusts = cur.wind_gusts_10m || cur.wind_speed_10m * 1.3;
-            if (gusts >= 90) alerts.push({ type: 'red', title: `${t('alert_r')}: ${t('alert_wind_r')}`, text: t('sum_wind').replace('{v}', fmtWind(gusts)), detail: t('alert_wind_desc') });
-            else if (gusts >= 70) alerts.push({ type: 'orange', title: `${t('alert_o')}: ${t('alert_wind_o')}`, text: t('sum_wind').replace('{v}', fmtWind(gusts)), detail: t('alert_wind_desc') });
-            const rainToday = daily.precipitation_sum[0] || 0;
-            if (rainToday >= 40) alerts.push({ type: 'orange', title: `${t('alert_o')}: ${t('alert_rain_o')}`, text: `~ ${fmtPrecip(rainToday)}${precipUnitLabel()}`, detail: t('alert_rain_desc') });
-            const maxT = daily.temperature_2m_max[0];
-            if (maxT >= 40) alerts.push({ type: 'red', title: `${t('alert_r')}: ${t('temp')}`, text: `${fmtTemp(maxT)}°`, detail: t('alert_heat_desc') });
-            const wmo = cur.weather_code;
-            if (wmo === 99) alerts.push({ type: 'tornado', title: t('alert_t'), text: t('alert_tornado'), detail: t('alert_tornado_desc') });
-            else if (wmo >= 95) alerts.push({ type: 'yellow', title: t('alert_y'), text: t('alert_storm'), detail: t('alert_storm_desc') });
+            const lang = S.lang || 'es';
 
-            if (alerts.length === 0) {
-                // Se mostrará o no según checkAndShowAlert — no ocultar si hay alerta WMO activa
-                // Pero si no hay alertas de este bloque, dejamos que checkAndShowAlert controle
-                fetchExternalAlerts().then(ext => {
-                    if (ext.length > 0) showCombinedAlerts(ext);
-                }).catch(() => { });
+            // Gusts: comprueba actual y máximo de próximas 12h
+            const curGust = cur.wind_gusts_10m || cur.wind_speed_10m * 1.3 || 0;
+            const maxGust = hourly?.wind_gusts_10m
+                ? Math.max(curGust, ...hourly.wind_gusts_10m.slice(0, 12))
+                : curGust;
+            if (maxGust >= 100) alerts.push({
+                level: 'extreme', type: 'wind', icon: 'wind', priority: 8,
+                title: { es: 'Viento extremo', en: 'Extreme wind', fr: 'Vent extrême', de: 'Extremer Wind', it: 'Vento estremo', pt: 'Vento extremo', nl: 'Extreme wind', pl: 'Ekstremalny wiatr', ru: 'Экстремальный ветер', zh: '极端风', ja: '猛烈な風', ko: '극한 바람', sv: 'Extremt blåsigt', ar: 'رياح شديدة', el: 'Ακραίος άνεμος' },
+                body: { es: `Ráfagas de hasta ${fmtWind(maxGust)}. Evite salir y extreme precauciones.`, en: `Gusts up to ${fmtWind(maxGust)}. Avoid going out.` }
+            });
+            else if (maxGust >= 75) alerts.push({
+                level: 'high', type: 'wind', icon: 'wind', priority: 5,
+                title: { es: 'Viento muy fuerte', en: 'Very strong wind', fr: 'Vent très fort', de: 'Sehr starker Wind', it: 'Vento molto forte', pt: 'Vento muito forte' },
+                body: { es: `Ráfagas de hasta ${fmtWind(maxGust)}. Precaución al conducir.`, en: `Gusts up to ${fmtWind(maxGust)}. Drive with care.` }
+            });
+            else if (maxGust >= 50) alerts.push({
+                level: 'moderate', type: 'wind', icon: 'wind', priority: 2,
+                title: { es: 'Viento fuerte', en: 'Strong wind', fr: 'Vent fort', de: 'Starker Wind', it: 'Vento forte', pt: 'Vento forte' },
+                body: { es: `Ráfagas de ${fmtWind(maxGust)} previstas.`, en: `Gusts of ${fmtWind(maxGust)} expected.` }
+            });
+
+            // Temperatura máxima del día
+            const maxT = daily?.temperature_2m_max?.[0];
+            if (maxT !== undefined) {
+                const tC = S.unit === 'F' ? (maxT - 32) * 5 / 9 : maxT;
+                if (tC >= 42) alerts.push({
+                    level: 'extreme', type: 'heat', icon: 'heat', priority: 7,
+                    title: { es: 'Calor extremo', en: 'Extreme heat', fr: 'Chaleur extrême', de: 'Extreme Hitze', it: 'Caldo estremo', pt: 'Calor extremo' },
+                    body: { es: `Máxima de ${fmtTemp(maxT)}°. Riesgo vital. Evite salir.`, en: `High of ${fmtTemp(maxT)}°. Life risk. Avoid going out.` }
+                });
+                else if (tC >= 38) alerts.push({
+                    level: 'high', type: 'heat', icon: 'heat', priority: 4,
+                    title: { es: 'Calor intenso', en: 'Intense heat', fr: 'Forte chaleur', de: 'Starke Hitze', it: 'Caldo intenso', pt: 'Calor intenso' },
+                    body: { es: `Máxima de ${fmtTemp(maxT)}°. Manténgase hidratado y evite el sol.`, en: `High of ${fmtTemp(maxT)}°. Stay hydrated, avoid sun.` }
+                });
+            }
+
+            // Precipitación acumulada del día
+            const rainToday = daily?.precipitation_sum?.[0] || 0;
+            if (rainToday >= 60) alerts.push({
+                level: 'extreme', type: 'rain', icon: 'rain', priority: 9,
+                title: { es: 'Lluvias torrenciales', en: 'Torrential rain', fr: 'Pluies torrentielles', de: 'Starkregen', it: 'Piogge torrenziali', pt: 'Chuvas torrenciais' },
+                body: { es: `Acumulado previsto: ${fmtPrecip(rainToday)}${precipUnitLabel()}. Riesgo de inundaciones.`, en: `Expected total: ${fmtPrecip(rainToday)}${precipUnitLabel()}. Flood risk.` }
+            });
+            else if (rainToday >= 30) alerts.push({
+                level: 'high', type: 'rain', icon: 'rain', priority: 6,
+                title: { es: 'Lluvias intensas', en: 'Heavy rain', fr: 'Pluies intenses', de: 'Starker Regen', it: 'Piogge intense', pt: 'Chuvas intensas' },
+                body: { es: `Acumulado previsto: ${fmtPrecip(rainToday)}${precipUnitLabel()}.`, en: `Expected total: ${fmtPrecip(rainToday)}${precipUnitLabel()}.` }
+            });
+
+            // Código WMO actual + próximas 6h
+            const wmoNow = cur.weather_code;
+            const now6h = hourly?.weather_code?.slice(0, 6) || [];
+            const topWmo = [wmoNow, ...now6h].reduce((best, c) => {
+                const rank = { 99: 10, 96: 9, 95: 8, 82: 5, 75: 5, 65: 4, 77: 3, 73: 3, 71: 3, 63: 2, 81: 2, 55: 2, 61: 1, 80: 1 };
+                return (rank[c] || 0) > (rank[best] || 0) ? c : best;
+            }, wmoNow);
+
+            if ([95, 96, 99].includes(topWmo)) alerts.push({
+                level: 'extreme', type: 'storm', icon: 'storm', priority: 10,
+                title: { es: topWmo === 99 ? 'Tormenta severa' : 'Tormenta eléctrica', en: topWmo === 99 ? 'Severe thunderstorm' : 'Thunderstorm', fr: 'Orage violent', de: 'Schweres Gewitter', it: 'Temporale forte', pt: 'Trovoada severa' },
+                body: { es: topWmo === 99 ? 'Granizo grande. Busca refugio seguro inmediatamente.' : topWmo === 96 ? 'Tormenta con granizo. Evita espacios abiertos.' : 'Riesgo de rayos. Permanece en interior.', en: topWmo === 99 ? 'Large hail. Seek safe shelter immediately.' : topWmo === 96 ? 'Storm with hail. Avoid open areas.' : 'Lightning risk. Stay indoors.' }
+            });
+            else if ([65, 75, 82].includes(topWmo)) {
+                const isSnow = topWmo === 75;
+                alerts.push({
+                    level: 'high', type: isSnow ? 'snow' : 'rain', icon: isSnow ? 'snow' : 'rain', priority: 6,
+                    title: { es: isSnow ? 'Nieve intensa' : 'Lluvias intensas', en: isSnow ? 'Heavy snow' : 'Heavy rain', fr: isSnow ? 'Neige forte' : 'Pluies fortes', de: isSnow ? 'Starker Schneefall' : 'Starker Regen', it: isSnow ? 'Neve intensa' : 'Piogge intense', pt: isSnow ? 'Neve forte' : 'Chuvas fortes' },
+                    body: { es: isSnow ? 'Posible cierre de carreteras. Usa cadenas.' : 'Visibilidad reducida. Precaución al conducir.', en: isSnow ? 'Possible road closures. Use snow chains.' : 'Reduced visibility. Drive carefully.' }
+                });
+            }
+            else if ([71, 73, 77].includes(topWmo)) alerts.push({
+                level: 'moderate', type: 'snow', icon: 'snow', priority: 3,
+                title: { es: 'Nevadas', en: 'Snowfall', fr: 'Chutes de neige', de: 'Schneefall', it: 'Nevicate', pt: 'Nevadas' },
+                body: { es: 'Superficies resbaladizas. Extreme la precaución.', en: 'Slippery surfaces. Take extra care.' }
+            });
+            else if ([55, 63, 81].includes(topWmo)) alerts.push({
+                level: 'moderate', type: 'rain', icon: 'rain', priority: 1,
+                title: { es: 'Lluvia moderada', en: 'Moderate rain', fr: 'Pluie modérée', de: 'Mäßiger Regen', it: 'Pioggia moderata', pt: 'Chuva moderada' },
+                body: { es: 'Posible acumulación en calzadas. Precaución.', en: 'Possible road flooding. Take care.' }
+            });
+
+            // Calidad del aire (si disponible)
+            if (S.aqiData?.european_aqi > 80) {
+                const aqi = Math.round(S.aqiData.european_aqi);
+                alerts.push({
+                    level: aqi > 100 ? 'high' : 'moderate', type: 'aqi', icon: 'warn', priority: aqi > 100 ? 4 : 2,
+                    title: { es: 'Calidad del aire mala', en: 'Poor air quality', fr: 'Mauvaise qualité de l\'air', de: 'Schlechte Luftqualität' },
+                    body: { es: `Índice AQI: ${aqi}. Evita actividades al aire libre.`, en: `AQI: ${aqi}. Avoid outdoor activities.` }
+                });
+            }
+
+            // Ordena por prioridad descendente, devuelve máximo 2
+            return alerts.sort((a, b) => b.priority - a.priority).slice(0, 2);
+        }
+
+        function getAlertTitle(a) {
+            return a.title[S.lang] || a.title.es || a.title.en || '';
+        }
+        function getAlertBody(a) {
+            return a.body[S.lang] || a.body.es || a.body.en || '';
+        }
+
+        function renderAlerts() { /* integrado en checkAndShowAlert */ }
+
+        function checkAndShowAlert(data) {
+            const banner = document.getElementById('alertBanner');
+            if (!banner) return;
+            const alerts = detectAlerts(data);
+
+            if (!alerts.length) {
+                banner.innerHTML = '';
+                S._lastAlertCode = null;
                 return;
             }
 
-            // Fetch external alerts and merge all together
-            fetchExternalAlerts().then(ext => {
-                showCombinedAlerts([...alerts, ...ext]);
-            }).catch(() => {
-                showCombinedAlerts(alerts);
-            });
-        }
+            const topAlert = alerts[0];
+            const code = alerts.map(a => a.type + a.level).join('|');
 
-        // Muestra todas las alertas en un único card combinado estilo AEMET
-        function showCombinedAlerts(alerts) {
-            if (!alerts || alerts.length === 0) return;
-            const banner = document.getElementById('unifiedAlertsBanner');
-            if (!banner) return;
-
-            // Prioridad: red > tornado > orange > yellow
-            const priority = { red: 4, tornado: 3, orange: 2, yellow: 1 };
-            const sorted = [...alerts].sort((a, b) => (priority[b.type] || 0) - (priority[a.type] || 0));
-            const topType = sorted[0].type;
-            const accent = 'rgba(255,255,255,0.55)';
-
-            // Titulo combinado: "Avisos por viento fuerte y calidad del aire mala"
-            const cleanTitles = sorted.map(a =>
-                (a.title || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '')
-                    .replace(/^Aviso \w+:\s*/i, '').trim()
-            );
-            const titleEl = document.getElementById('alertTitle');
-            const bodyEl = document.getElementById('alertTitle2');
-            const sourceEl = document.getElementById('alertSourceLink');
-
-            if (cleanTitles.length === 1) {
-                titleEl.textContent = sorted[0].title.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim();
-            } else {
-                const lang = S.lang || 'es';
-                const joinWord = lang === 'es' ? ' y ' : ' and ';
-                const prep = lang === 'es' ? 'Avisos por ' : 'Warnings: ';
-                titleEl.textContent = prep + cleanTitles.slice(0, -1).join(', ') + joinWord + cleanTitles[cleanTitles.length - 1];
-            }
-
-            // Body: primera alerta más detalle
-            const bodyLines = sorted.map(a => (a.text || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim()).filter(Boolean);
-            bodyEl.textContent = bodyLines.join(' — ');
-
-            // Source
-            let sourceUrl = 'https://www.aemet.es/es/eltiempo/prediccion/avisos';
-            let sourceLabel = 'AEMET. Agencia Estatal de Meteorología';
-            if (S._countryCode && S._countryCode !== 'ES') {
-                sourceUrl = 'https://www.meteoalarm.org/';
-                sourceLabel = 'MeteoAlarm. European weather warnings';
-            }
-            if (sourceEl) { sourceEl.href = sourceUrl; sourceEl.textContent = sourceLabel; }
-
-            banner.style.display = '';
-            S._lastAlertCode = sorted[0].type;
-        }
-
-        // Construye una tarjeta de aviso estilo AEMET: fondo cristal neutro, sin emojis
-        function buildAlertCard(a, icons) {
-            const div = document.createElement('div');
-            div.className = 'alert-notif-card alert-card-unified';
-            div.style.cssText = `cursor:pointer;margin-bottom:0`;
-            div.setAttribute('role', 'alert');
-
-            // Strip emojis from title and text
-            const cleanTitle = (a.title || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim();
-            const cleanText = (a.text || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim();
-
-            // Header: icon + title
-            const header = document.createElement('div');
-            header.className = 'alert-notif-header';
-            header.innerHTML = `
-                <div class="alert-triangle-icon" style="color:${accent}">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
-                            stroke="${accent}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            fill="${accent}22"/>
-                    </svg>
-                </div>
-                <span class="alert-notif-title">${cleanTitle}</span>`;
-            div.appendChild(header);
-
-            const body = document.createElement('div');
-            body.className = 'alert-notif-body';
-            body.textContent = cleanText;
-            div.appendChild(body);
-
-            if (a.detail) {
-                const src = document.createElement('div');
-                src.className = 'alert-notif-source';
-                src.textContent = (a.detail || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim();
-                div.appendChild(src);
-            }
-
-            div.onclick = () => showAlertDialog(a);
-            return div;
-        }
-
-        // ─── EXTERNAL ALERTS (multi-source) ──────────────────────────────────────────
-        // Fetches from multiple free sources: Open-Meteo forecast extremes,
-        // Nominatim country code → regional alert APIs
-        async function fetchExternalAlerts() {
-            const results = [];
-            if (!S.lat) return results;
-
-            // Source 1: Open-Meteo hourly wind gusts (next 24h) — more detailed than current
+            // Comprueba si ya fue descartada < 1h
             try {
-                const omUrl = `https://api.open-meteo.com/v1/forecast?latitude=${S.lat}&longitude=${S.lon}` +
-                    `&hourly=wind_gusts_10m,precipitation,cape&forecast_days=1&timezone=auto`;
-                const r = await fetch(omUrl);
-                if (r.ok) {
-                    const d = await r.json();
-                    if (d.hourly) {
-                        const maxGust = Math.max(...(d.hourly.wind_gusts_10m || [0]));
-                        const maxPrecip = (d.hourly.precipitation || []).reduce((a, b) => a + b, 0);
-                        const maxCAPE = Math.max(...(d.hourly.cape || [0]));
-                        if (maxGust >= 100) {
-                            results.push({ type: 'red', title: `${t('alert_wind_r')} — Open-Meteo`, text: `Ráfagas de hasta ${fmtWind(maxGust)} en las próximas 24h`, detail: t('alert_wind_desc') });
-                        } else if (maxGust >= 75 && maxGust < 100) {
-                            results.push({ type: 'orange', title: `${t('alert_wind_o')} — Open-Meteo`, text: `Ráfagas de hasta ${fmtWind(maxGust)} previstas`, detail: t('alert_wind_desc') });
-                        }
-                        if (maxPrecip >= 50) {
-                            results.push({ type: 'orange', title: `${t('alert_rain_o')} — Open-Meteo`, text: `Precipitación acumulada prevista: ${fmtPrecip(maxPrecip)}${precipUnitLabel()}`, detail: t('alert_rain_desc') });
-                        }
-                        // High CAPE = convective instability = storm risk
-                        if (maxCAPE >= 2000) {
-                            results.push({ type: 'yellow', title: `${t('alert_storm')} — Open-Meteo`, text: `Inestabilidad convectiva alta (CAPE ${Math.round(maxCAPE)} J/kg)`, detail: t('alert_storm_desc') });
-                        }
-                    }
-                }
-            } catch (e) { /* silently skip */ }
+                const d = JSON.parse(localStorage.getItem('wh_alert_v2') || '{}');
+                if (d.code === code && (Date.now() - d.at) < 3600000) return;
+            } catch { }
 
-            // Source 2: AEMET avisos (Spain only) via proxy-free public RSS
+            if (code === S._lastAlertCode && banner.children.length) return;
+            S._lastAlertCode = code;
+
+            const { url: srcUrl, label: srcLabel } = getAlertSource(S._countryCode);
+            const extraLine = alerts.length > 1
+                ? `<br><span style="opacity:.75;font-size:12px">+ ${getAlertTitle(alerts[1])}</span>`
+                : '';
+
+            banner.innerHTML = `
+                <div class="ab-card ab-${topAlert.level}" role="alert" aria-live="assertive"
+                     onclick="window.open('${srcUrl}','_blank')">
+                    <div class="ab-icon">${AB_ICONS[topAlert.icon] || AB_ICONS.warn}</div>
+                    <div class="ab-content">
+                        <div class="ab-title">${getAlertTitle(topAlert)}${extraLine}</div>
+                        <div class="ab-body">${getAlertBody(topAlert)}</div>
+                        <div class="ab-source"><a href="${srcUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${srcLabel}</a></div>
+                    </div>
+                    <button class="ab-close" onclick="event.stopPropagation();dismissAlert()" title="Cerrar">×</button>
+                </div>`;
+        }
+
+        function dismissAlert() {
+            const banner = document.getElementById('alertBanner');
+            if (banner) banner.innerHTML = '';
             try {
-                const countryCode = await getCountryCode();
-                if (countryCode === 'ES') {
-                    // AEMET no tiene API pública sin key, pero podemos usar el RSS de avisos de Protección Civil
-                    // que es de acceso libre. Usamos el de la red de predicción de AEMET vía WMO CAP
-                    const aemetUrl = `https://opendata.aemet.es/opendata/api/avisos_cap/ultimoelaborado/area/esp`;
-                    // Solo intentamos si tenemos key configurada (sin key usamos alternativa)
-                    // Alternativa gratuita: MeteoAlarm RSS (Europa)
-                    const meteoAlarmUrl = `https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-spain`;
-                    const rssR = await fetch(meteoAlarmUrl, { signal: AbortSignal.timeout(4000) });
-                    if (rssR.ok) {
-                        const rssText = await rssR.text();
-                        const parser = new DOMParser();
-                        const xmlDoc = parser.parseFromString(rssText, 'application/xml');
-                        const entries = xmlDoc.querySelectorAll('entry');
-                        let addedFromMeteoAlarm = 0;
-                        entries.forEach(entry => {
-                            if (addedFromMeteoAlarm >= 2) return; // limit
-                            const title = entry.querySelector('title')?.textContent || '';
-                            const summary = entry.querySelector('summary')?.textContent || '';
-                            // Parse severity from title/content
-                            let alertType = 'yellow';
-                            if (/red|rojo|extreme/i.test(title + summary)) alertType = 'red';
-                            else if (/orange|naranja|high/i.test(title + summary)) alertType = 'orange';
-                            if (title && (title.toLowerCase().includes('spain') || title.toLowerCase().includes('españa') || !title.toLowerCase().includes('no active'))) {
-                                if (!title.toLowerCase().includes('no active') && !title.toLowerCase().includes('no hay avisos')) {
-                                    results.push({ type: alertType, title: `MeteoAlarm: ${title.substring(0, 60)}`, text: summary.substring(0, 100) || 'Ver detalles en MeteoAlarm', detail: 'Aviso emitido por MeteoAlarm / AEMET. Consulta la fuente oficial para más información.' });
-                                    addedFromMeteoAlarm++;
-                                }
-                            }
-                        });
-                    }
-                }
-            } catch (e) { /* silently skip */ }
-
-            // Source 3: Open-Meteo air quality extreme alerts
-            try {
-                if (S.aqiData && S.aqiData.european_aqi > 80) {
-                    const aqi = Math.round(S.aqiData.european_aqi);
-                    results.push({ type: aqi > 100 ? 'red' : 'orange', title: `${t('aqi')}`, text: `AQI: ${aqi} — ${t(aqi > 100 ? 'aqi_haz' : 'aqi_vbad')}`, detail: t('aqi_bad') });
-                }
-            } catch (e) { /* silently skip */ }
-
-            return results;
+                localStorage.setItem('wh_alert_v2', JSON.stringify({ code: S._lastAlertCode, at: Date.now() }));
+            } catch { }
         }
 
-        // Helper: get ISO country code from coordinates using Nominatim (OpenStreetMap)
-        async function getCountryCode() {
-            if (S._countryCode) return S._countryCode;
-            try {
-                const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${S.lat}&lon=${S.lon}&format=json`, {
-                    headers: { 'Accept-Language': 'en' }, signal: AbortSignal.timeout(3000)
-                });
-                if (r.ok) {
-                    const d = await r.json();
-                    S._countryCode = d.address?.country_code?.toUpperCase() || '';
-                    return S._countryCode;
-                }
-            } catch (e) { }
-            return '';
-        }
-
-        function showAlertDialog(a) {
-            const overlay = document.getElementById('alertModalOverlay');
-            const panel = overlay.querySelector('.alert-panel');
-            const iconWrap = document.getElementById('modalAlertIcon');
-            const title = document.getElementById('modalAlertTitle');
-            const desc = document.getElementById('modalAlertDesc');
-            const btn = document.getElementById('modalAlertBtn');
-
-            panel.className = `alert-panel alert-card-${a.type}`;
-            iconWrap.innerHTML = a.icon;
-            title.textContent = a.title;
-            desc.innerHTML = `<strong>${a.text}</strong><br><br>${a.detail}`;
-
-            // Link to official source
-            let sourceUrl = `https://www.google.com/search?q=weather+warnings+${encodeURIComponent(S.cityName)}`;
-            if (S.lang === 'es') {
-                sourceUrl = `https://www.google.com/search?q=avisos+meteorologicos+aemet+${encodeURIComponent(S.cityName)}`;
-            }
-            btn.href = sourceUrl;
-            btn.textContent = t('alert_source');
-
-            document.getElementById('modalCloseBtn').textContent = t('close');
-
-            overlay.classList.add('show');
-        }
-
-        function closeAlertDialog() {
-            document.getElementById('alertModalOverlay').classList.remove('show');
-        }
+        // Alias de compatibilidad
+        function showCombinedAlerts() { }
+        function buildAlertCard() { }
+        function fetchExternalAlerts() { return Promise.resolve([]); }
+        function showAlertDialog() { }
+        function closeAlertDialog() { }
+        function dismissUnifiedAlert() { dismissAlert(); }
 
 
         function renderSummaryPhrase() {
@@ -7082,8 +7215,11 @@
             precip: { url: null, label: t('map_precip'), gradient: 'linear-gradient(to right,rgba(0,180,255,0),#00bfff,#00ff00,#ffff00,#ff8c00,#ff0000)', minLabel: '0 mm', maxLabel: '50+ mm/h', mode: 'rainviewer' },
             wind: { url: `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${OWM}`, label: t('map_wind'), gradient: 'linear-gradient(to right,#e0f7ff,#64b5f6,#1565c0,#0d47a1)', minLabel: '0', maxLabel: '200+ km/h', mode: 'static' },
             aqi: { url: 'https://tiles.aqicn.org/tiles/usepa-aqi/{z}/{x}/{y}.png?token=demo', label: t('map_aqi'), gradient: 'linear-gradient(to right,#00e400,#92d050,#ffff00,#ff7e00,#ff0000,#8f3f97,#7e0023)', minLabel: t('aqi_good'), maxLabel: t('aqi_haz'), mode: 'static' },
+            alerts: { url: null, label: 'Avisos meteorológicos', gradient: 'linear-gradient(to right,#ffff00,#ff8c00,#ff0000,#8b0000)', minLabel: 'Amarillo', maxLabel: 'Rojo', mode: 'alerts' },
         };
         let currentLayer = 'temp', weatherTileLayer = null, baseTileLayer = null;
+        // Extra alert layers (MeteoAlarm WMS + GDACS GeoRSS markers)
+        let alertsLayerGroup = null;
 
         // ─── RAINVIEWER state ─────────────────────────────────────────────────────────
         let rvFrames = [];   // { ts, path } sorted asc — past + future (coverage/nowcast)
@@ -7150,7 +7286,7 @@
         async function setMapLayer(name) {
             currentLayer = name;
             document.querySelectorAll('.map-layer-option, .mmov-layer-option').forEach(b => b.classList.remove('active'));
-            const btnMap = { temp: 'lyrTemp', precip: 'lyrPrecip', wind: 'lyrWind', aqi: 'lyrAqi' };
+            const btnMap = { temp: 'lyrTemp', precip: 'lyrPrecip', wind: 'lyrWind', aqi: 'lyrAqi', alerts: 'lyrAlerts' };
             if (btnMap[name]) document.getElementById(btnMap[name])?.classList.add('active');
             document.querySelectorAll('.mmov-layer-option').forEach(b => {
                 if (b.dataset.layer === name) b.classList.add('active');
@@ -7160,6 +7296,7 @@
             document.getElementById('mmovLayerPanel')?.classList.remove('open');
 
             if (weatherTileLayer) { S.map.removeLayer(weatherTileLayer); weatherTileLayer = null; }
+            if (alertsLayerGroup) { S.map.removeLayer(alertsLayerGroup); alertsLayerGroup = null; }
             stopAnim();
 
             const cfg = MAP_LAYERS[name];
@@ -7195,13 +7332,110 @@
                 updateAnimLabel(0);
                 animBar.classList.add('visible');
                 applyAnimFrame(0);
+            } else if (cfg.mode === 'alerts') {
+                animBar.classList.remove('visible');
+                await loadAlertsLayer();
             } else {
                 // Static: just add the tile layer, no animation bar
                 animBar.classList.remove('visible');
                 if (cfg.url) {
-                    weatherTileLayer = L.tileLayer(cfg.url, { opacity: 0.82, maxZoom: 19, maxNativeZoom: 10 }).addTo(S.map);
+                    weatherTileLayer = L.tileLayer(cfg.url, { opacity: 0.82, maxZoom: 19, maxNativeZoom: 6, tileSize: 256 }).addTo(S.map);
                 }
             }
+        }
+
+        // ─── ALERTS LAYER (MeteoAlarm WMS + GDACS markers) ───────────────────────────
+        async function loadAlertsLayer() {
+            if (!S.map) return;
+            alertsLayerGroup = L.layerGroup().addTo(S.map);
+
+            // ── 1. MeteoAlarm WMS (Europa, gratuito, sin clave) ──────────────────────
+            const meteoAlarmWMS = L.tileLayer.wms(
+                'https://ogcie.iblsoft.com/meteoalarm/wms',
+                {
+                    layers: 'warnings',
+                    format: 'image/png',
+                    transparent: true,
+                    opacity: 0.72,
+                    version: '1.3.0',
+                    attribution: '© <a href="https://www.meteoalarm.org" target="_blank">MeteoAlarm / EUMETNET</a>',
+                    maxZoom: 19,
+                }
+            );
+            alertsLayerGroup.addLayer(meteoAlarmWMS);
+
+            // ── 2. GDACS (Global Disaster Alert — ONU, gratuito) — markers via GeoJSON ──
+            try {
+                const gdacsUrl = 'https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=TC,EQ,FL,DR,WF,VO&alertlevel=Green;Orange;Red&fromdate=&todate=&country=&limit=50&offset=1&format=geojson';
+                const res = await fetch(gdacsUrl, { signal: AbortSignal.timeout(8000) });
+                if (res.ok) {
+                    const geojson = await res.json();
+                    const colorMap = { Red: '#cc0000', Orange: '#e67e00', Green: '#2d8a00' };
+
+                    const l10nAlert = {
+                        es: { TC: 'Ciclón', EQ: 'Terremoto', FL: 'Inundación', DR: 'Sequía', WF: 'Incendio', VO: 'Volcán', Red: 'Rojo', Orange: 'Naranja', Green: 'Verde', type: 'Tipo', level: 'Nivel', since: 'Desde', more: 'Más info →' },
+                        en: { TC: 'Cyclone', EQ: 'Earthquake', FL: 'Flood', DR: 'Drought', WF: 'Wildfire', VO: 'Volcano', Red: 'Red', Orange: 'Orange', Green: 'Green', type: 'Type', level: 'Level', since: 'Since', more: 'More info →' },
+                        fr: { TC: 'Cyclone', EQ: 'Séisme', FL: 'Inondation', DR: 'Sécheresse', WF: 'Incendie', VO: 'Volcan', Red: 'Rouge', Orange: 'Orange', Green: 'Vert', type: 'Type', level: 'Niveau', since: 'Depuis', more: 'Plus d\'infos →' },
+                        de: { TC: 'Zyklon', EQ: 'Erdbeben', FL: 'Überschwemmung', DR: 'Dürre', WF: 'Waldbrand', VO: 'Vulkan', Red: 'Rot', Orange: 'Orange', Green: 'Grün', type: 'Typ', level: 'Stufe', since: 'Seit', more: 'Mehr Infos →' },
+                        pt: { TC: 'Ciclone', EQ: 'Terremoto', FL: 'Inundação', DR: 'Seca', WF: 'Incêndio', VO: 'Vulcão', Red: 'Vermelho', Orange: 'Laranja', Green: 'Verde', type: 'Tipo', level: 'Nível', since: 'Desde', more: 'Mais info →' },
+                        it: { TC: 'Ciclone', EQ: 'Terremoto', FL: 'Inondazione', DR: 'Siccità', WF: 'Incendio', VO: 'Vulcano', Red: 'Rosso', Orange: 'Arancione', Green: 'Verde', type: 'Tipo', level: 'Livello', since: 'Dal', more: 'Maggiori info →' },
+                        ca: { TC: 'Cicló', EQ: 'Terratrèmol', FL: 'Inundació', DR: 'Sequera', WF: 'Incendi', VO: 'Volcà', Red: 'Vermell', Orange: 'Taronja', Green: 'Verd', type: 'Tipus', level: 'Nivell', since: 'Des de', more: 'Més info →' },
+                        gl: { TC: 'Ciclón', EQ: 'Terremoto', FL: 'Inundación', DR: 'Seca', WF: 'Incendio', VO: 'Volcán', Red: 'Vermello', Orange: 'Laranxa', Green: 'Verde', type: 'Tipo', level: 'Nivel', since: 'Desde', more: 'Máis info →' },
+                        eu: { TC: 'Zikloia', EQ: 'Lurrikarak', FL: 'Uholdea', DR: 'Lehortea', WF: 'Sutea', VO: 'Sumendia', Red: 'Gorria', Orange: 'Laranja', Green: 'Berdea', type: 'Mota', level: 'Maila', since: 'Noiztik', more: 'Info gehiago →' }
+                    };
+                    const langDict = l10nAlert[S.lang] || l10nAlert.es;
+
+                    const typeIcon = {
+                        TC: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v20m10-10H2M18.364 5.636l-12.728 12.728M5.636 5.636l12.728 12.728" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" fill="white" fill-opacity="0.5"/></svg>`,
+                        EQ: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 12h5l3 -8 4 16 3 -8h3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+                        FL: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M2 12C2 12 5 9 12 9C19 9 22 12 22 12M2 17C2 17 5 14 12 14C19 14 22 17 22 17M12 2L12 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+                        DR: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="white" stroke-width="2"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>`,
+                        WF: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 7 7 7 13C7 16 9 18 12 21C15 18 17 16 17 13C17 7 12 2 12 2Z" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M12 11C12 11 10 13 10 15C10 16 11 17 12 18C13 17 14 16 14 15C14 13 12 11 12 11Z" fill="white"/></svg>`,
+                        VO: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M2 20L12 4l10 16z" stroke="white" stroke-width="2" stroke-linejoin="round"/><path d="M12 4v6M10 8h4" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>`
+                    };
+
+                    L.geoJSON(geojson, {
+                        pointToLayer(feature, latlng) {
+                            const level = feature.properties?.alertlevel || 'Green';
+                            const type = feature.properties?.eventtype || '';
+                            const color = colorMap[level] || '#888';
+                            const svgIcon = typeIcon[type] || `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+                            const icon = L.divIcon({
+                                className: '',
+                                html: `<div style="
+                                    background:${color};
+                                    width:28px;height:28px;
+                                    border-radius:50%;
+                                    display:flex;align-items:center;justify-content:center;
+                                    border:2px solid rgba(255,255,255,0.85);
+                                    box-shadow:0 2px 8px rgba(0,0,0,0.4);
+                                    cursor:pointer;
+                                ">${svgIcon}</div>`,
+                                iconSize: [28, 28],
+                                iconAnchor: [14, 14],
+                            });
+                            return L.marker(latlng, { icon });
+                        },
+                        onEachFeature(feature, layer) {
+                            const p = feature.properties || {};
+                            const rawLevel = p.alertlevel || '';
+                            const rawType = p.eventtype || '';
+                            const name = p.eventname || p.name || 'Evento';
+                            const date = p.fromdate ? p.fromdate.slice(0, 10) : '';
+
+                            const tLevel = langDict[rawLevel] || rawLevel;
+                            const tType = langDict[rawType] || rawType;
+
+                            layer.bindPopup(`
+                                <b>${name}</b><br>
+                                ${langDict.type}: ${tType} &nbsp;|&nbsp; ${langDict.level}: <b>${tLevel}</b><br>
+                                ${date ? langDict.since + ': ' + date : ''}
+                                ${p.url ? '<br><a href="' + p.url + '" target="_blank">' + langDict.more + '</a>' : ''}
+                            `, { maxWidth: 220 });
+                        }
+                    }).addTo(alertsLayerGroup);
+                }
+            } catch (e) { console.warn('GDACS fetch failed:', e); }
         }
 
         // ─── MAP ANIMATION ────────────────────────────────────────────────────────────
@@ -7248,7 +7482,7 @@
             const step = animSteps[v];
             if (!step?.path) return;
             const rvUrl = `https://tilecache.rainviewer.com${step.path}/256/{z}/{x}/{y}/4/1_1.png`;
-            weatherTileLayer = L.tileLayer(rvUrl, { opacity: 0.75, maxZoom: 19, maxNativeZoom: 12 }).addTo(S.map);
+            weatherTileLayer = L.tileLayer(rvUrl, { opacity: 0.75, maxZoom: 19, maxNativeZoom: 6, tileSize: 256 }).addTo(S.map);
         }
 
         // Update the map marker pin value for a given hour offset and layer
@@ -7297,17 +7531,35 @@
 
 
         // ─── MAP BASE TILES ───────────────────────────────────────────────────────────
+        let isSatellite = false;
         function getBaseTileUrl() {
+            if (isSatellite) return {
+                url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                sub: null,
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            };
             const dark = document.body.classList.contains('dark-mode');
             if (dark) return { url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', sub: 'abcd' };
             // Light mode: CartoDB Voyager — more colorful and readable than Positron
             return { url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', sub: 'abcd' };
         }
+        function toggleSatellite() {
+            isSatellite = !isSatellite;
+            updateMapBaseTile();
+            // Update button states desktop
+            const btnDesk = document.getElementById('satToggleBtn');
+            if (btnDesk) btnDesk.classList.toggle('active', isSatellite);
+            // Update button states mobile
+            const btnMob = document.getElementById('mmovSatBtn');
+            if (btnMob) btnMob.classList.toggle('active', isSatellite);
+        }
         function updateMapBaseTile() {
             if (!S.map) return;
             if (baseTileLayer) { S.map.removeLayer(baseTileLayer); }
             const t = getBaseTileUrl();
-            baseTileLayer = L.tileLayer(t.url, { maxZoom: 19, subdomains: t.sub }).addTo(S.map);
+            const opts = { maxZoom: 19 };
+            if (t.sub) opts.subdomains = t.sub;
+            baseTileLayer = L.tileLayer(t.url, opts).addTo(S.map);
             if (baseTileLayer) baseTileLayer.bringToBack();
         }
         function toggleMapFullscreen() {
@@ -7395,20 +7647,14 @@
         let _scrollLockY = 0;
         function lockScroll() {
             _scrollLockY = window.scrollY || window.pageYOffset;
-            document.body.style.top = '-' + _scrollLockY + 'px';
-            document.body.style.position = 'fixed';
-            document.body.style.width = '100%';
             document.body.style.overflow = 'hidden';
         }
         function unlockScroll() {
-            document.body.style.position = '';
-            document.body.style.top = '';
-            document.body.style.width = '';
             document.body.style.overflow = '';
-            window.scrollTo(0, _scrollLockY);
         }
 
         function openFavModal() {
+            syncPanelBg();
             renderFavList();
             document.getElementById('favModal').classList.add('open');
             lockScroll();
@@ -7421,8 +7667,16 @@
             if (btn) btn.disabled = alreadySaved;
             if (textSpan) textSpan.textContent = alreadySaved ? t('fav_saved') : t('fav_add_cur');
         }
-        function closeFavModal() { document.getElementById('favModal').classList.remove('open'); unlockScroll(); }
-        document.getElementById('favModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeFavModal(); });
+        function closeFavModal() {
+            const el = document.getElementById('favModal');
+            el.style.animation = 'pageSlideOut 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+            setTimeout(() => {
+                el.classList.remove('open');
+                el.style.animation = '';
+                unlockScroll();
+            }, 270);
+        }
+        // No overlay backdrop — page-style panels close via back button only
 
         function addCurrentToFav() {
             if (!S.lat || !S.cityName) return;
@@ -7515,6 +7769,253 @@
             return { html: svg(cityPath, "#fff"), bg: "rgba(255,255,255,0.15)" };
         }
 
+        // Maps weather_code + is_day to a BG_THEMES key
+        function codeToThemeKey(code, isDay) {
+            if ([96, 99].includes(code)) return 'hail';
+            if ([95].includes(code)) return 'stormy';
+            if ([71, 73, 75, 77, 85, 86].includes(code)) return 'snowy';
+            if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return 'rainy';
+            if ([45, 48].includes(code)) return 'fog';
+            if ([2, 3].includes(code)) return isDay ? 'cloudy' : 'night';
+            if (code === 1) return isDay ? 'morning' : 'night';
+            if (code === 0) return isDay ? 'day' : 'night';
+            return isDay ? 'day' : 'night';
+        }
+
+        function favCardGradient(themeKey) {
+            const isDark = document.body.classList.contains('dark-mode');
+            const themes = isDark ? BG_DARK_THEMES : BG_THEMES;
+            const t = themes[themeKey] || themes.day;
+            const s = t.stops;
+            return `linear-gradient(135deg, ${s[0]} 0%, ${s[1]} 40%, ${s[2]} 75%, ${s[3]} 100%)`;
+        }
+
+        // Animated particles inside a fav card (rain, snow, clouds, stars)
+        function startFavCardFx(card, code, isDay) {
+            // Remove any existing canvas
+            const oldCanvas = card.querySelector('.fav-fx-canvas');
+            if (oldCanvas) oldCanvas.remove();
+
+            let fxType = null;
+            if ([96, 99].includes(code)) fxType = 'hail';
+            else if ([51, 53, 55, 61, 63, 65, 80, 81, 82, 95].includes(code)) fxType = 'rain';
+            else if ([71, 73, 75, 77, 85, 86].includes(code)) fxType = 'snow';
+            else if ([45, 48].includes(code)) fxType = 'fog';
+            else if ([2, 3].includes(code)) fxType = 'clouds';
+            else if (!isDay) fxType = 'stars';
+
+            if (!fxType) return;
+
+            const canvas = document.createElement('canvas');
+            canvas.className = 'fav-fx-canvas';
+            canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;border-radius:16px;overflow:hidden;';
+            card.insertBefore(canvas, card.firstChild);
+
+            const ctx = canvas.getContext('2d');
+            let animId;
+
+            function resize() {
+                canvas.width = card.offsetWidth;
+                canvas.height = card.offsetHeight;
+            }
+            resize();
+
+            const W = () => canvas.width;
+            const H = () => canvas.height;
+
+            // Particles
+            let particles = [];
+
+            if (fxType === 'rain') {
+                const count = 28;
+                for (let i = 0; i < count; i++) {
+                    particles.push({ x: Math.random() * 600, y: Math.random() * 200, speed: 2.5 + Math.random() * 2.5, len: 10 + Math.random() * 10, opacity: 0.2 + Math.random() * 0.3 });
+                }
+                function drawRain() {
+                    ctx.clearRect(0, 0, W(), H());
+                    particles.forEach(p => {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(174,214,241,${p.opacity})`;
+                        ctx.lineWidth = 1.2;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p.x - 2, p.y + p.len);
+                        ctx.stroke();
+                        p.y += p.speed;
+                        p.x -= 1;
+                        if (p.y > H() + 20) { p.y = -20; p.x = Math.random() * W(); }
+                    });
+                    animId = requestAnimationFrame(drawRain);
+                }
+                drawRain();
+            } else if (fxType === 'snow') {
+                const count = 22;
+                for (let i = 0; i < count; i++) {
+                    particles.push({ x: Math.random() * 600, y: Math.random() * 200, speed: 0.5 + Math.random() * 0.8, r: 1.5 + Math.random() * 2.5, drift: (Math.random() - 0.5) * 0.4, opacity: 0.4 + Math.random() * 0.4, angle: Math.random() * Math.PI * 2 });
+                }
+                function drawSnow() {
+                    ctx.clearRect(0, 0, W(), H());
+                    particles.forEach(p => {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
+                        ctx.fill();
+                        p.y += p.speed;
+                        p.x += p.drift + Math.sin(p.angle) * 0.3;
+                        p.angle += 0.02;
+                        if (p.y > H() + 10) { p.y = -10; p.x = Math.random() * W(); }
+                    });
+                    animId = requestAnimationFrame(drawSnow);
+                }
+                drawSnow();
+            } else if (fxType === 'clouds') {
+                // Estilo Apple Weather: masas volumétricas grandes, muy difusas, casi estáticas
+                const apfClouds = [];
+                const apfDefs = [
+                    { xr: 0.08, yr: 0.25, wr: 1.1, hr: 0.55, op: 0.55, spd: 0.025 },
+                    { xr: 0.45, yr: 0.10, wr: 1.3, hr: 0.50, op: 0.45, spd: 0.018 },
+                    { xr: 0.70, yr: 0.38, wr: 0.9, hr: 0.48, op: 0.38, spd: 0.030 },
+                    { xr: -0.1, yr: 0.55, wr: 0.8, hr: 0.42, op: 0.28, spd: 0.020 },
+                ];
+                apfDefs.forEach(d => {
+                    apfClouds.push({ xr: d.xr, yr: d.yr, wr: d.wr, hr: d.hr, op: d.op, spd: d.spd, phase: Math.random() * Math.PI * 2 });
+                });
+                // Dibuja una masa nubosa al estilo Apple: pila de gradientes radiales muy grandes y muy blur
+                function drawApfCloud(c) {
+                    const w = W(), h = H();
+                    const cx = c.xr * w;
+                    const cy = c.yr * h;
+                    const rw = c.wr * w * 0.55; // radio horizontal
+                    const rh = c.hr * h * 0.55; // radio vertical
+                    // Capa 1: masa base grande, muy difusa
+                    const g1 = ctx.createRadialGradient(cx, cy, 0, cx, cy, rw);
+                    g1.addColorStop(0, `rgba(255,255,255,${c.op})`);
+                    g1.addColorStop(0.45, `rgba(240,245,255,${c.op * 0.6})`);
+                    g1.addColorStop(0.75, `rgba(220,232,252,${c.op * 0.25})`);
+                    g1.addColorStop(1, `rgba(200,218,248,0)`);
+                    ctx.save();
+                    ctx.filter = 'blur(18px)';
+                    ctx.scale(1, rh / rw);
+                    ctx.fillStyle = g1;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy * (rw / rh), rw, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                    // Capa 2: núcleo más brillante, menos blur
+                    const g2 = ctx.createRadialGradient(cx, cy - rh * 0.1, 0, cx, cy, rw * 0.6);
+                    g2.addColorStop(0, `rgba(255,255,255,${c.op * 0.7})`);
+                    g2.addColorStop(0.5, `rgba(248,252,255,${c.op * 0.3})`);
+                    g2.addColorStop(1, `rgba(230,240,255,0)`);
+                    ctx.save();
+                    ctx.filter = 'blur(8px)';
+                    ctx.scale(1, rh / rw * 0.75);
+                    ctx.fillStyle = g2;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy * (rw / (rh * 0.75)), rw * 0.55, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+                function drawClouds() {
+                    ctx.clearRect(0, 0, W(), H());
+                    apfClouds.forEach(c => {
+                        c.xr += c.spd / W();        // velocidad en píxeles reales por frame: ~0.025px/f
+                        c.phase += 0.003;
+                        c.yr += Math.sin(c.phase) * 0.00015; // deriva vertical imperceptible
+                        if (c.xr > 1.4) c.xr = -0.5;
+                        drawApfCloud(c);
+                    });
+                    animId = requestAnimationFrame(drawClouds);
+                }
+                drawClouds();
+            } else if (fxType === 'stars') {
+                const stars = [];
+                for (let i = 0; i < 18; i++) {
+                    stars.push({ x: Math.random() * 600, y: Math.random() * 90, r: 0.6 + Math.random() * 1.2, phase: Math.random() * Math.PI * 2, speed: 0.01 + Math.random() * 0.02 });
+                }
+                function drawStars() {
+                    ctx.clearRect(0, 0, W(), H());
+                    stars.forEach(s => {
+                        const alpha = 0.3 + 0.5 * Math.sin(s.phase);
+                        ctx.beginPath();
+                        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+                        ctx.fill();
+                        s.phase += s.speed;
+                    });
+                    animId = requestAnimationFrame(drawStars);
+                }
+                drawStars();
+            } else if (fxType === 'hail') {
+                // Granizo en tarjeta: gotas opacas que caen rápido + destello de tormenta
+                const drops = [];
+                const count = 20;
+                for (let i = 0; i < count; i++) {
+                    drops.push({ x: Math.random() * 600, y: Math.random() * 200, speed: 4 + Math.random() * 4, r: 2 + Math.random() * 2.5, opacity: 0.55 + Math.random() * 0.3 });
+                }
+                let flashAlpha = 0;
+                let nextFlash = Date.now() + 1500 + Math.random() * 4000;
+                function drawHail() {
+                    ctx.clearRect(0, 0, W(), H());
+                    // Flash de relámpago ocasional
+                    const now = Date.now();
+                    if (now > nextFlash) { flashAlpha = 0.22 + Math.random() * 0.15; nextFlash = now + 2000 + Math.random() * 6000; }
+                    if (flashAlpha > 0.005) {
+                        ctx.fillStyle = `rgba(200,215,255,${flashAlpha})`;
+                        ctx.fillRect(0, 0, W(), H());
+                        flashAlpha *= 0.78;
+                    }
+                    drops.forEach(p => {
+                        // Gota ovalada con highlight
+                        const g = ctx.createRadialGradient(p.x - p.r * 0.3, p.y - p.r * 0.4, p.r * 0.1, p.x, p.y, p.r);
+                        g.addColorStop(0, `rgba(255,255,255,${p.opacity})`);
+                        g.addColorStop(0.5, `rgba(210,228,248,${p.opacity * 0.7})`);
+                        g.addColorStop(1, `rgba(160,190,220,${p.opacity * 0.3})`);
+                        ctx.beginPath();
+                        ctx.ellipse(p.x, p.y, p.r, p.r * 1.25, 0, 0, Math.PI * 2);
+                        ctx.fillStyle = g;
+                        ctx.fill();
+                        p.y += p.speed;
+                        p.x -= 1.5;
+                        if (p.y > H() + 10) { p.y = -10; p.x = Math.random() * W(); }
+                    });
+                    animId = requestAnimationFrame(drawHail);
+                }
+                drawHail();
+            } else if (fxType === 'fog') {
+                // Niebla en tarjeta: masas blancas difusas que se deslizan muy despacio
+                const fogMasses = [];
+                for (let i = 0; i < 3; i++) {
+                    fogMasses.push({ xr: Math.random(), yr: 0.1 + i * 0.28 + Math.random() * 0.12, spd: 0.015 + Math.random() * 0.010, op: 0.18 + Math.random() * 0.14, phase: Math.random() * Math.PI * 2 });
+                }
+                function drawFog() {
+                    ctx.clearRect(0, 0, W(), H());
+                    fogMasses.forEach(f => {
+                        f.xr += f.spd / W();
+                        f.phase += 0.002;
+                        if (f.xr > 1.4) f.xr = -0.5;
+                        const fx = f.xr * W();
+                        const fy = (f.yr + Math.sin(f.phase) * 0.05) * H();
+                        const rw = W() * 0.85, rh = H() * 0.22;
+                        ctx.save();
+                        ctx.scale(1, rh / rw);
+                        const g = ctx.createRadialGradient(fx, fy * (rw / rh), 0, fx, fy * (rw / rh), rw);
+                        g.addColorStop(0, `rgba(235,238,245,${f.op})`);
+                        g.addColorStop(0.5, `rgba(220,225,235,${f.op * 0.5})`);
+                        g.addColorStop(1, 'rgba(210,218,230,0)');
+                        ctx.fillStyle = g;
+                        ctx.beginPath();
+                        ctx.arc(fx, fy * (rw / rh), rw, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    });
+                    animId = requestAnimationFrame(drawFog);
+                }
+                drawFog();
+            }
+
+            // Store cancel function on card for cleanup
+            card._stopFx = () => { if (animId) cancelAnimationFrame(animId); };
+        }
+
         function renderFavList() {
             const favs = loadFavs();
             const container = document.getElementById('favList');
@@ -7529,34 +8030,39 @@
                 return;
             }
 
-            // Render skeleton cards first
+            // Render skeleton cards first (no time, no sub)
             container.innerHTML = favs.map((f, i) => {
                 const shortName = f.name.split(',')[0];
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString(S.lang === 'es' ? 'es-ES' : 'en-GB', { hour: '2-digit', minute: '2-digit' });
-                return `<div class="fav-item fav-card-loading" id="fav-card-${i}" onclick="selectFromFav(${f.lat},${f.lon},'${escQ(f.name)}')">
+                return `<div class="fav-item fav-card-loading" id="fav-card-${i}" draggable="true" data-idx="${i}" onclick="selectFromFav(${f.lat},${f.lon},'${escQ(f.name)}')">
+  <div class="fav-drag-handle" onclick="event.stopPropagation()" title="Arrastrar para reordenar">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="5" r="1.5" fill="currentColor"/><circle cx="15" cy="5" r="1.5" fill="currentColor"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><circle cx="9" cy="19" r="1.5" fill="currentColor"/><circle cx="15" cy="19" r="1.5" fill="currentColor"/></svg>
+  </div>
+  <div class="fav-card-info">
+    <div class="fav-card-top">
+      <div class="fav-card-name">${shortName}</div>
+    </div>
+    <div class="fav-card-bottom">
+      <div class="fav-card-condition" id="fav-cond-${i}">…</div>
+    </div>
+  </div>
+  <div class="fav-card-right">
+    <div class="fav-card-temp" id="fav-temp-${i}">—°</div>
+    <div class="fav-card-range" id="fav-range-${i}">—</div>
+  </div>
   <button class="fav-del-btn" onclick="event.stopPropagation();deleteFav(${i})" title="Eliminar">
     <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>
   </button>
-  <div class="fav-card-top">
-    <div>
-      <div class="fav-card-name">${shortName}</div>
-      <div class="fav-card-sub">${timeStr}</div>
-    </div>
-    <div class="fav-card-temp" id="fav-temp-${i}">—°</div>
-  </div>
-  <div class="fav-card-bottom">
-    <div class="fav-card-condition" id="fav-cond-${i}">…</div>
-    <div class="fav-card-range" id="fav-range-${i}">—</div>
-  </div>
 </div>`;
             }).join('');
+
+            // Drag-and-drop reorder
+            initFavDragDrop(container);
 
             // Fetch weather for each fav in parallel
             favs.forEach(async (f, i) => {
                 try {
                     const unit = S.unit === 'F' ? 'fahrenheit' : 'celsius';
-                    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${f.lat}&longitude=${f.lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=${unit}&timezone=auto&forecast_days=1`);
+                    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${f.lat}&longitude=${f.lon}&current=temperature_2m,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min&temperature_unit=${unit}&timezone=auto&forecast_days=1`);
                     const d = await r.json();
                     const card = document.getElementById(`fav-card-${i}`);
                     if (!card) return;
@@ -7564,11 +8070,11 @@
 
                     const temp = Math.round(d.current?.temperature_2m ?? 0);
                     const code = d.current?.weather_code ?? 0;
+                    const isDay = d.current?.is_day ?? 1;
                     const tmax = Math.round(d.daily?.temperature_2m_max?.[0] ?? temp);
                     const tmin = Math.round(d.daily?.temperature_2m_min?.[0] ?? temp);
                     const sym = S.unit === 'F' ? '°F' : '°';
                     const condLabel = (WMO[code] || {})[S.lang] || (WMO[code] || {}).es || '';
-                    const lang = S.lang || 'es';
                     const highLbl = t('high') || 'H';
                     const lowLbl = t('low') || 'L';
                     const rangeLabel = `${highLbl} ${tmax}${sym}  ${lowLbl} ${tmin}${sym}`;
@@ -7577,19 +8083,102 @@
                     document.getElementById(`fav-cond-${i}`).textContent = condLabel;
                     document.getElementById(`fav-range-${i}`).textContent = rangeLabel;
 
-                    // Subtle tinted background per weather code
-                    const isRain = [51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code);
-                    const isStorm = [95, 96, 99].includes(code);
-                    const isSnow = [71, 73, 75, 77, 85, 86].includes(code);
-                    const isClear = [0, 1].includes(code);
-                    if (isStorm) card.style.background = 'rgba(80,50,120,0.30)';
-                    else if (isRain) card.style.background = 'rgba(40,80,160,0.28)';
-                    else if (isSnow) card.style.background = 'rgba(180,210,255,0.20)';
-                    else if (isClear) card.style.background = 'rgba(255,255,255,0.16)';
+                    // Alert badge — detect from weather data
+                    const favAlerts = detectAlerts(d);
+                    if (favAlerts.length > 0) {
+                        const fa = favAlerts[0];
+                        const alertLabel = getAlertTitle(fa);
+                        const triangleSvg = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-right:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255,255,255,0.15)"/></svg>`;
+                        const badgeEl = document.createElement('div');
+                        const lvlClass = { extreme: 'fav-alert-badge--extreme', high: 'fav-alert-badge--high', moderate: 'fav-alert-badge--moderate', info: 'fav-alert-badge--moderate' }[fa.level] || 'fav-alert-badge--moderate';
+                        badgeEl.className = `fav-alert-badge ${lvlClass}`;
+                        badgeEl.innerHTML = `${triangleSvg}<span style="color:#fff;font-weight:600">${alertLabel}</span>`;
+                        const bottom = card.querySelector('.fav-card-bottom');
+                        if (bottom) bottom.appendChild(badgeEl);
+                    }
+
+                    // Dynamic background matching the weather/time theme
+                    const themeKey = codeToThemeKey(code, isDay);
+                    card.style.background = favCardGradient(themeKey);
+                    card.style.border = '1px solid rgba(255,255,255,0.20)';
+
+                    // Animated weather particles inside the card
+                    startFavCardFx(card, code, isDay);
                 } catch (e) {
                     const card = document.getElementById(`fav-card-${i}`);
                     if (card) card.classList.remove('fav-card-loading');
                 }
+            });
+        }
+
+        function initFavDragDrop(container) {
+            let dragIdx = null, dragEl = null;
+
+            container.querySelectorAll('.fav-item').forEach(item => {
+                // Desktop drag events
+                item.addEventListener('dragstart', e => {
+                    dragIdx = +item.dataset.idx;
+                    dragEl = item;
+                    setTimeout(() => item.classList.add('dragging'), 0);
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+                item.addEventListener('dragend', () => {
+                    item.classList.remove('dragging');
+                    container.querySelectorAll('.fav-item').forEach(i => i.classList.remove('drag-over'));
+                });
+                item.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    if (+item.dataset.idx === dragIdx) return;
+                    container.querySelectorAll('.fav-item').forEach(i => i.classList.remove('drag-over'));
+                    item.classList.add('drag-over');
+                });
+                item.addEventListener('drop', e => {
+                    e.preventDefault();
+                    const toIdx = +item.dataset.idx;
+                    if (toIdx === dragIdx) return;
+                    const favs = loadFavs();
+                    const moved = favs.splice(dragIdx, 1)[0];
+                    favs.splice(toIdx, 0, moved);
+                    saveFavs(favs);
+                    renderFavList();
+                });
+
+                // Touch drag (mobile)
+                const handle = item.querySelector('.fav-drag-handle');
+                if (!handle) return;
+                let touchStartY, touchStartIdx;
+                handle.addEventListener('touchstart', e => {
+                    touchStartY = e.touches[0].clientY;
+                    touchStartIdx = +item.dataset.idx;
+                    dragEl = item;
+                    item.classList.add('dragging');
+                    e.preventDefault();
+                }, { passive: false });
+                handle.addEventListener('touchmove', e => {
+                    e.preventDefault();
+                    const ty = e.touches[0].clientY;
+                    const items = [...container.querySelectorAll('.fav-item:not(.dragging)')];
+                    container.querySelectorAll('.fav-item').forEach(i => i.classList.remove('drag-over'));
+                    const target = items.find(el => {
+                        const r = el.getBoundingClientRect();
+                        return ty >= r.top && ty <= r.bottom;
+                    });
+                    if (target) target.classList.add('drag-over');
+                }, { passive: false });
+                handle.addEventListener('touchend', () => {
+                    item.classList.remove('dragging');
+                    const over = container.querySelector('.fav-item.drag-over');
+                    if (over && over !== item) {
+                        const toIdx = +over.dataset.idx;
+                        const favs = loadFavs();
+                        const moved = favs.splice(touchStartIdx, 1)[0];
+                        favs.splice(toIdx, 0, moved);
+                        saveFavs(favs);
+                        renderFavList();
+                    } else {
+                        container.querySelectorAll('.fav-item').forEach(i => i.classList.remove('drag-over'));
+                    }
+                });
             });
         }
 
@@ -7781,12 +8370,14 @@
                     precip: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="19" x2="8" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="8" y1="13" x2="8" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="19" x2="16" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="13" x2="16" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
                     wind: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8h13a3 3 0 1 0 0-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 12h16a3 3 0 1 1 0 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="16" x2="12" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
                     aqi: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 13v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 17l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+                    alerts: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
                 };
                 const layerOptions = [
                     { key: 'temp', label: t('map_temp') },
                     { key: 'precip', label: t('map_precip') },
                     { key: 'wind', label: t('map_wind') },
                     { key: 'aqi', label: t('map_aqi') },
+                    { key: 'alerts', label: 'Avisos activos' },
                 ];
                 const layerBtns = layerOptions.map(l =>
                     `<button class="mmov-layer-option${l.key === currentLayer ? ' active' : ''}" data-layer="${l.key}" onclick="setMapLayer('${l.key}')">
@@ -7813,6 +8404,12 @@
                         <button class="mmov-btn" onclick="if(S.map&&S.lat) S.map.setView([S.lat, S.lon], 5)" title="Mi ubicación" style="margin-bottom:10px">
                              <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
                                 <path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/>
+                            </svg>
+                        </button>
+                        <button class="mmov-btn${isSatellite ? ' active' : ''}" id="mmovSatBtn" onclick="toggleSatellite()" title="Satélite" style="margin-bottom:10px">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="4" stroke="white" stroke-width="2"/>
+                                <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="white" stroke-width="2" stroke-linecap="round"/>
                             </svg>
                         </button>
                         <button class="mmov-btn" id="mmovLayerBtn" onclick="toggleMmovLayerPanel()" title="Capas">
@@ -7894,6 +8491,7 @@
             updateDarkLabel();
             localStorage.setItem('wh_dark', isDark ? '1' : '0');
             if (S.map) { updateMapBaseTile(); setTimeout(() => S.map.invalidateSize(), 200); }
+            syncPanelBg();
         }
         function changeLang(val) {
             S.lang = val;
@@ -7984,9 +8582,31 @@
                 }
             }
         }
-        function openSettings() { document.getElementById('settingsModal').classList.add('open'); lockScroll(); }
-        function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); unlockScroll(); }
-        document.getElementById('settingsModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeSettings(); });
+        function syncPanelBg() {
+            const isDark = document.body.classList.contains('dark-mode');
+            const themes = isDark ? BG_DARK_THEMES : BG_THEMES;
+            const theme = themes[bgThemeKey] || themes.day;
+            const stops = theme.stops;
+            document.documentElement.style.setProperty('--panel-bg-top', stops[0]);
+            document.documentElement.style.setProperty('--panel-bg-bot', stops[3]);
+        }
+
+        function openSettings() {
+            syncPanelBg();
+            const el = document.getElementById('settingsModal');
+            el.classList.add('open');
+            lockScroll();
+        }
+        function closeSettings() {
+            const el = document.getElementById('settingsModal');
+            el.style.animation = 'pageSlideOut 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+            setTimeout(() => {
+                el.classList.remove('open');
+                el.style.animation = '';
+                unlockScroll();
+            }, 270);
+        }
+        // No overlay backdrop — page-style panels close via back button only
         function setUnit(u) {
             S.unit = u;
             const el = document.getElementById('selTemp'); if (el) el.value = u;
@@ -8069,184 +8689,145 @@
 
         // ─── WEATHER ALERT SYSTEM ─────────────────────────────────────────────────────
         //
-        // WMO codes clasificados por nivel de peligro:
-        //  EXTREME  → 99 (tormenta severa con granizo), 96 (tormenta + granizo), 95 (tormenta)
-        //  HIGH     → 82 (chubascos violentos), 75 (nieve intensa), 65 (lluvia intensa)
-        //  MODERATE → 73, 71 (nieve), 63, 61 (lluvia), 81, 80 (chubascos), 55 (llovizna densa)
-        //  SNOW     → 77 (granizo/nieve granular)
+        // ── FUENTES METEOROLÓGICAS GLOBALES POR PAÍS ─────────────────────────────
+        function getAlertSource(cc) {
+            if (!cc) return { url: 'https://www.wmo.int/severe-weather-information-centre', label: 'WMO Severe Weather Information Centre' };
+            const c = cc.toUpperCase();
 
-        const ALERT_LEVELS = {
-            extreme: { codes: [95, 96, 99], level: 'extreme', priority: 4 },
-            high: { codes: [65, 75, 82], level: 'high', priority: 3 },
-            snow: { codes: [71, 73, 77], level: 'snow', priority: 2 },
-            moderate: { codes: [55, 61, 63, 80, 81], level: 'moderate', priority: 1 },
-        };
+            // ── EUROPA ────────────────────────────────────────────────────────────
+            const EUROPE_METEOALARM = ['AT', 'BE', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR',
+                'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT',
+                'RO', 'RS', 'SK', 'SI', 'SE', 'CH', 'TR', 'GB'];
 
-        const ALERT_META = {
-            // Tormentas
-            95: { emoji: '⛈️', color: '#c62828', bgColor: 'rgba(183,28,28,0.25)', advice: { es: 'Evita espacios abiertos y árboles. Permanece en interior. Peligro de rayos y viento fuerte.', en: 'Stay indoors. Avoid open spaces and trees. Risk of lightning and strong wind.' } },
-            96: { emoji: '⛈️', color: '#c62828', bgColor: 'rgba(183,28,28,0.25)', advice: { es: 'Tormenta con granizo. Protege vehículos y no salgas sin protección. Riesgo de daños graves.', en: 'Hailstorm. Protect vehicles and do not go out without cover. Risk of severe damage.' } },
-            99: { emoji: '🌪️', color: '#7b0000', bgColor: 'rgba(100,0,0,0.3)', advice: { es: 'Tormenta severa con granizo grande. Permanece en refugio seguro. Riesgo vital.', en: 'Severe thunderstorm with large hail. Stay in safe shelter. Life risk.' } },
-            // Lluvias torrenciales
-            65: { emoji: '🌧️', color: '#1565c0', bgColor: 'rgba(21,101,192,0.25)', advice: { es: 'Lluvia intensa. Posibles inundaciones en zonas bajas. Conduce con precaución y evita torrentes.', en: 'Heavy rain. Possible flooding in low areas. Drive carefully and avoid streams.' } },
-            82: { emoji: '🌧️', color: '#e65100', bgColor: 'rgba(230,81,0,0.25)', advice: { es: 'Chubascos muy intensos. Visibilidad reducida. Evita carreteras cortadas y aparcamientos subterráneos.', en: 'Violent rain showers. Reduced visibility. Avoid flooded roads and underground car parks.' } },
-            // Nieve
-            71: { emoji: '🌨️', color: '#283593', bgColor: 'rgba(26,35,126,0.25)', advice: { es: 'Nieve ligera. Precaución al conducir y en accesos a zonas de montaña.', en: 'Light snow. Caution driving and on mountain access roads.' } },
-            73: { emoji: '❄️', color: '#283593', bgColor: 'rgba(26,35,126,0.28)', advice: { es: 'Nevada moderada. Usa cadenas o neumáticos de invierno. Evita salidas innecesarias.', en: 'Moderate snowfall. Use chains or winter tyres. Avoid unnecessary trips.' } },
-            75: { emoji: '❄️', color: '#1a237e', bgColor: 'rgba(26,35,126,0.35)', advice: { es: 'Nevada intensa. Carreteras de montaña cortadas. Permanece en lugar seguro y cálido.', en: 'Heavy snowfall. Mountain roads closed. Stay in a safe, warm place.' } },
-            77: { emoji: '🌨️', color: '#283593', bgColor: 'rgba(40,53,147,0.25)', advice: { es: 'Granizo/nieve granular. Superficies muy resbaladizas. Extrema precaución al caminar y conducir.', en: 'Snow grains. Very slippery surfaces. Extreme caution when walking and driving.' } },
-            // Lluvia moderada / chubascos
-            55: { emoji: '🌧️', color: '#1565c0', bgColor: 'rgba(21,101,192,0.2)', advice: { es: 'Llovizna intensa. Pavimento resbaladizo. Conduce despacio y mantén distancia de seguridad.', en: 'Dense drizzle. Slippery road. Drive slowly and keep a safe distance.' } },
-            61: { emoji: '🌦️', color: '#1565c0', bgColor: 'rgba(21,101,192,0.2)', advice: { es: 'Lluvia ligera. Lleva paraguas y precaución al conducir. Sin mayor riesgo.', en: 'Light rain. Carry an umbrella and drive carefully. No major risk.' } },
-            63: { emoji: '🌧️', color: '#1565c0', bgColor: 'rgba(21,101,192,0.22)', advice: { es: 'Lluvia moderada. Posible acumulación en calzadas. Conduce con precaución.', en: 'Moderate rain. Possible water accumulation on roads. Drive carefully.' } },
-            80: { emoji: '🌦️', color: '#1565c0', bgColor: 'rgba(21,101,192,0.2)', advice: { es: 'Chubascos ligeros intermitentes. Pueden cesar pronto. Lleva ropa de abrigo.', en: 'Light intermittent showers. May stop soon. Wear warm clothing.' } },
-            81: { emoji: '🌧️', color: '#1976d2', bgColor: 'rgba(25,118,210,0.22)', advice: { es: 'Chubascos moderados. Lleva paraguas. Posible lluvia fuerte puntualmente.', en: 'Moderate rain showers. Carry an umbrella. Possible brief heavy rain.' } },
-        };
+            if (c === 'ES') return { url: 'https://www.aemet.es/es/eltiempo/prediccion/avisos', label: 'AEMET — Agencia Estatal de Meteorología' };
+            if (c === 'AD') return { url: 'https://www.meteo.ad/', label: 'Servei Meteorològic d\'Andorra' };
+            if (EUROPE_METEOALARM.includes(c)) return { url: 'https://www.meteoalarm.org/', label: 'MeteoAlarm — European Weather Warnings' };
+            if (c === 'RU') return { url: 'https://www.meteoinfo.ru/', label: 'Roshydromet — Russian Weather Service' };
+            if (c === 'UA') return { url: 'https://meteo.gov.ua/', label: 'Ukrainian Hydrometeorological Center' };
+            if (c === 'BY') return { url: 'https://www.pogoda.by/', label: 'Belhydromet — Belarus Weather' };
 
-        // Detecta si hay una alerta activa en los próximos N horas
-        function detectWeatherAlert(data) {
-            if (!data) return null;
+            // ── NORTEAMÉRICA ─────────────────────────────────────────────────────
+            if (c === 'US') return { url: 'https://alerts.weather.gov/', label: 'NWS — National Weather Service (USA)' };
+            if (c === 'CA') return { url: 'https://weather.gc.ca/warnings/index_e.html', label: 'Environment Canada — Weather Warnings' };
+            if (c === 'MX') return { url: 'https://smn.conagua.gob.mx/es/avisos-meteorologicos', label: 'SMN — Servicio Meteorológico Nacional (México)' };
+            if (c === 'GT') return { url: 'https://www.insivumeh.gob.gt/', label: 'INSIVUMEH — Guatemala' };
+            if (c === 'BZ') return { url: 'https://www.hydromet.gov.bz/', label: 'National Meteorological Service of Belize' };
+            if (c === 'HN') return { url: 'https://www.smn.hn/', label: 'SMN — Servicio Meteorológico Nacional de Honduras' };
+            if (c === 'SV') return { url: 'https://www.snet.gob.sv/', label: 'SNET — El Salvador' };
+            if (c === 'NI') return { url: 'https://www.ineter.gob.ni/', label: 'INETER — Nicaragua' };
+            if (c === 'CR') return { url: 'https://www.imn.ac.cr/', label: 'IMN — Instituto Meteorológico Nacional de Costa Rica' };
+            if (c === 'PA') return { url: 'https://www.etesa.com.pa/', label: 'ETESA — Empresa de Transmisión Eléctrica S.A. (Panamá)' };
+            if (c === 'CU') return { url: 'https://www.insmet.cu/', label: 'INSMET — Instituto de Meteorología de Cuba' };
+            if (c === 'JM') return { url: 'https://www.metservice.gov.jm/', label: 'Meteorological Service Jamaica' };
+            if (c === 'HT') return { url: 'https://www.meteo-haiti.org/', label: 'UHM — Unité Hydrométéorologie d\'Haïti' };
+            if (c === 'DO') return { url: 'https://onamet.gob.do/', label: 'ONAMET — Rep. Dominicana' };
+            if (c === 'PR') return { url: 'https://www.weather.gov/sju/', label: 'NWS San Juan — Puerto Rico' };
+            if (['TT', 'BB', 'LC', 'VC', 'GD', 'AG', 'KN', 'DM'].includes(c)) return { url: 'https://www.cimh.edu.bb/', label: 'CIMH — Caribbean Inst. of Meteorology and Hydrology' };
 
-            const cur = data.current;
-            const hourly = data.hourly;
-            const daily = data.daily;
+            // ── SUDAMÉRICA ──────────────────────────────────────────────────────
+            if (c === 'BR') return { url: 'https://alertas2.inmet.gov.br/', label: 'INMET — Instituto Nacional de Meteorologia (Brasil)' };
+            if (c === 'AR') return { url: 'https://www.smn.gob.ar/alertas', label: 'SMN — Servicio Meteorológico Nacional (Argentina)' };
+            if (c === 'CL') return { url: 'https://www.meteochile.gob.cl/PortalDMC-web/index.xhtml', label: 'DMC — Dirección Meteorológica de Chile' };
+            if (c === 'CO') return { url: 'https://www.ideam.gov.co/web/tiempo-y-clima/alertas', label: 'IDEAM — Instituto de Hidrología (Colombia)' };
+            if (c === 'VE') return { url: 'https://www.inameh.gob.ve/', label: 'INAMEH — Venezuela' };
+            if (c === 'PE') return { url: 'https://www.senamhi.gob.pe/main.php?dp=lima&p=06', label: 'SENAMHI — Perú' };
+            if (c === 'EC') return { url: 'https://www.inamhi.gob.ec/', label: 'INAMHI — Ecuador' };
+            if (c === 'BO') return { url: 'https://senamhi.gob.bo/', label: 'SENAMHI — Bolivia' };
+            if (c === 'PY') return { url: 'https://www.meteorologia.gov.py/', label: 'DINAC — Dirección Nacional de Aeronáutica Civil (Paraguay)' };
+            if (c === 'UY') return { url: 'https://www.inumet.gub.uy/', label: 'INUMET — Uruguay' };
+            if (c === 'GY') return { url: 'https://www.hydromet.gov.gy/', label: 'Hydromet — Guyana' };
+            if (c === 'SR') return { url: 'https://www.meteosur.net/', label: 'Meteorologische Dienst Suriname' };
 
-            // 1. Comprueba código actual
-            const curCode = cur.weather_code;
-            for (const [, grp] of Object.entries(ALERT_LEVELS)) {
-                if (grp.codes.includes(curCode)) {
-                    return buildAlert(curCode, grp.level, cur, hourly, 'now');
-                }
-            }
+            // ── ASIA ─────────────────────────────────────────────────────────────
+            if (c === 'CN') return { url: 'https://www.weather.com.cn/', label: 'CMA — China Meteorological Administration' };
+            if (c === 'JP') return { url: 'https://www.jma.go.jp/en/warn/', label: 'JMA — Japan Meteorological Agency' };
+            if (c === 'KR') return { url: 'https://www.weather.go.kr/w/weather/warning/current-warnings.do', label: 'KMA — Korea Meteorological Administration' };
+            if (c === 'KP') return { url: 'https://www.wmo.int/severe-weather-information-centre', label: 'WMO Severe Weather Information Centre' };
+            if (c === 'IN') return { url: 'https://mausam.imd.gov.in/imd_latest/contents/warning.php', label: 'IMD — India Meteorological Department' };
+            if (c === 'PK') return { url: 'https://www.pmd.gov.pk/', label: 'PMD — Pakistan Meteorological Department' };
+            if (c === 'BD') return { url: 'https://www.bmd.gov.bd/', label: 'BMD — Bangladesh Meteorological Department' };
+            if (c === 'LK') return { url: 'https://www.meteo.gov.lk/', label: 'Department of Meteorology Sri Lanka' };
+            if (c === 'NP') return { url: 'https://www.dhm.gov.np/', label: 'DHM — Department of Hydrology and Meteorology (Nepal)' };
+            if (c === 'BT') return { url: 'https://www.nchm.gov.bt/', label: 'NCHM — Bhutan' };
+            if (c === 'MV') return { url: 'https://www.meteorology.gov.mv/', label: 'Maldives Meteorological Service' };
+            if (c === 'MM') return { url: 'https://www.moezala.gov.mm/', label: 'DMH — Department of Meteorology and Hydrology (Myanmar)' };
+            if (c === 'TH') return { url: 'https://www.tmd.go.th/en/', label: 'TMD — Thai Meteorological Department' };
+            if (c === 'VN') return { url: 'https://nchmf.gov.vn/', label: 'NCHMF — National Centre for Hydro-Meteorological Forecasting (Vietnam)' };
+            if (c === 'KH') return { url: 'https://www.mowram.gov.kh/', label: 'Department of Meteorology Cambodia' };
+            if (c === 'LA') return { url: 'https://www.wmo.int/severe-weather-information-centre', label: 'WMO Severe Weather Information Centre' };
+            if (c === 'MY') return { url: 'https://www.met.gov.my/', label: 'MetMalaysia — Malaysian Meteorological Department' };
+            if (c === 'SG') return { url: 'https://www.weather.gov.sg/warnings-advisories/', label: 'MSS — Meteorological Service Singapore' };
+            if (c === 'ID') return { url: 'https://www.bmkg.go.id/', label: 'BMKG — Indonesia' };
+            if (c === 'PH') return { url: 'https://www.pagasa.dost.gov.ph/', label: 'PAGASA — Philippine Atmospheric Agency' };
+            if (c === 'TL') return { url: 'https://www.wmo.int/severe-weather-information-centre', label: 'WMO Severe Weather Information Centre' };
+            if (c === 'PG') return { url: 'https://www.pngmet.gov.pg/', label: 'PNG NWS — Papua New Guinea Met Service' };
+            if (c === 'AF') return { url: 'https://www.amd.gov.af/', label: 'AMD — Afghanistan Meteorological Department' };
+            if (c === 'IR') return { url: 'https://www.irimo.ir/far/index.php', label: 'IRIMO — Iran Meteorological Organization' };
+            if (c === 'IQ') return { url: 'https://www.meteorology.gov.iq/', label: 'Iraqi Meteorological Organization' };
+            if (c === 'SA') return { url: 'https://www.ncm.ae/', label: 'NCM — National Centre of Meteorology (Arabia)' };
+            if (c === 'AE') return { url: 'https://www.ncm.ae/', label: 'NCM — National Centre of Meteorology (UAE)' };
+            if (c === 'QA') return { url: 'https://qmet.gov.qa/', label: 'Qatar Meteorology Department' };
+            if (c === 'KW') return { url: 'https://www.met.gov.kw/', label: 'Kuwait Meteorology Department' };
+            if (c === 'BH') return { url: 'https://www.bahrainweather.gov.bh/', label: 'Bahrain Meteorological Directorate' };
+            if (c === 'OM') return { url: 'https://www.met.gov.om/', label: 'Oman Meteorology Department' };
+            if (c === 'YE') return { url: 'https://www.cama.gov.ye/', label: 'CAMA — Civil Aviation and Meteorology Authority (Yemen)' };
+            if (c === 'SY') return { url: 'https://www.wmo.int/severe-weather-information-centre', label: 'WMO Severe Weather Information Centre' };
+            if (c === 'LB') return { url: 'https://www.meteo.gov.lb/', label: 'Météo Liban' };
+            if (c === 'JO') return { url: 'https://www.jmd.gov.jo/', label: 'JMD — Jordan Meteorological Department' };
+            if (c === 'IL') return { url: 'https://ims.gov.il/en/warnings', label: 'IMS — Israel Meteorological Service' };
+            if (c === 'PS') return { url: 'https://www.pmd.ps/', label: 'Palestinian Meteorological Department' };
+            if (c === 'KZ') return { url: 'https://www.kazhydromet.kz/', label: 'Kazhydromet — Kazakhstan' };
+            if (c === 'UZ') return { url: 'https://www.meteo.uz/', label: 'Uzhydromet — Uzbekistan' };
+            if (c === 'TM') return { url: 'https://www.milli-meteo.gov.tm/', label: 'National Meteorological Service of Turkmenistan' };
+            if (c === 'TJ') return { url: 'https://www.meteo.tj/', label: 'Tajikmeteoservice' };
+            if (c === 'KG') return { url: 'https://www.meteo.kg/', label: 'Kyrgyzhydromet' };
+            if (c === 'AM') return { url: 'https://www.meteo.am/', label: 'Armenian State Hydrometeorological Service' };
+            if (c === 'AZ') return { url: 'https://www.eco.gov.az/', label: 'National Hydrometeorology Department (Azerbaijan)' };
+            if (c === 'GE') return { url: 'https://www.meteo.gov.ge/', label: 'National Environment Agency (Georgia)' };
 
-            // 2. Comprueba próximas 6 horas en hourly
-            if (hourly && hourly.time) {
-                const now = new Date();
-                const horizon = new Date(now.getTime() + 6 * 3600000);
-                for (let i = 0; i < hourly.time.length; i++) {
-                    const t = new Date(hourly.time[i]);
-                    if (t < now || t > horizon) continue;
-                    const code = hourly.weather_code[i];
-                    for (const [, grp] of Object.entries(ALERT_LEVELS)) {
-                        if (grp.codes.includes(code)) {
-                            return buildAlert(code, grp.level, cur, hourly, t);
-                        }
-                    }
-                }
-            }
+            // ── ÁFRICA ──────────────────────────────────────────────────────────
+            if (c === 'ZA') return { url: 'https://www.weathersa.co.za/warnings', label: 'SAWS — South African Weather Service' };
+            if (c === 'EG') return { url: 'https://www.ema.gov.eg/', label: 'EMA — Egyptian Meteorological Authority' };
+            if (c === 'NG') return { url: 'https://www.nimet.gov.ng/', label: 'NiMet — Nigerian Meteorological Agency' };
+            if (c === 'KE') return { url: 'https://www.meteo.go.ke/', label: 'KMD — Kenya Meteorological Department' };
+            if (c === 'ET') return { url: 'https://www.ethiomet.gov.et/', label: 'NMA — National Meteorological Agency (Ethiopia)' };
+            if (c === 'GH') return { url: 'https://www.meteo.gov.gh/', label: 'Ghana Meteorological Agency' };
+            if (c === 'SN') return { url: 'https://www.anacim.sn/', label: 'ANACIM — Sénégal' };
+            if (c === 'CI') return { url: 'https://www.sodexam.com/', label: 'SODEXAM — Côte d\'Ivoire' };
+            if (c === 'CM') return { url: 'https://www.meteo-cameroon.net/', label: 'Direction de la Météorologie Nationale du Cameroun' };
+            if (c === 'MA') return { url: 'https://www.marocmeteo.ma/', label: 'DMN — Direction de la Météorologie Nationale (Maroc)' };
+            if (c === 'DZ') return { url: 'https://www.meteo.dz/', label: 'ONM — Office National de Météorologie (Algérie)' };
+            if (c === 'TN') return { url: 'https://www.meteo.tn/', label: 'INM — Institut National de la Météorologie (Tunisie)' };
+            if (c === 'LY') return { url: 'https://www.ncm.gov.ly/', label: 'NCMAF — Libya' };
+            if (c === 'SD') return { url: 'https://www.smr.gov.sd/', label: 'Sudan Meteorological Authority' };
+            if (c === 'TZ') return { url: 'https://www.meteo.go.tz/', label: 'TMA — Tanzania Meteorological Authority' };
+            if (c === 'UG') return { url: 'https://www.unma.go.ug/', label: 'UNMA — Uganda National Meteorological Authority' };
+            if (c === 'ZW') return { url: 'https://www.met.gov.zw/', label: 'MSD — Meteorological Services Department Zimbabwe' };
+            if (c === 'ZM') return { url: 'https://www.zmd.gov.zm/', label: 'ZMD — Zambia Meteorological Department' };
+            if (c === 'MZ') return { url: 'https://www.inam.gov.mz/', label: 'INAM — Instituto Nacional de Meteorologia (Moçambique)' };
+            if (c === 'MG') return { url: 'https://www.meteomadagascar.mg/', label: 'Météo Madagascar' };
+            if (c === 'MU') return { url: 'https://metservice.intnet.mu/', label: 'Mauritius Meteorological Services' };
+            if (c === 'AO') return { url: 'https://www.inamet.gov.ao/', label: 'INAMET — Angola' };
+            if (c === 'NA') return { url: 'https://www.meteona.com/', label: 'Namibia Meteorological Service' };
+            if (c === 'BW') return { url: 'https://www.dms.gov.bw/', label: 'DMS — Department of Meteorological Services (Botswana)' };
+            if (c === 'RW') return { url: 'https://www.meteorwanda.gov.rw/', label: 'RMA — Rwanda Meteorology Agency' };
+            if (c === 'ML') return { url: 'https://www.malimeteo.ml/', label: 'Direction Nationale de la Météorologie (Mali)' };
+            if (c === 'BF') return { url: 'https://www.anam.bf/', label: 'ANAM — Agence Nationale de la Météorologie (Burkina Faso)' };
+            if (c === 'NE') return { url: 'https://www.meteo-niger.ne/', label: 'DMN — Direction de la Météorologie Nationale (Niger)' };
+            if (c === 'TD') return { url: 'https://www.wmo.int/severe-weather-information-centre', label: 'WMO Severe Weather Information Centre' };
+            if (c === 'SO') return { url: 'https://www.wmo.int/severe-weather-information-centre', label: 'WMO Severe Weather Information Centre' };
 
-            // 3. Comprueba daily máximo del día
-            if (daily && daily.weather_code && daily.weather_code[0]) {
-                const todayCode = daily.weather_code[0];
-                for (const [, grp] of Object.entries(ALERT_LEVELS)) {
-                    if (grp.codes.includes(todayCode) && grp.priority >= 2) {
-                        return buildAlert(todayCode, grp.level, cur, hourly, 'today');
-                    }
-                }
-            }
+            // ── OCEANÍA ─────────────────────────────────────────────────────────
+            if (c === 'AU') return { url: 'https://www.bom.gov.au/australia/warnings/', label: 'BOM — Bureau of Meteorology (Australia)' };
+            if (c === 'NZ') return { url: 'https://www.metservice.com/warnings/', label: 'MetService — New Zealand' };
+            if (c === 'FJ') return { url: 'https://www.met.gov.fj/', label: 'Fiji Meteorological Service' };
+            if (['WS', 'TO', 'VU', 'SB', 'KI', 'FM', 'MH', 'PW', 'NR', 'TV'].includes(c))
+                return { url: 'https://www.bom.gov.au/pacific/', label: 'BOM Pacific — Bureau of Meteorology Pacific' };
 
-            return null;
+            // ── FALLBACK GLOBAL ──────────────────────────────────────────────────
+            return { url: 'https://www.wmo.int/severe-weather-information-centre', label: 'WMO — Severe Weather Information Centre' };
         }
 
-        function buildAlert(code, level, cur, hourly, when) {
-            const meta = ALERT_META[code] || { emoji: '⚠️', color: '#f57c00', bgColor: 'rgba(245,124,0,0.2)', advice: { es: 'Condiciones meteorológicas adversas.', en: 'Adverse weather conditions.' } };
-            const wmoInfo = WMO[code] || {};
-            const label = wmoInfo[S.lang] || wmoInfo.es || wmoInfo.en || 'Alerta';
-            const city = S.cityName ? S.cityName.split(',')[0] : '';
-
-            let whenLabel = '';
-            if (when === 'now') whenLabel = S.lang === 'es' ? 'Ahora mismo' : 'Right now';
-            else if (when === 'today') whenLabel = S.lang === 'es' ? 'Hoy' : 'Today';
-            else {
-                const h = new Date(when).getHours().toString().padStart(2, '0');
-                whenLabel = (S.lang === 'es' ? 'Previsto a las ' : 'Expected at ') + h + ':00';
-            }
-
-            return { code, level, meta, label, city, whenLabel, cur, hourly };
-        }
-
-        // Renders the alert banner with all detail — estilo AEMET, blanco, sin emojis
-        function renderAlert(alert) {
-            if (!alert) return;
-
-            const { level, meta, label, city, whenLabel, cur, hourly } = alert;
-            const lang = S.lang || 'es';
-
-            const titleEl = document.getElementById('alertTitle');
-            const bodyEl = document.getElementById('alertTitle2');
-            const sourceEl = document.getElementById('alertSourceLink');
-
-            // Title
-            const levelTitleKey = {
-                extreme: 'alert_r',
-                high: 'alert_o',
-                moderate: 'alert_moderate',
-                snow: 'alert_snow',
-            };
-            titleEl.textContent = t(levelTitleKey[level] || 'alert_moderate');
-
-            // Body
-            const cityStr = city ? (lang === 'ar' ? ' في ' + city : lang === 'ja' || lang === 'zh' || lang === 'ko' ? city + 'の' : ' ' + t('alert_in_prep') + ' ' + city) : '';
-            const typeStr = label;
-            let bodyText = '';
-            const warnWord = t('alert_warn_for');
-            const periodExtra = level === 'extreme' ? ' ' + t('alert_extra_extreme') : level === 'snow' ? ' ' + t('alert_extra_snow') : '';
-            bodyText = `${warnWord} ${typeStr.toLowerCase()}${cityStr}. ${whenLabel}.${periodExtra}`;
-            bodyEl.textContent = bodyText;
-
-            // Source link
-            let sourceUrl = `https://www.aemet.es/es/eltiempo/prediccion/avisos`;
-            let sourceLabel = 'AEMET. Agencia Estatal de Meteorología';
-            if (S._countryCode && S._countryCode !== 'ES') {
-                sourceUrl = `https://www.meteoalarm.org/`;
-                sourceLabel = 'MeteoAlarm. European weather warnings';
-            }
-            if (sourceEl) {
-                sourceEl.href = sourceUrl;
-                sourceEl.textContent = sourceLabel;
-            }
-
-            // Show unified banner
-            const banner = document.getElementById('unifiedAlertsBanner');
-            if (banner) {
-                banner.style.display = '';
-            }
-        }
-
-        // Dismiss alert (stores dismissed code + timestamp for 1h)
-        function dismissAlert() {
-            dismissUnifiedAlert();
-        }
-
-        function dismissUnifiedAlert() {
-            const banner = document.getElementById('unifiedAlertsBanner');
-            if (banner) banner.style.display = 'none';
-            if (S._lastAlertCode) {
-                localStorage.setItem('wh_alert_dismissed', JSON.stringify({ code: S._lastAlertCode, at: Date.now() }));
-            }
-        }
-
-        // Check if user has dismissed this alert code recently (< 1 hour)
-        function isAlertDismissed(code) {
-            try {
-                const d = JSON.parse(localStorage.getItem('wh_alert_dismissed') || '{}');
-                return d.code === code && (Date.now() - d.at) < 3600000;
-            } catch { return false; }
-        }
-
-        // Main entry point — called after each fetchWeather()
-        function checkAndShowAlert(data) {
-            const alert = detectWeatherAlert(data);
-            if (!alert) {
-                const banner = document.getElementById('unifiedAlertsBanner');
-                if (banner) banner.style.display = 'none';
-                S._lastAlertCode = null;
-                return;
-            }
-            if (isAlertDismissed(alert.code) && alert.code === S._lastAlertCode) return;
-            S._lastAlertCode = alert.code;
-            renderAlert(alert);
-        }
 
 
         initBgCanvas();
